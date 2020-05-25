@@ -18,7 +18,8 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     "continuous",
     GitHubActionsImage.UbuntuLatest,
     GitHubActionsImage.WindowsLatest,
-    On = new[] { GitHubActionsTrigger.Push, GitHubActionsTrigger.PullRequest },
+    OnPullRequestBranches = new[] { "master" },
+    OnPushBranches = new[] { "master" },
     InvokedTargets = new[] { nameof(Publish), nameof(Pack) })]
 internal class Build : NukeBuild
 {
