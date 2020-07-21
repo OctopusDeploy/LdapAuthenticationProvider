@@ -3,6 +3,7 @@ using Octopus.Diagnostics;
 using Octopus.Server.Extensibility.Authentication.Extensions;
 using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
 using Octopus.Server.Extensibility.Authentication.Ldap.Identities;
+using Octopus.Server.Extensibility.Results;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -25,14 +26,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             this.groupLocator = groupLocator;
         }
 
-        public ExternalGroupResult Read(IUser user, CancellationToken cancellationToken)
+        public string IdentityProviderName => LdapAuthentication.ProviderName;
+
+        public IResultFromExtension<ExternalGroupResult> Read(IUser user, CancellationToken cancellationToken)
         {
             if (!configurationStore.GetIsEnabled())
-                return new ExternalGroupResult(LdapAuthentication.ProviderName, "Not enabled");
+                return ResultFromExtension<ExternalGroupResult>.ExtensionDisabled();
             if (user.Username == User.GuestLogin)
-                return new ExternalGroupResult(LdapAuthentication.ProviderName, "Not valid for Guest user");
+                return ResultFromExtension<ExternalGroupResult>.Failed("Not valid for Guest user");
             if (user.Identities.All(p => p.IdentityProviderName != LdapAuthentication.ProviderName))
-                return new ExternalGroupResult(LdapAuthentication.ProviderName, "No identities matching this provider");
+                return ResultFromExtension<ExternalGroupResult>.Failed("No identities matching this provider");
 
             // if the user has multiple, unique identities assigned then the group list should be the distinct union of the groups from
             // all of the identities
@@ -61,10 +64,10 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             if (!wasAbleToRetrieveSomeGroups)
             {
                 log.ErrorFormat("Couldn't retrieve groups for user {0}", user.Username);
-                return new ExternalGroupResult(LdapAuthentication.ProviderName, $"Couldn't retrieve groups for user {user.Username}");
+                return ResultFromExtension<ExternalGroupResult>.Failed($"Couldn't retrieve groups for user {user.Username}");
             }
 
-            return new ExternalGroupResult(LdapAuthentication.ProviderName, newGroups.Select(g => g).ToArray());
+            return ResultFromExtension<ExternalGroupResult>.Success(new ExternalGroupResult(newGroups.Select(g => g).ToArray()));
         }
     }
 }

@@ -3,6 +3,7 @@ using Octopus.Diagnostics;
 using Octopus.Server.Extensibility.Authentication.Extensions;
 using Octopus.Server.Extensibility.Authentication.HostServices;
 using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
+using Octopus.Server.Extensibility.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         private readonly ILdapConfigurationStore configurationStore;
         private readonly IUserPrincipalFinder userPrincipalFinder;
 
+        public string IdentityProviderName => LdapAuthentication.ProviderName;
+
         public LdapExternalSecurityGroupLocator(
             ILog log,
             ILdapContextProvider contextProvider,
@@ -32,15 +35,15 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             this.userPrincipalFinder = userPrincipalFinder;
         }
 
-        public ExternalSecurityGroupResult Search(string name, CancellationToken cancellationToken)
+        public IResultFromExtension<ExternalSecurityGroupResult> Search(string name, CancellationToken cancellationToken)
         {
             if (!configurationStore.GetIsEnabled())
-                return null;
+                return ResultFromExtension<ExternalSecurityGroupResult>.ExtensionDisabled();
 
             var groups = FindGroups(name, cancellationToken);
-            var result = new ExternalSecurityGroupResult(LdapAuthentication.ProviderName, groups);
+            var result = new ExternalSecurityGroupResult(groups);
 
-            return result;
+            return ResultFromExtension<ExternalSecurityGroupResult>.Success(result);
         }
 
         public ExternalSecurityGroup[] FindGroups(string name, CancellationToken cancellationToken)

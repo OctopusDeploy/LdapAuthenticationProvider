@@ -1,6 +1,7 @@
-﻿using Octopus.Server.Extensibility.Extensions.Infrastructure.Web.Api;
+﻿using Octopus.Data;
+using Octopus.Server.Extensibility.Authentication.Extensions;
+using Octopus.Server.Extensibility.Extensions.Infrastructure.Web.Api;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,6 +9,10 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Web
 {
     public class UserLookupAction : IAsyncApiAction
     {
+        private static readonly IRequiredParameter<string> PartialName = new RequiredQueryParameterProperty<string>("partialName", "Partial username to lookup");
+        private static readonly BadRequestRegistration Disabled = new BadRequestRegistration($"The {LdapAuthentication.ProviderName} is currently disabled");
+        private static readonly OctopusJsonRegistration<ExternalUserLookupResult> SearchResults = new OctopusJsonRegistration<ExternalUserLookupResult>();
+
         private readonly ICanSearchLdapUsers userSearch;
 
         public UserLookupAction(
@@ -16,21 +21,19 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Web
             this.userSearch = userSearch;
         }
 
-        public Task ExecuteAsync(OctoContext context)
+        public Task<IOctoResponseProvider> ExecuteAsync(IOctoRequest request)
         {
-            var name = context.Request.Query["partialName"]?.FirstOrDefault();
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                context.Response.BadRequest("Please provide the name of a user to search for");
-                return Task.FromResult(0);
-            }
-
-            using (var cts = new CancellationTokenSource(TimeSpan.FromMinutes(1)))
-            {
-                context.Response.AsOctopusJson(userSearch.Search(name, cts.Token));
-            }
-
-            return Task.FromResult(0);
+            return request
+                .HandleAsync(PartialName, name =>
+                {
+                    using (var cts = new CancellationTokenSource(TimeSpan.FromMinutes(1)))
+                    {
+                        var externalUserLookupResult = userSearch.Search(name, cts.Token);
+                        if (externalUserLookupResult is ISuccessResult<ExternalUserLookupResult> successResult)
+                            return Task.FromResult(SearchResults.Response(successResult.Value));
+                        return Task.FromResult(Disabled.Response());
+                    }
+                });
         }
     }
 }

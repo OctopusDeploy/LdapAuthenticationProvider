@@ -14,6 +14,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         private readonly IUserPrincipalFinder userPrincipalFinder;
         private readonly IIdentityCreator identityCreator;
 
+        public string IdentityProviderName => LdapAuthentication.ProviderName;
+
         public UserMatcher(
             ILdapContextProvider contextProvider,
             ILdapObjectNameNormalizer objectNameNormalizer,

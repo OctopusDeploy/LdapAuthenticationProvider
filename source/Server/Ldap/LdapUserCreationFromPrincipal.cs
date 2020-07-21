@@ -1,6 +1,7 @@
-﻿using Octopus.Server.Extensibility.Authentication.Extensions;
+﻿using Octopus.Data.Model.User;
+using Octopus.Server.Extensibility.Authentication.Extensions;
 using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
-using Octopus.Server.Extensibility.Authentication.Storage.User;
+using Octopus.Server.Extensibility.Results;
 using System.Security.Principal;
 using System.Threading;
 
@@ -11,6 +12,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         private readonly ILdapConfigurationStore configurationStore;
         private readonly ILdapCredentialValidator credentialValidator;
 
+        public string IdentityProviderName => LdapAuthentication.ProviderName;
+
         public LdapUserCreationFromPrincipal(
             ILdapConfigurationStore configurationStore,
             ILdapCredentialValidator credentialValidator)
@@ -19,10 +22,10 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             this.credentialValidator = credentialValidator;
         }
 
-        public AuthenticationUserCreateResult GetOrCreateUser(IPrincipal principal, CancellationToken cancellationToken)
+        public IResultFromExtension<IUser> GetOrCreateUser(IPrincipal principal, CancellationToken cancellationToken)
         {
             return !configurationStore.GetIsEnabled() ?
-                new AuthenticationUserCreateResult() :
+                ResultFromExtension<IUser>.ExtensionDisabled() :
                 credentialValidator.GetOrCreateUser(principal.Identity.Name, cancellationToken);
         }
     }

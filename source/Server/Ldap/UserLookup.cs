@@ -2,6 +2,7 @@
 using Octopus.Server.Extensibility.Authentication.Extensions;
 using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
 using Octopus.Server.Extensibility.Authentication.Ldap.Identities;
+using Octopus.Server.Extensibility.Results;
 using System.Linq;
 using System.Threading;
 
@@ -14,6 +15,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         private readonly ILdapConfigurationStore configurationStore;
         private readonly IUserPrincipalFinder userPrincipalFinder;
         private readonly IIdentityCreator identityCreator;
+
+        public string IdentityProviderName => LdapAuthentication.ProviderName;
 
         public UserSearch(
             ILdapContextProvider contextProvider,
@@ -29,10 +32,10 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             this.identityCreator = identityCreator;
         }
 
-        public ExternalUserLookupResult Search(string searchTerm, CancellationToken cancellationToken)
+        public IResultFromExtension<ExternalUserLookupResult> Search(string searchTerm, CancellationToken cancellationToken)
         {
             if (!configurationStore.GetIsEnabled())
-                return new ExternalUserLookupResult(LdapAuthentication.ProviderName, Enumerable.Empty<IdentityResource>().ToArray());
+                return ResultFromExtension<ExternalUserLookupResult>.ExtensionDisabled();
 
             objectNameNormalizer.NormalizeName(searchTerm, out var partialName, out var domain);
 
@@ -46,7 +49,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                     .Select(u => identityCreator.Create(u.Mail, u.UPN, u.SamAccountName, u.DisplayName).ToResource())
                     .ToArray();
 
-                return new ExternalUserLookupResult(LdapAuthentication.ProviderName, identityResources);
+                return ResultFromExtension<ExternalUserLookupResult>.Success(new ExternalUserLookupResult(identityResources));
             }
         }
     }

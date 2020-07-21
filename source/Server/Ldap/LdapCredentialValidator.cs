@@ -1,9 +1,11 @@
+using Octopus.Data;
+using Octopus.Data.Model.User;
 using Octopus.Diagnostics;
 using Octopus.Server.Extensibility.Authentication.HostServices;
 using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
 using Octopus.Server.Extensibility.Authentication.Ldap.Identities;
 using Octopus.Server.Extensibility.Authentication.Resources.Identities;
-using Octopus.Server.Extensibility.Authentication.Storage.User;
+using Octopus.Server.Extensibility.Results;
 using System;
 using System.Linq;
 using System.Threading;
@@ -20,6 +22,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         private readonly ILdapService ldapService;
 
         internal static string EnvironmentUserDomainName = Environment.UserDomainName;
+
+        public string IdentityProviderName => LdapAuthentication.ProviderName;
 
         public LdapCredentialValidator(
             ILog log,
@@ -39,11 +43,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public int Priority => 100;
 
-        public AuthenticationUserCreateResult ValidateCredentials(string username, string password, CancellationToken cancellationToken)
+        public IResultFromExtension<IUser> ValidateCredentials(string username, string password, CancellationToken cancellationToken)
         {
             if (!configurationStore.GetIsEnabled())
             {
-                return new AuthenticationUserCreateResult();
+                return ResultFromExtension<IUser>.ExtensionDisabled();
             }
 
             if (username == null) throw new ArgumentNullException(nameof(username));
@@ -53,13 +57,13 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             var validatedUser = ldapService.ValidateCredentials(username, password, cancellationToken);
             if (!string.IsNullOrWhiteSpace(validatedUser.ValidationMessage))
             {
-                return new AuthenticationUserCreateResult(validatedUser.ValidationMessage);
+                return ResultFromExtension<IUser>.Failed(validatedUser.ValidationMessage);
             }
 
             return GetOrCreateUser(validatedUser, cancellationToken);
         }
 
-        public AuthenticationUserCreateResult GetOrCreateUser(string username, CancellationToken cancellationToken)
+        public IResultFromExtension<IUser> GetOrCreateUser(string username, CancellationToken cancellationToken)
         {
             var result = ldapService.FindByIdentity(username);
 
@@ -71,7 +75,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             return GetOrCreateUser(result, cancellationToken);
         }
 
-        internal AuthenticationUserCreateResult GetOrCreateUser(UserValidationResult principal, CancellationToken cancellationToken)
+        internal IResultFromExtension<IUser> GetOrCreateUser(UserValidationResult principal, CancellationToken cancellationToken)
         {
             var samAccountName = principal.SamAccountName;
             var displayName = principal.DisplayName;
@@ -95,7 +99,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             // who just logged in.
             if (existingMatchingUser != null)
             {
-                return new AuthenticationUserCreateResult(existingMatchingUser);
+                return ResultFromExtension<IUser>.Success(existingMatchingUser);
             }
 
             foreach (var user in users)
@@ -104,7 +108,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 var anyLdapIdentity = user.Identities.FirstOrDefault(p => p.IdentityProviderName == LdapAuthentication.ProviderName);
                 if (anyLdapIdentity == null)
                 {
-                    return new AuthenticationUserCreateResult(userStore.AddIdentity(user.Id, authenticatingIdentity, cancellationToken));
+                    return ResultFromExtension<IUser>.Success(userStore.AddIdentity(user.Id, authenticatingIdentity, cancellationToken));
                 }
 
                 foreach (var identity in user.Identities.Where(p => p.IdentityProviderName == LdapAuthentication.ProviderName))
@@ -118,7 +122,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                         identity.Claims[IdentityCreator.SamAccountNameClaimType].Value = samAccountName;
                         identity.Claims[ClaimDescriptor.DisplayNameClaimType].Value = displayName;
 
-                        return new AuthenticationUserCreateResult(userStore.UpdateIdentity(user.Id, identity, cancellationToken));
+                        return ResultFromExtension<IUser>.Success(userStore.UpdateIdentity(user.Id, identity, cancellationToken));
                     }
                     else
                     {
@@ -135,7 +139,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                             identity.Claims[IdentityCreator.SamAccountNameClaimType].Value = samAccountName;
                             identity.Claims[ClaimDescriptor.DisplayNameClaimType].Value = displayName;
 
-                            return new AuthenticationUserCreateResult(userStore.UpdateIdentity(user.Id, identity, cancellationToken));
+                            return ResultFromExtension<IUser>.Success(userStore.UpdateIdentity(user.Id, identity, cancellationToken));
                         }
 
                         // otherUserPrincipal still exists in ldap, so what we have here is a new user
@@ -150,7 +154,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 cancellationToken,
                 identities: new[] { authenticatingIdentity });
 
-            return new AuthenticationUserCreateResult(userCreateResult);
+            if (userCreateResult is FailureResult failure)
+                throw new ApplicationException($"Error creating user. {failure.ErrorString}");
+
+            var successResult = ((Result<IUser>)userCreateResult);
+            return ResultFromExtension<IUser>.Success(successResult.Value);
         }
     }
 }

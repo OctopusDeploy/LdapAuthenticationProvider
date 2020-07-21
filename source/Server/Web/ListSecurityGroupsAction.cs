@@ -1,7 +1,8 @@
-﻿using Octopus.Server.Extensibility.Authentication.HostServices;
+﻿using Octopus.Data;
+using Octopus.Server.Extensibility.Authentication.Extensions;
+using Octopus.Server.Extensibility.Authentication.HostServices;
 using Octopus.Server.Extensibility.Extensions.Infrastructure.Web.Api;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,6 +10,10 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Web
 {
     public class ListSecurityGroupsAction : IAsyncApiAction
     {
+        private static readonly IRequiredParameter<string> PartialName = new RequiredQueryParameterProperty<string>("partialName", "Partial group name to lookup");
+        private static readonly BadRequestRegistration Disabled = new BadRequestRegistration($"The {LdapAuthentication.ProviderName} is currently disabled");
+        private static readonly OctopusJsonRegistration<ExternalSecurityGroup[]> SearchResults = new OctopusJsonRegistration<ExternalSecurityGroup[]>();
+
         private readonly ILdapExternalSecurityGroupLocator externalSecurityGroupLocator;
 
         public ListSecurityGroupsAction(
@@ -17,26 +22,19 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Web
             this.externalSecurityGroupLocator = externalSecurityGroupLocator;
         }
 
-        public Task ExecuteAsync(OctoContext context)
+        public Task<IOctoResponseProvider> ExecuteAsync(IOctoRequest request)
         {
-            var name = context.Request.Query["partialName"]?.FirstOrDefault();
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                context.Response.BadRequest("Please provide the name of a group to search by, or a team");
-                return Task.FromResult(0);
-            }
-
-            using (var cts = new CancellationTokenSource(TimeSpan.FromMinutes(1)))
-            {
-                context.Response.AsOctopusJson(SearchByName(name, cts.Token));
-            }
-
-            return Task.FromResult(0);
-        }
-
-        private ExternalSecurityGroup[] SearchByName(string name, CancellationToken cancellationToken)
-        {
-            return externalSecurityGroupLocator.Search(name, cancellationToken).Groups;
+            return request
+                .HandleAsync(PartialName, name =>
+                {
+                    using (var cts = new CancellationTokenSource(TimeSpan.FromMinutes(1)))
+                    {
+                        var result = externalSecurityGroupLocator.Search(name, cts.Token);
+                        if (result is ISuccessResult<ExternalSecurityGroupResult> successResult)
+                            return Task.FromResult(SearchResults.Response(successResult.Value.Groups));
+                        return Task.FromResult(Disabled.Response());
+                    }
+                });
         }
     }
 }
