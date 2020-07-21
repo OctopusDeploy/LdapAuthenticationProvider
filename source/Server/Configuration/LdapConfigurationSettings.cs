@@ -28,7 +28,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapServer", ConfigurationDocumentStore.GetServer(), isEnabled && !string.IsNullOrWhiteSpace(ConfigurationDocumentStore.GetServer()), "Server");
             yield return new ConfigurationValue<int>("Octopus.WebPortal.LdapPort", ConfigurationDocumentStore.GetPort(), isEnabled, "Port");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUsername", ConfigurationDocumentStore.GetConnectUsername(), isEnabled, "Username");
-            yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapPassword", ConfigurationDocumentStore.GetConnectPassword(), isEnabled, "Password", true);
+            yield return new ConfigurationValue<SensitiveString>("Octopus.WebPortal.LdapPassword", ConfigurationDocumentStore.GetConnectPassword(), isEnabled, "Password");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapBaseDn", ConfigurationDocumentStore.GetBaseDn(), isEnabled, "Base DN");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapDefaultDomain", ConfigurationDocumentStore.GetBaseDn(), isEnabled, "Default Domain");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserFilter", ConfigurationDocumentStore.GetUserFilter(), isEnabled, "User Filter");

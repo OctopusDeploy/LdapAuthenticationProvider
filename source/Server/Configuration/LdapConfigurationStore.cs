@@ -44,12 +44,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             SetProperty(doc => doc.ConnectUsername = username);
         }
 
-        public string GetConnectPassword()
+        public SensitiveString GetConnectPassword()
         {
             return GetProperty(doc => doc.ConnectPassword);
         }
 
-        public void SetConnectPassword(string password)
+        public void SetConnectPassword(SensitiveString password)
         {
             SetProperty(doc => doc.ConnectPassword = password);
         }

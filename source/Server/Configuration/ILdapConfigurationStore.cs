@@ -17,9 +17,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         void SetConnectUsername(string username);
 
-        string GetConnectPassword();
+        SensitiveString GetConnectPassword();
 
-        void SetConnectPassword(string password);
+        void SetConnectPassword(SensitiveString password);
 
         string GetBaseDn();
 

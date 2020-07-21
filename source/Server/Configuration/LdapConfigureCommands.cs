@@ -43,11 +43,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 ldapConfiguration.Value.SetConnectUsername(v);
                 log.Info("LDAP Username set to: " + v);
             });
-            yield return new ConfigureCommandOption("ldapPassword=", LdapConfigurationResource.PasswordDescription, v =>
-            {
-                ldapConfiguration.Value.SetConnectPassword(v);
-                log.Info("LDAP Password set");
-            });
             yield return new ConfigureCommandOption("ldapBaseDn=", LdapConfigurationResource.BaseDnDescription, v =>
             {
                 ldapConfiguration.Value.SetBaseDn(v);

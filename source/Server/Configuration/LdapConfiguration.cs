@@ -5,9 +5,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 {
     public class LdapConfiguration : ExtensionConfigurationDocument
     {
-        public LdapConfiguration() : base("Ldap", "Thomas Unger", "1.0")
+        public LdapConfiguration() : base(LdapConfigurationStore.SingletonId, "Ldap", "Thomas Unger", "1.0")
         {
-            Id = LdapConfigurationStore.SingletonId;
         }
 
         public string Server { get; set; }
@@ -16,8 +15,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         public string ConnectUsername { get; set; }
 
-        [Encrypted]
-        public string ConnectPassword { get; set; }
+        public SensitiveString ConnectPassword { get; set; }
 
         public string BaseDn { get; set; }
 
@@ -31,7 +29,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
     }
 
     public class LdapMappingConfiguration
-    { 
+    {
         public string UserNameAttribute { get; set; } = "sAMAccountName";
 
         public string UserDisplayNameAttribute { get; set; } = "displayName";
