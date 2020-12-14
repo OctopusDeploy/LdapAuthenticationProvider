@@ -65,6 +65,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public IResultFromExtension<IUser> GetOrCreateUser(string username, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(username))
+                return ResultFromExtension<IUser>.Failed("No username provided");
+
             var result = ldapService.FindByIdentity(username);
 
             if (!string.IsNullOrWhiteSpace(result.ValidationMessage))

@@ -14,6 +14,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public string BuildUserName(string name, string domain)
         {
+            if (string.IsNullOrWhiteSpace(name))
+                return null;
+
             if (string.IsNullOrWhiteSpace(domain))
                 return name;
             return $"{domain}\\{name}";
