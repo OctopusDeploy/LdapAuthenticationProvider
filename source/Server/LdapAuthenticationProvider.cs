@@ -5,6 +5,7 @@ using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
 using Octopus.Server.Extensibility.Authentication.Ldap.Identities;
 using Octopus.Server.Extensibility.Authentication.Resources;
 using Octopus.Server.Extensibility.Authentication.Resources.Identities;
+using Octopus.Server.MessageContracts;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
