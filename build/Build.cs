@@ -29,7 +29,9 @@ internal class Build : NukeBuild
     private readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
     [Solution] private readonly Solution Solution;
-    [GitVersion] private readonly GitVersion GitVersion;
+
+    [GitVersion(Framework = "net5.0", NoFetch = true)]
+    private readonly GitVersion GitVersion;
 
     private AbsolutePath SourceDirectory => RootDirectory / "source";
     private AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
