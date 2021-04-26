@@ -13,6 +13,10 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         void SetPort(int port);
 
+        void SetUseSsl(bool useSsl);
+
+        bool GetUseSsl();
+
         string GetConnectUsername();
 
         void SetConnectUsername(string username);

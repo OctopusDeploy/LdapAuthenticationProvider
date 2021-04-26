@@ -13,6 +13,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         public int Port { get; set; } = 389;
 
+        public bool UseSsl { get; set; }
+
         public string ConnectUsername { get; set; }
 
         public SensitiveString ConnectPassword { get; set; }

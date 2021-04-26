@@ -16,6 +16,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         public LdapContext GetContext()
         {
             var con = new LdapConnection();
+            con.SecureSocketLayer = ldapConfiguration.Value.GetUseSsl();
             con.Connect(ldapConfiguration.Value.GetServer(), ldapConfiguration.Value.GetPort());
             con.Bind(ldapConfiguration.Value.GetConnectUsername(), ldapConfiguration.Value.GetConnectPassword().Value);
 

@@ -34,6 +34,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             SetProperty(doc => doc.Port = port);
         }
 
+        public void SetUseSsl(bool useSsl)
+        {
+            SetProperty(doc => doc.UseSsl = useSsl);
+        }
+
+        public bool GetUseSsl()
+        {
+            return GetProperty(doc => doc.UseSsl);
+        }
+
         public string GetConnectUsername()
         {
             return GetProperty(doc => doc.ConnectUsername);
