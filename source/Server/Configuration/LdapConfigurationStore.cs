@@ -44,6 +44,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             return GetProperty(doc => doc.UseSsl);
         }
 
+        public void SetIgnoreSslErrors(bool ignoreSslErrors)
+        {
+            SetProperty(doc => doc.IgnoreSslErrors = ignoreSslErrors);
+        }
+
+        public bool GetIgnoreSslErrors()
+        {
+            return GetProperty(doc => doc.IgnoreSslErrors);
+        }
+
         public string GetConnectUsername()
         {
             return GetProperty(doc => doc.ConnectUsername);

@@ -17,6 +17,10 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         bool GetUseSsl();
 
+        void SetIgnoreSslErrors(bool ignoreSslErrors);
+
+        bool GetIgnoreSslErrors();
+
         string GetConnectUsername();
 
         void SetConnectUsername(string username);
