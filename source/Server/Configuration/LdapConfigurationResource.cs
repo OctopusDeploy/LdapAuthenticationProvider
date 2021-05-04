@@ -1,6 +1,6 @@
-﻿using Octopus.Server.Extensibility.Extensions.Infrastructure.Configuration;
-using Octopus.Server.MessageContracts;
-using Octopus.Server.MessageContracts.Attributes;
+﻿using Octopus.Data.Resources;
+using Octopus.Data.Resources.Attributes;
+using Octopus.Server.Extensibility.Extensions.Infrastructure.Configuration;
 using System.ComponentModel;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
@@ -9,6 +9,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
     {
         public const string ServerDescription = "Set the server URL.";
         public const string PortDescription = "Set the port using to connect.";
+        public const string UseSslDescription = "Sets whether to use Secure Socket Layer to connect to LDAP.";
+        public const string IgnoreSslErrorsDescription = "Sets whether to ignore certificate validation errors.";
         public const string UsernameDescription = "Set the user DN to query LDAP.";
         public const string PasswordDescription = "Set the password to query LDAP.";
         public const string BaseDnDescription = "Set the root distinguished name (DN) to query LDAP.";
@@ -26,6 +28,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Description(PortDescription)]
         [Writeable]
         public int Port { get; set; }
+
+        [DisplayName("Use SSL")]
+        [Description(UseSslDescription)]
+        [Writeable]
+        public bool UseSsl { get; set; }
+
+        [DisplayName("Ignore SSL errors")]
+        [Description(IgnoreSslErrorsDescription)]
+        [Writeable]
+        public bool IgnoreSslErrors { get; set; }
 
         [DisplayName("Username")]
         [Description(UsernameDescription)]

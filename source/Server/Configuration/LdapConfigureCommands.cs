@@ -38,6 +38,18 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 ldapConfiguration.Value.SetPort(port);
                 log.Info("LDAP Port set to: " + port);
             });
+            yield return new ConfigureCommandOption("ldapUseSsl=", LdapConfigurationResource.UseSslDescription, v =>
+            {
+                bool.TryParse(v, out var useSsl);
+                ldapConfiguration.Value.SetUseSsl(useSsl);
+                log.Info("LDAP UseSsl set to: " + useSsl);
+            });
+            yield return new ConfigureCommandOption("ldapIgnoreSslErrors=", LdapConfigurationResource.IgnoreSslErrorsDescription, v =>
+            {
+                bool.TryParse(v, out var ignoreSslErrors);
+                ldapConfiguration.Value.SetIgnoreSslErrors(ignoreSslErrors);
+                log.Info("LDAP IgnoreSslErrors set to: " + ignoreSslErrors);
+            });
             yield return new ConfigureCommandOption("ldapUsername=", LdapConfigurationResource.UsernameDescription, v =>
             {
                 ldapConfiguration.Value.SetConnectUsername(v);

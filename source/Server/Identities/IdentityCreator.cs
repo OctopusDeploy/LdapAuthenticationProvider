@@ -1,5 +1,4 @@
 ﻿using Octopus.Data.Model.User;
-using Octopus.Server.Extensibility.Authentication.Model;
 using Octopus.Server.Extensibility.Authentication.Resources.Identities;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap.Identities

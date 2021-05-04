@@ -18,6 +18,8 @@ In Octopus Deploy, navigate to Configuration -> Settings -> LDAP.
 |---|---|---|
 |Server|The plain hostname of the LDAP server.|localhost|
 |Port|The port to access the LDAP server.|389|
+|Use SSL|Whether to use Secure Socket Layer to connect to LDAP.|False|
+|Ignore SSL errors|Whether to ignore certificate validation errors.|False|
 |Username|The distinguished name of the user that the extension will use when connecting to the LDAP server.|cn=query,dc=example,dc=org|
 |Password|The password of the user specified above.|***|
 |Base DN|The root distinguished name (DN) to use when running queries.|dc=example,dc=org|
@@ -46,7 +48,6 @@ Refer to the [Octopus Documentation][5] for more information.
 This is a first version with a basic set of features. If you need more, feel free to contribute - I'm happy to accept a pull request.
 
 - Automatic user creation is always enabled.
-- SSL connection not tested and probably won't work.
 
 [1]: https://octopus.com
 [2]: https://github.com/dsbenghe/Novell.Directory.Ldap.NETStandard
