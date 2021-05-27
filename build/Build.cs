@@ -1,98 +1,109 @@
 using Nuke.Common;
-using Nuke.Common.CI;
-using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
-using System.Linq;
+using OctoVersion.Core;
 using static Nuke.Common.IO.FileSystemTasks;
-using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Nuke.Common.IO.CompressionTasks;
+using Nuke.OctoVersion;
 
 [CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
-[GitHubActions(
-    "continuous",
-    GitHubActionsImage.UbuntuLatest,
-    GitHubActionsImage.WindowsLatest,
-    OnPullRequestBranches = new[] { "master" },
-    OnPushBranches = new[] { "master" },
-    InvokedTargets = new[] { nameof(Publish), nameof(Pack) })]
-internal class Build : NukeBuild
+class Build : NukeBuild
 {
-    public static int Main() => Execute<Build>(x => x.Publish);
+    readonly Configuration Configuration = Configuration.Release;
 
-    [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
-    private readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+    [Solution] readonly Solution Solution;
 
-    [Solution] private readonly Solution Solution;
+    [NukeOctoVersion] readonly OctoVersionInfo OctoVersionInfo;
 
-    [GitVersion(Framework = "net5.0", NoFetch = true)]
-    private readonly GitVersion GitVersion;
+    AbsolutePath SourceDirectory => RootDirectory / "source";
+    AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
+    AbsolutePath PublishDirectory => RootDirectory / "publish";
 
-    private AbsolutePath SourceDirectory => RootDirectory / "source";
-    private AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
-    private AbsolutePath PublishDirectory => ArtifactsDirectory / "publish";
-    private AbsolutePath PackDirectory => ArtifactsDirectory / "pack";
-
-    Project ExtensionProject => Solution.GetProject("Server");
-
-    private Target Clean => _ => _
+    Target Clean => _ => _
+        .Before(Restore)
         .Executes(() =>
         {
-            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
+            SourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults").ForEach(DeleteDirectory);
             EnsureCleanDirectory(ArtifactsDirectory);
+            EnsureCleanDirectory(PublishDirectory);
         });
 
-    private Target Restore => _ => _
-     .DependsOn(Clean)
+    Target CalculateVersion => _ => _
         .Executes(() =>
         {
-            DotNetRestore(s => s
+            //all the magic happens inside `[NukeOctoVersion]` above. we just need a target for TeamCity to call
+        });
+
+    Target Restore => _ => _
+        .DependsOn(Clean)
+        .Executes(() =>
+        {
+            DotNetRestore(_ => _
                 .SetProjectFile(Solution));
         });
 
-    private Target Publish => _ => _
+    Target Compile => _ => _
+        .DependsOn(Clean)
         .DependsOn(Restore)
-        .Produces(PublishDirectory)
         .Executes(() =>
         {
-            DotNetPublish(s => s
-                .SetProject(ExtensionProject)
+            Logger.Info("Building LDAP Authentication Provider v{0}", OctoVersionInfo.FullSemVer);
+
+            DotNetBuild(_ => _
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
+                .SetVersion(OctoVersionInfo.FullSemVer)
+                .EnableNoRestore());
+        });
+
+
+    Target Test => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetTest(_ => _
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
+                .SetNoBuild(true)
+                .EnableNoRestore());
+        });
+
+    Target Publish => _ => _
+        .DependsOn(Compile)
+        .DependsOn(Test)
+        .Executes(() =>
+        {
+            DotNetPublish(_ => _
+                .SetProject(SourceDirectory / "Server")
+                .SetConfiguration(Configuration)
                 .SetOutput(PublishDirectory)
-                .SetConfiguration(Configuration)
-                .SetVersion(GitVersion.FullSemVer)
-                .SetAssemblyVersion(GitVersion.AssemblySemVer)
-                .SetFileVersion(GitVersion.AssemblySemFileVer)
-                .SetInformationalVersion(GitVersion.InformationalVersion)
-                .EnableNoRestore());
-
-            Logger.Info("Deleting all files except primary output and dependencies, as this will be loaded as an extension.");
-
-            PublishDirectory.GlobFiles("*.*")
-                .Except(new[]
-                {
-                    PublishDirectory / $"{ExtensionProject.GetProperty("AssemblyName")}.dll",
-                    PublishDirectory / "Novell.Directory.Ldap.NETStandard.dll"
-                }).ForEach(DeleteFile);
+                .EnableNoBuild()
+                .AddProperty("Version", OctoVersionInfo.FullSemVer)
+            );
         });
 
-    private Target Pack => _ => _
-        .DependsOn(Restore)
-        .Produces(PackDirectory / "*.nupkg")
+    Target Zip => _ => _
+        .DependsOn(Publish)
         .Executes(() =>
         {
-            DotNetPack(s => s
-                .SetProject(ExtensionProject)
-                .SetOutputDirectory(PackDirectory)
-                .SetConfiguration(Configuration)
-                .SetVersion(GitVersion.FullSemVer)
-                .SetAssemblyVersion(GitVersion.AssemblySemVer)
-                .SetFileVersion(GitVersion.AssemblySemFileVer)
-                .SetInformationalVersion(GitVersion.InformationalVersion)
-                .EnableNoRestore());
+            var ldapPackage = ArtifactsDirectory / $"Octopus.LdapAuthenticationProvider.{OctoVersionInfo.FullSemVer}.zip";
+            Compress(PublishDirectory, ldapPackage);
+
+            System.Console.WriteLine($"::set-output name=packages_to_push::{ldapPackage}");
         });
+
+    Target Default => _ => _
+        .DependsOn(Zip);
+
+    /// Support plugins are available for:
+    /// - JetBrains ReSharper        https://nuke.build/resharper
+    /// - JetBrains Rider            https://nuke.build/rider
+    /// - Microsoft VisualStudio     https://nuke.build/visualstudio
+    /// - Microsoft VSCode           https://nuke.build/vscode
+    public static int Main() => Execute<Build>(x => x.Default);
 }
