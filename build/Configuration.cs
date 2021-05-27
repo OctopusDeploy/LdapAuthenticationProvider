@@ -1,6 +1,7 @@
-﻿using Nuke.Common.Tooling;
+using System.ComponentModel;
+using Nuke.Common.Tooling;
 
-[System.ComponentModel.TypeConverter(typeof(TypeConverter<Configuration>))]
+[TypeConverter(typeof(TypeConverter<Configuration>))]
 public class Configuration : Enumeration
 {
     public static Configuration Debug = new Configuration { Value = nameof(Debug) };
