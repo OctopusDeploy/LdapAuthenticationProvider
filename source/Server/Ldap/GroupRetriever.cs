@@ -12,12 +12,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public class GroupRetriever : IExternalGroupRetriever
     {
-        private readonly ILog log;
+        private readonly ISystemLog log;
         private readonly ILdapConfigurationStore configurationStore;
         private readonly ILdapExternalSecurityGroupLocator groupLocator;
 
         public GroupRetriever(
-            ILog log,
+            ISystemLog log,
             ILdapConfigurationStore configurationStore,
             ILdapExternalSecurityGroupLocator groupLocator)
         {

@@ -6,12 +6,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public class LdapService : ILdapService
     {
-        private readonly ILog log;
+        private readonly ISystemLog log;
         private readonly ILdapObjectNameNormalizer objectNameNormalizer;
         private readonly ILdapContextProvider contextProvider;
         private readonly IUserPrincipalFinder _userPrincipalFinder;
 
-        public LdapService(ILog log,
+        public LdapService(ISystemLog log,
             ILdapObjectNameNormalizer objectNameNormalizer,
             ILdapContextProvider contextProvider,
             IUserPrincipalFinder userPrincipalFinder)
