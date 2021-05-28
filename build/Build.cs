@@ -1,8 +1,11 @@
+using System.IO;
 using Nuke.Common;
+using Nuke.Common.CI;
 using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
 using OctoVersion.Core;
 using static Nuke.Common.IO.FileSystemTasks;
@@ -23,6 +26,7 @@ class Build : NukeBuild
     AbsolutePath SourceDirectory => RootDirectory / "source";
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     AbsolutePath PublishDirectory => RootDirectory / "publish";
+    AbsolutePath LocalPackagesDir => RootDirectory / ".." / "LocalPackages";
 
     Target Clean => _ => _
         .Before(Restore)
@@ -61,7 +65,6 @@ class Build : NukeBuild
                 .EnableNoRestore());
         });
 
-
     Target Test => _ => _
         .DependsOn(Compile)
         .Executes(() =>
@@ -73,32 +76,44 @@ class Build : NukeBuild
                 .EnableNoRestore());
         });
 
-    Target Publish => _ => _
-        .DependsOn(Compile)
+    Target Pack => _ => _
         .DependsOn(Test)
+        .Produces(ArtifactsDirectory / "*.nupkg")
         .Executes(() =>
         {
-            DotNetPublish(_ => _
-                .SetProject(SourceDirectory / "Server")
+            Logger.Info("Packing  LDAP Authentication Provider v{0}", OctoVersionInfo.FullSemVer);
+
+            DotNetPack(_ => _
+                .SetProject(Solution)
+                .SetVersion(OctoVersionInfo.FullSemVer)
                 .SetConfiguration(Configuration)
-                .SetOutput(PublishDirectory)
+                .SetOutputDirectory(ArtifactsDirectory)
                 .EnableNoBuild()
-                .AddProperty("Version", OctoVersionInfo.FullSemVer)
-            );
+                .DisableIncludeSymbols()
+                .SetVerbosity(DotNetVerbosity.Normal));
         });
 
-    Target Zip => _ => _
-        .DependsOn(Publish)
+    Target CopyToLocalPackages => _ => _
+        .OnlyWhenStatic(() => IsLocalBuild)
+        .TriggeredBy(Pack)
         .Executes(() =>
         {
-            var ldapPackage = ArtifactsDirectory / $"Octopus.LdapAuthenticationProvider.{OctoVersionInfo.FullSemVer}.zip";
-            Compress(PublishDirectory, ldapPackage);
+            EnsureExistingDirectory(LocalPackagesDir);
+            ArtifactsDirectory.GlobFiles("*.nupkg")
+                .ForEach(package => CopyFileToDirectory(package, LocalPackagesDir));
+        });
 
-            System.Console.WriteLine($"::set-output name=packages_to_push::{ldapPackage}");
+    Target OutputPackagesToPush => _ => _
+        .DependsOn(Pack)
+        .Executes(() =>
+        {
+            ArtifactsDirectory.GlobFiles("*.nupkg")
+                .NotEmpty()
+                .ForEach(package => System.Console.WriteLine($"::set-output name=packages_to_push::{package}"));
         });
 
     Target Default => _ => _
-        .DependsOn(Zip);
+        .DependsOn(OutputPackagesToPush);
 
     /// Support plugins are available for:
     /// - JetBrains ReSharper        https://nuke.build/resharper

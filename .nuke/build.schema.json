@@ -59,11 +59,12 @@
               "CalculateVersion",
               "Clean",
               "Compile",
+              "CopyToLocalPackages",
               "Default",
-              "Publish",
+              "OutputPackagesToPush",
+              "Pack",
               "Restore",
-              "Test",
-              "Zip"
+              "Test"
             ]
           }
         },
@@ -80,11 +81,12 @@
               "CalculateVersion",
               "Clean",
               "Compile",
+              "CopyToLocalPackages",
               "Default",
-              "Publish",
+              "OutputPackagesToPush",
+              "Pack",
               "Restore",
-              "Test",
-              "Zip"
+              "Test"
             ]
           }
         },
