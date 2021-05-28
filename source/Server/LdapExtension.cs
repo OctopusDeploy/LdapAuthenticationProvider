@@ -11,7 +11,7 @@ using Octopus.Server.Extensibility.Extensions.Mappings;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
-    [OctopusPlugin("Ldap", "Thomas Unger")]
+    [OctopusPlugin("Ldap", "Octopus Deploy (contributed by Thomas Unger)")]
     public class LdapExtension : IOctopusExtension
     {
         public void Load(ContainerBuilder builder)
