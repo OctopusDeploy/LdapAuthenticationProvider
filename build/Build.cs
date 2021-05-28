@@ -1,16 +1,13 @@
-using System.IO;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
 using OctoVersion.Core;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
-using static Nuke.Common.IO.CompressionTasks;
 using Nuke.OctoVersion;
 
 [CheckBuildProjectConfigurations]
@@ -23,10 +20,10 @@ class Build : NukeBuild
 
     [NukeOctoVersion] readonly OctoVersionInfo OctoVersionInfo;
 
-    AbsolutePath SourceDirectory => RootDirectory / "source";
-    AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
-    AbsolutePath PublishDirectory => RootDirectory / "publish";
-    AbsolutePath LocalPackagesDir => RootDirectory / ".." / "LocalPackages";
+    static AbsolutePath SourceDirectory => RootDirectory / "source";
+    static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
+    static AbsolutePath PublishDirectory => RootDirectory / "publish";
+    static AbsolutePath LocalPackagesDir => RootDirectory / ".." / "LocalPackages";
 
     Target Clean => _ => _
         .Before(Restore)
