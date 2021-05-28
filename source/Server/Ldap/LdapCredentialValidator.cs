@@ -14,7 +14,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public class LdapCredentialValidator : ILdapCredentialValidator
     {
-        private readonly ILog log;
+        private readonly ISystemLog log;
         private readonly ILdapObjectNameNormalizer objectNameNormalizer;
         private readonly IUpdateableUserStore userStore;
         private readonly ILdapConfigurationStore configurationStore;
@@ -26,7 +26,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         public string IdentityProviderName => LdapAuthentication.ProviderName;
 
         public LdapCredentialValidator(
-            ILog log,
+            ISystemLog log,
             ILdapObjectNameNormalizer objectNameNormalizer,
             IUpdateableUserStore userStore,
             ILdapConfigurationStore configurationStore,

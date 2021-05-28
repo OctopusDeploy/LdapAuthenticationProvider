@@ -1,10 +1,10 @@
-﻿using Octopus.Data.Resources.Users;
-using Octopus.Server.Extensibility.Authentication.Extensions;
+﻿using Octopus.Server.Extensibility.Authentication.Extensions;
 using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
 using Octopus.Server.Extensibility.Authentication.Ldap.Identities;
 using Octopus.Server.Extensibility.Results;
 using System.Linq;
 using System.Threading;
+using Octopus.Server.Extensibility.Authentication.Model;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
