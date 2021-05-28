@@ -38,6 +38,6 @@ jobs:
         uses: OctopusDeploy/push-package-action@v1.0.1
         with:
           server: https://deploy.octopus.app
-          space: Microsites
+          space: Integrations
           api_key: ${{ secrets.DEPLOY_API_KEY }}
           packages: ${{ steps.build.outputs.packages_to_push }}
