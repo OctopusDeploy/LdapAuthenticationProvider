@@ -6,7 +6,7 @@
     <AssemblyName>Octopus.Server.Extensibility.Authentication.Ldap</AssemblyName>
     <Description>Implements the LDAP authentication provider.</Description>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Authors>Thomas Unger</Authors>
+    <Authors>Octopus Deploy (contributed by Thomas Unger)</Authors>
     <PackageId>Octopus.Server.Extensibility.Authentication.Ldap</PackageId>
     <PackageIcon>icon.png</PackageIcon>
     <PackageLicense>https://github.com/tunger/OctopusDeploy-LdapAuthenticationProvider/blob/master/LICENSE</PackageLicense>
