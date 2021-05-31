@@ -124,6 +124,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             SetProperty(doc => doc.GroupFilter = groupFilter);
         }
 
+        public bool GetAllowAutoUserCreation()
+        {
+            return GetProperty(doc => doc.AllowAutoUserCreation);
+        }
+
+        public void SetAllowAutoUserCreation(bool allowAutoUserCreation)
+        {
+            SetProperty(doc => doc.AllowAutoUserCreation = allowAutoUserCreation);
+        }
+
         public string GetUserDisplayNameAttribute()
         {
             return GetProperty(doc => doc.AttributeMapping.UserDisplayNameAttribute);

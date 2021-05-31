@@ -150,17 +150,25 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 }
             }
 
+            return CreateNewUser(cancellationToken, principal, authenticatingIdentity);
+        }
+
+        IResultFromExtension<IUser> CreateNewUser(CancellationToken cancellationToken, UserValidationResult principal, Identity authenticatingIdentity)
+        {
+            if (!configurationStore.GetAllowAutoUserCreation())
+                return ResultFromExtension<IUser>.Failed("User could not be located and auto user creation is not enabled.");
+
             var userCreateResult = userStore.Create(
-                userPrincipalName,
-                displayName,
-                emailAddress,
+                principal.UserPrincipalName,
+                principal.DisplayName,
+                principal.EmailAddress,
                 cancellationToken,
-                identities: new[] { authenticatingIdentity });
+                identities: new[] {authenticatingIdentity});
 
             if (userCreateResult is FailureResult failure)
                 throw new ApplicationException($"Error creating user. {failure.ErrorString}");
 
-            var successResult = ((Result<IUser>)userCreateResult);
+            var successResult = (Result<IUser>) userCreateResult;
             return ResultFromExtension<IUser>.Success(successResult.Value);
         }
     }

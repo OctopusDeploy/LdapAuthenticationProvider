@@ -7,6 +7,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
     {
         public LdapConfiguration() : base(LdapConfigurationStore.SingletonId, "Ldap", "Octopus Deploy (contributed by Thomas Unger)", "1.0")
         {
+            AllowAutoUserCreation = true;
         }
 
         public string Server { get; set; }
@@ -28,6 +29,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public string UserFilter { get; set; } = "(&(objectClass=person)(sAMAccountName=*))";
 
         public string GroupFilter { get; set; } = "(&(objectClass=group)(cn=*))";
+
+        public bool AllowAutoUserCreation { get; set; }
 
         public LdapMappingConfiguration AttributeMapping { get; set; } = new LdapMappingConfiguration();
     }
