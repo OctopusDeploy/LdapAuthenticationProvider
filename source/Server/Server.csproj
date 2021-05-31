@@ -9,8 +9,8 @@
     <Authors>Octopus Deploy (contributed by Thomas Unger)</Authors>
     <PackageId>Octopus.Server.Extensibility.Authentication.Ldap</PackageId>
     <PackageIcon>icon.png</PackageIcon>
-    <PackageLicense>https://github.com/tunger/OctopusDeploy-LdapAuthenticationProvider/blob/master/LICENSE</PackageLicense>
-    <PackageProjectUrl>https://github.com/tunger/OctopusDeploy-LdapAuthenticationProvider</PackageProjectUrl>
+    <PackageLicense>https://github.com/OctopusDeploy/LdapAuthenticationProvider/blob/main/LICENSE.md</PackageLicense>
+    <PackageProjectUrl>https://github.com/OctopusDeploy/LdapAuthenticationProvider</PackageProjectUrl>
     <Product>Octopus.Server.Extensibility.Authentication.Ldap</Product>
     <NoWarn>NU5105</NoWarn>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
