@@ -1,5 +1,4 @@
-﻿using Octopus.Data.Model;
-using Octopus.Diagnostics;
+﻿using Octopus.Diagnostics;
 using Octopus.Server.Extensibility.Extensions.Infrastructure.Configuration;
 using System;
 using System.Collections.Generic;
@@ -8,8 +7,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 {
     public class LdapConfigureCommands : IContributeToConfigureCommand
     {
-        private readonly ISystemLog log;
-        private readonly Lazy<ILdapConfigurationStore> ldapConfiguration;
+        readonly ISystemLog log;
+        readonly Lazy<ILdapConfigurationStore> ldapConfiguration;
 
         public LdapConfigureCommands(
             ISystemLog log,
@@ -80,6 +79,13 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 ldapConfiguration.Value.SetGroupFilter(v);
                 log.Info("LDAP Group Filter set to: " + v);
             });
+            yield return new ConfigureCommandOption("ldapAllowAutoUserCreation=", LdapConfigurationResource.AllowAutoUserCreationDescription, v =>
+            {
+                var isAllowed = bool.Parse(v);
+                ldapConfiguration.Value.SetAllowAutoUserCreation(isAllowed);
+                log.Info("LDAP auto user creation allowed: " + isAllowed);
+            });
+
             yield return new ConfigureCommandOption("ldapUserDisplayNameAttribute=", LdapMappingConfigurationResource.UserDisplayNameAttributeDescription, v =>
             {
                 ldapConfiguration.Value.SetUserDisplayNameAttribute(v);

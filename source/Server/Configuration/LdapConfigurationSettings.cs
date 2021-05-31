@@ -35,6 +35,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapDefaultDomain", ConfigurationDocumentStore.GetBaseDn(), isEnabled, "Default Domain");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserFilter", ConfigurationDocumentStore.GetUserFilter(), isEnabled, "User Filter");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapGroupFilter", ConfigurationDocumentStore.GetGroupFilter(), isEnabled, "Group Filter");
+            yield return new ConfigurationValue<bool>("Octopus.WebPortal.LdapAllowAutoUserCreation=", ConfigurationDocumentStore.GetAllowAutoUserCreation(), isEnabled, "Allow Auto User Creation");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserNameAttribute", ConfigurationDocumentStore.GetUserNameAttribute(), isEnabled, "User Name Attribute");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserDisplayNameAttribute", ConfigurationDocumentStore.GetUserDisplayNameAttribute(), isEnabled, "User Display Name Attribute");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserPrincipalNameAttribute", ConfigurationDocumentStore.GetUserPrincipalNameAttribute(), isEnabled, "User Principal Name Attribute");

@@ -49,6 +49,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         void SetGroupFilter(string groupFilter);
 
+        bool GetAllowAutoUserCreation();
+        void SetAllowAutoUserCreation(bool allowAutoUserCreation);
+
         string GetUserDisplayNameAttribute();
 
         void SetUserDisplayNameAttribute(string userDisplayNameAttribute);

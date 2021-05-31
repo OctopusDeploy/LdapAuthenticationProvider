@@ -17,6 +17,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public const string DefaultDomainDescription = "Set the default domain when none is given in the logon form. Optional.";
         public const string UserFilterDescription = "The filter to use when searching valid users.";
         public const string GroupFilterDescription = "The filter to use when searching valid user groups.";
+        public const string AllowAutoUserCreationDescription = "Whether unknown users will be automatically created upon successful login.";
 
 
         [DisplayName("Server")]
@@ -68,6 +69,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Description(GroupFilterDescription)]
         [Writeable]
         public string GroupFilter { get; set; }
+
+        [DisplayName("Allow Auto User Creation")]
+        [Description(AllowAutoUserCreationDescription)]
+        [Writeable]
+        public bool AllowAutoUserCreation { get; set; }
 
         [DisplayName("Attribute Mapping")]
         public LdapMappingConfigurationResource AttributeMapping { get; set; } = new LdapMappingConfigurationResource();
