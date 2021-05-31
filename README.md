@@ -54,3 +54,7 @@ This is a first version with a basic set of features. If you need more, feel fre
 [3]: https://github.com/OctopusDeploy/DirectoryServicesAuthenticationProvider
 [4]: https://octopus.com/docs/administration/server-extensibility/installing-a-custom-server-extension
 [5]: https://octopus.com/docs/security/users-and-teams/external-groups-and-roles
+
+## Build and release pipeline
+
+This project is built using GitHub actions. A NuGet package is created and pushed to Octopus Deploy, where it is deployed to NuGet repositories.
