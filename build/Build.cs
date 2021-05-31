@@ -87,7 +87,9 @@ class Build : NukeBuild
                 .SetOutputDirectory(ArtifactsDirectory)
                 .EnableNoBuild()
                 .DisableIncludeSymbols()
-                .SetVerbosity(DotNetVerbosity.Normal));
+                .SetVerbosity(DotNetVerbosity.Normal)
+                .SetProperty("NuspecFile", "../../build/Octopus.Server.Extensibility.Authentication.Ldap.nuspec")
+                .SetProperty("NuspecProperties", $"Version={OctoVersionInfo.NuGetVersion}"));
         });
 
     Target CopyToLocalPackages => _ => _
