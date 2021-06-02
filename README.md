@@ -43,10 +43,6 @@ This extension behaves similar to the AD authentication provider.
 
 Refer to the [Octopus Documentation][5] for more information.
 
-## Known limitations
-
-- Automatic user creation is always enabled.
-
 [1]: https://octopus.com
 [2]: https://github.com/dsbenghe/Novell.Directory.Ldap.NETStandard
 [3]: https://github.com/OctopusDeploy/DirectoryServicesAuthenticationProvider
