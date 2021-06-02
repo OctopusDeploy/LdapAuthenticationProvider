@@ -45,8 +45,6 @@ Refer to the [Octopus Documentation][5] for more information.
 
 ## Known limitations
 
-This is a first version with a basic set of features. If you need more, feel free to contribute - I'm happy to accept a pull request.
-
 - Automatic user creation is always enabled.
 
 [1]: https://octopus.com
@@ -58,3 +56,7 @@ This is a first version with a basic set of features. If you need more, feel fre
 ## Build and release pipeline
 
 This project is built using GitHub actions. A NuGet package is created and pushed to Octopus Deploy, where it is deployed to NuGet repositories.
+
+## Issues
+
+Please see [Contributing](CONTRIBUTING.md)
