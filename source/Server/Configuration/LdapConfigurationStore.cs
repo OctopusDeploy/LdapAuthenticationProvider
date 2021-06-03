@@ -183,5 +183,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         {
             SetProperty(doc => doc.AttributeMapping.GroupNameAttribute = groupNameAttribute);
         }
+
+        public bool GetReferralFollowingEnabled() => GetProperty(doc => doc.ReferralFollowingEnabled);
+        public void SetReferralFollowingEnabled(bool enabled) => SetProperty(doc => doc.ReferralFollowingEnabled = enabled);
     }
 }

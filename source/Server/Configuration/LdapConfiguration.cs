@@ -32,6 +32,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         public bool AllowAutoUserCreation { get; set; }
 
+        public bool ReferralFollowingEnabled { get; set; } = true;
+
         public LdapMappingConfiguration AttributeMapping { get; set; } = new LdapMappingConfiguration();
     }
 

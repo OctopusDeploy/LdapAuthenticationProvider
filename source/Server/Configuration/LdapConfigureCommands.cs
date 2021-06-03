@@ -111,6 +111,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 ldapConfiguration.Value.SetGroupNameAttribute(v);
                 log.Info("LDAP GroupNameAttribute set to: " + v);
             });
+            yield return new ConfigureCommandOption("ldapReferralFollowingEnabled=", LdapMappingConfigurationResource, v =>
+            {
+                ldapConfiguration.Value.SetGroupNameAttribute(v);
+                log.Info("LDAP ReferralFollowingEnabled set to: " + v);
+            });
         }
     }
 }

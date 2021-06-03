@@ -18,6 +18,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public const string UserFilterDescription = "The filter to use when searching valid users.";
         public const string GroupFilterDescription = "The filter to use when searching valid user groups.";
         public const string AllowAutoUserCreationDescription = "Whether unknown users will be automatically created upon successful login.";
+        public const string ReferralFollowingEnabledDescription = "Sets whether to enable referral following.";
 
 
         [DisplayName("Server")]
@@ -74,6 +75,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Description(AllowAutoUserCreationDescription)]
         [Writeable]
         public bool AllowAutoUserCreation { get; set; }
+
+        [DisplayName("ReferralFollowingEnabledDescription")]
+        [Description(ReferralFollowingEnabledDescription)]
+        [Writeable]
+        public bool ReferralFollowingEnabled { get; set; }
 
         [DisplayName("Attribute Mapping")]
         public LdapMappingConfigurationResource AttributeMapping { get; set; } = new LdapMappingConfigurationResource();

@@ -35,6 +35,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             var con = new LdapConnection(options);
             con.Connect(ldapConfiguration.Value.GetServer(), ldapConfiguration.Value.GetPort());
             con.Bind(ldapConfiguration.Value.GetConnectUsername(), ldapConfiguration.Value.GetConnectPassword().Value);
+            con.Constraints.ReferralFollowing = ldapConfiguration.Value.GetReferralFollowingEnabled();
 
             return new LdapContext
             {

@@ -71,5 +71,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         string GetGroupNameAttribute();
 
         void SetGroupNameAttribute(string groupNameAttribute);
+        bool GetReferralFollowingEnabled();
     }
 }
