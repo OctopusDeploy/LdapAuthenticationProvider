@@ -20,7 +20,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public const string AllowAutoUserCreationDescription = "Whether unknown users will be automatically created upon successful login.";
         public const string ReferralFollowingEnabledDescription = "Sets whether to allow referral following.";
         public const string ReferralHopLimitDescription = "Sets the maximum number of referrals to follow during automatic referral following.";
-        public const string ConstraintTimeLimitDescription = "Sets the time limit in ms for LDAP operations on the directory.";
+        public const string ConstraintTimeLimitDescription = "Sets the time limit in ms for LDAP operations on the directory.  0 specifies no limit.";
 
         [DisplayName("Server")]
         [Description(ServerDescription)]

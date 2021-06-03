@@ -42,7 +42,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public int ReferralHopLimit { get; set; } = 10;
 
         /// <summary>
-        /// In ms.  Defaults to 0.
+        /// In ms.  Defaults to 0 (i.e. no limit)
         /// </summary>
         public int ConstraintTimeLimit { get; set; } = 0;
     }
