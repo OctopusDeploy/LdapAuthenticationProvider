@@ -35,6 +35,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public bool ReferralFollowingEnabled { get; set; } = true;
 
         public LdapMappingConfiguration AttributeMapping { get; set; } = new LdapMappingConfiguration();
+        /// <summary>
+        /// Defaults to 10, as specified in the Novell LDAP library.
+        /// If set to 0, no limit is imposed.
+        /// </summary>
+        public int ReferralHopLimit { get; set; } = 10;
+
+        /// <summary>
+        /// In ms.  Defaults to 0.
+        /// </summary>
+        public int ConstraintTimeLimit { get; set; } = 0;
     }
 
     public class LdapMappingConfiguration

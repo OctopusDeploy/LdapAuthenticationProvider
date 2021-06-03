@@ -71,6 +71,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         string GetGroupNameAttribute();
 
         void SetGroupNameAttribute(string groupNameAttribute);
+        
         bool GetReferralFollowingEnabled();
+        void SetReferralFollowingEnabled(bool enabled);
+        int GetReferralHopLimit();
+        void SetReferralHopLimit(int hopLimit);
+        int GetConstraintTimeLimit();
+        void SetConstraintTimeLimit(int timeLimit);
     }
 }

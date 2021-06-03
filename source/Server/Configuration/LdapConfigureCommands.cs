@@ -85,6 +85,42 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 ldapConfiguration.Value.SetAllowAutoUserCreation(isAllowed);
                 log.Info("LDAP auto user creation allowed: " + isAllowed);
             });
+            yield return new ConfigureCommandOption("ldapReferralFollowingEnabled=", LdapConfigurationResource.ReferralFollowingEnabledDescription, v =>
+            {
+                if (bool.TryParse(v, out var enabled))
+                {
+                    ldapConfiguration.Value.SetReferralFollowingEnabled(enabled);
+                    log.Info("LDAP ReferralFollowingEnabled set to: " + v);
+                }
+                else
+                {
+                    log.Warn($"Invalid LDAP ReferralFollowingEnabled specified: {v}.  Using default value instead.");
+                }
+            });
+            yield return new ConfigureCommandOption("ldapReferralHopLimit=", LdapConfigurationResource.ReferralHopLimitDescription, v =>
+            {
+                if (int.TryParse(v, out var hopLimit))
+                {
+                    ldapConfiguration.Value.SetReferralHopLimit(hopLimit);
+                    log.Info("LDAP ReferalHopLimit set to: " + v);
+                }
+                else
+                {
+                    log.Warn($"Invalid LDAP ReferalHopLimit specified: {v}.  Using default value instead.");
+                }
+            });
+            yield return new ConfigureCommandOption("ldapConstraintTimeLimit=", LdapConfigurationResource.ConstraintTimeLimitDescription, v =>
+            {
+                if (int.TryParse(v, out var timeLimit))
+                {
+                    ldapConfiguration.Value.SetConstraintTimeLimit(timeLimit);
+                    log.Info("LDAP ConstraintTimeLimit set to: " + v);
+                }
+                else
+                {
+                    log.Warn($"Invalid LDAP ConstraintTimeLimit specified: {v}.  Using default value instead.");
+                }
+            });
 
             yield return new ConfigureCommandOption("ldapUserDisplayNameAttribute=", LdapMappingConfigurationResource.UserDisplayNameAttributeDescription, v =>
             {
@@ -110,11 +146,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             {
                 ldapConfiguration.Value.SetGroupNameAttribute(v);
                 log.Info("LDAP GroupNameAttribute set to: " + v);
-            });
-            yield return new ConfigureCommandOption("ldapReferralFollowingEnabled=", LdapMappingConfigurationResource, v =>
-            {
-                ldapConfiguration.Value.SetGroupNameAttribute(v);
-                log.Info("LDAP ReferralFollowingEnabled set to: " + v);
             });
         }
     }

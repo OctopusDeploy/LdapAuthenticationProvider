@@ -18,8 +18,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public const string UserFilterDescription = "The filter to use when searching valid users.";
         public const string GroupFilterDescription = "The filter to use when searching valid user groups.";
         public const string AllowAutoUserCreationDescription = "Whether unknown users will be automatically created upon successful login.";
-        public const string ReferralFollowingEnabledDescription = "Sets whether to enable referral following.";
-
+        public const string ReferralFollowingEnabledDescription = "Sets whether to allow referral following.";
+        public const string ReferralHopLimitDescription = "Sets the maximum number of referrals to follow during automatic referral following.";
+        public const string ConstraintTimeLimitDescription = "Sets the time limit in ms for LDAP operations on the directory.";
 
         [DisplayName("Server")]
         [Description(ServerDescription)]
@@ -76,10 +77,20 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Writeable]
         public bool AllowAutoUserCreation { get; set; }
 
-        [DisplayName("ReferralFollowingEnabledDescription")]
+        [DisplayName("Referral Following Enabled")]
         [Description(ReferralFollowingEnabledDescription)]
         [Writeable]
         public bool ReferralFollowingEnabled { get; set; }
+
+        [DisplayName("Referral Hop Limit")]
+        [Description(ReferralHopLimitDescription)]
+        [Writeable]
+        public static string ReferralHopLimit { get; set; }
+
+        [DisplayName("Constraint Time Limit")]
+        [Description(ConstraintTimeLimitDescription)]
+        [Writeable]
+        public static string ConstraintTimeLimit { get; set; }
 
         [DisplayName("Attribute Mapping")]
         public LdapMappingConfigurationResource AttributeMapping { get; set; } = new LdapMappingConfigurationResource();
