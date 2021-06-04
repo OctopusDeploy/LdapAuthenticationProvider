@@ -102,11 +102,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 if (int.TryParse(v, out var hopLimit))
                 {
                     ldapConfiguration.Value.SetReferralHopLimit(hopLimit);
-                    log.Info("LDAP ReferalHopLimit set to: " + v);
+                    log.Info("LDAP ReferralHopLimit set to: " + v);
                 }
                 else
                 {
-                    log.Warn($"Invalid LDAP ReferalHopLimit specified: {v}.  Using default value instead.");
+                    log.Warn($"Invalid LDAP ReferralHopLimit specified: {v}.  Using default value instead.");
                 }
             });
             yield return new ConfigureCommandOption("ldapConstraintTimeLimit=", LdapConfigurationResource.ConstraintTimeLimitDescription, v =>
