@@ -85,6 +85,42 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 ldapConfiguration.Value.SetAllowAutoUserCreation(isAllowed);
                 log.Info("LDAP auto user creation allowed: " + isAllowed);
             });
+            yield return new ConfigureCommandOption("ldapReferralFollowingEnabled=", LdapConfigurationResource.ReferralFollowingEnabledDescription, v =>
+            {
+                if (bool.TryParse(v, out var enabled))
+                {
+                    ldapConfiguration.Value.SetReferralFollowingEnabled(enabled);
+                    log.Info("LDAP ReferralFollowingEnabled set to: " + v);
+                }
+                else
+                {
+                    log.Warn($"Invalid LDAP ReferralFollowingEnabled specified: {v}. Value must be either 'true', or 'false'.");
+                }
+            });
+            yield return new ConfigureCommandOption("ldapReferralHopLimit=", LdapConfigurationResource.ReferralHopLimitDescription, v =>
+            {
+                if (int.TryParse(v, out var hopLimit) && hopLimit >= 0)
+                {
+                    ldapConfiguration.Value.SetReferralHopLimit(hopLimit);
+                    log.Info("LDAP ReferralHopLimit set to: " + v);
+                }
+                else
+                {
+                    log.Warn($"Invalid LDAP ReferralHopLimit specified: {v}. Value must be a number equal to, or greater than zero.");
+                }
+            });
+            yield return new ConfigureCommandOption("ldapConstraintTimeLimit=", LdapConfigurationResource.ConstraintTimeLimitDescription, v =>
+            {
+                if (int.TryParse(v, out var timeLimit) && timeLimit >= 0)
+                {
+                    ldapConfiguration.Value.SetConstraintTimeLimit(timeLimit);
+                    log.Info("LDAP ConstraintTimeLimit set to: " + v);
+                }
+                else
+                {
+                    log.Warn($"Invalid LDAP ConstraintTimeLimit specified: {v}. Value must be a number equal to, or greater than zero.");
+                }
+            });
 
             yield return new ConfigureCommandOption("ldapUserDisplayNameAttribute=", LdapMappingConfigurationResource.UserDisplayNameAttributeDescription, v =>
             {

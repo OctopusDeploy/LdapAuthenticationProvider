@@ -183,5 +183,15 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         {
             SetProperty(doc => doc.AttributeMapping.GroupNameAttribute = groupNameAttribute);
         }
+
+        public bool GetReferralFollowingEnabled() => GetProperty(doc => doc.ReferralFollowingEnabled);
+        public void SetReferralFollowingEnabled(bool enabled) => SetProperty(doc => doc.ReferralFollowingEnabled = enabled);
+
+        public int GetReferralHopLimit() => GetProperty(doc => doc.ReferralHopLimit);
+        public void SetReferralHopLimit(int hopLimit) => SetProperty(doc => doc.ReferralHopLimit = hopLimit);
+
+        public int GetConstraintTimeLimit() => GetProperty(doc => doc.ConstraintTimeLimit);
+        public void SetConstraintTimeLimit(int timeLimit) => SetProperty(doc => doc.ConstraintTimeLimit = timeLimit);
+
     }
 }
