@@ -94,31 +94,31 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 }
                 else
                 {
-                    log.Warn($"Invalid LDAP ReferralFollowingEnabled specified: {v}.  Using default value instead.");
+                    log.Warn($"Invalid LDAP ReferralFollowingEnabled specified: {v}.");
                 }
             });
             yield return new ConfigureCommandOption("ldapReferralHopLimit=", LdapConfigurationResource.ReferralHopLimitDescription, v =>
             {
-                if (int.TryParse(v, out var hopLimit))
+                if (int.TryParse(v, out var hopLimit) && hopLimit >= 0)
                 {
                     ldapConfiguration.Value.SetReferralHopLimit(hopLimit);
                     log.Info("LDAP ReferralHopLimit set to: " + v);
                 }
                 else
                 {
-                    log.Warn($"Invalid LDAP ReferralHopLimit specified: {v}.  Using default value instead.");
+                    log.Warn($"Invalid LDAP ReferralHopLimit specified: {v}.");
                 }
             });
             yield return new ConfigureCommandOption("ldapConstraintTimeLimit=", LdapConfigurationResource.ConstraintTimeLimitDescription, v =>
             {
-                if (int.TryParse(v, out var timeLimit))
+                if (int.TryParse(v, out var timeLimit) && timeLimit >= 0)
                 {
                     ldapConfiguration.Value.SetConstraintTimeLimit(timeLimit);
                     log.Info("LDAP ConstraintTimeLimit set to: " + v);
                 }
                 else
                 {
-                    log.Warn($"Invalid LDAP ConstraintTimeLimit specified: {v}.  Using default value instead.");
+                    log.Warn($"Invalid LDAP ConstraintTimeLimit specified: {v}.");
                 }
             });
 
