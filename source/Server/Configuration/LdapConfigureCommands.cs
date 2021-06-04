@@ -94,7 +94,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 }
                 else
                 {
-                    log.Warn($"Invalid LDAP ReferralFollowingEnabled specified: {v}.");
+                    log.Warn($"Invalid LDAP ReferralFollowingEnabled specified: {v}. Value must be either 'true', or 'false'.");
                 }
             });
             yield return new ConfigureCommandOption("ldapReferralHopLimit=", LdapConfigurationResource.ReferralHopLimitDescription, v =>
@@ -106,7 +106,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 }
                 else
                 {
-                    log.Warn($"Invalid LDAP ReferralHopLimit specified: {v}.");
+                    log.Warn($"Invalid LDAP ReferralHopLimit specified: {v}. Value must be a number equal to, or greater than zero.");
                 }
             });
             yield return new ConfigureCommandOption("ldapConstraintTimeLimit=", LdapConfigurationResource.ConstraintTimeLimitDescription, v =>
@@ -118,7 +118,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 }
                 else
                 {
-                    log.Warn($"Invalid LDAP ConstraintTimeLimit specified: {v}.");
+                    log.Warn($"Invalid LDAP ConstraintTimeLimit specified: {v}. Value must be a number equal to, or greater than zero.");
                 }
             });
 
