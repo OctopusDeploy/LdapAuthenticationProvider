@@ -44,7 +44,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         /// In ms.  Defaults to 0 (i.e. no limit)
         /// </summary>
         public int ConstraintTimeLimit { get; set; } = 0;
-        
+
         public LdapMappingConfiguration AttributeMapping { get; set; } = new LdapMappingConfiguration();
     }
 

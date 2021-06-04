@@ -77,21 +77,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Writeable]
         public bool AllowAutoUserCreation { get; set; }
 
-        [DisplayName("Referral Following Enabled")]
-        [Description(ReferralFollowingEnabledDescription)]
-        [Writeable]
-        public bool ReferralFollowingEnabled { get; set; }
-
-        [DisplayName("Referral Hop Limit")]
-        [Description(ReferralHopLimitDescription)]
-        [Writeable]
-        public static string ReferralHopLimit { get; set; }
-
-        [DisplayName("Constraint Time Limit")]
-        [Description(ConstraintTimeLimitDescription)]
-        [Writeable]
-        public static string ConstraintTimeLimit { get; set; }
-
         [DisplayName("Attribute Mapping")]
         public LdapMappingConfigurationResource AttributeMapping { get; set; } = new LdapMappingConfigurationResource();
     }
