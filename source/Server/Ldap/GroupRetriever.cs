@@ -57,14 +57,14 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 }
                 else
                 {
-                    log.WarnFormat("Couldn't retrieve groups for samAccountName {0}", samAccountName);
+                    log.WarnFormat("Unable to retrieve groups for samAccountName {0}", samAccountName);
                 }
             }
 
             if (!wasAbleToRetrieveSomeGroups)
             {
-                log.ErrorFormat("Couldn't retrieve groups for user {0}", user.Username);
-                return ResultFromExtension<ExternalGroupResult>.Failed($"Couldn't retrieve groups for user {user.Username}");
+                log.ErrorFormat("Unable to retrieve groups for user {0}", user.Username);
+                return ResultFromExtension<ExternalGroupResult>.Failed($"Unable to retrieve groups for user {user.Username}");
             }
 
             return ResultFromExtension<ExternalGroupResult>.Success(new ExternalGroupResult(newGroups.Select(g => g).ToArray()));
