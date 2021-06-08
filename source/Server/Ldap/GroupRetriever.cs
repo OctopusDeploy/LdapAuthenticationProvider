@@ -44,7 +44,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             var ldapIdentities = user.Identities.Where(p => p.IdentityProviderName == LdapAuthentication.ProviderName);
             foreach (var ldapIdentity in ldapIdentities)
             {
-                var samAccountName = ldapIdentity.Claims[IdentityCreator.SamAccountNameClaimType].Value;
+                var samAccountName = ldapIdentity.Claims[IdentityCreator.ExternalIdentityClaimType].Value;
 
                 var result = groupLocator.GetGroupIdsForUser(samAccountName, cancellationToken);
                 if (result.WasAbleToRetrieveGroups)

@@ -7,14 +7,14 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Identities
     public class IdentityCreator : IIdentityCreator
     {
         public const string UpnClaimType = "upn";
-        public const string SamAccountNameClaimType = "sam";
+        public const string ExternalIdentityClaimType = "extID";
 
-        public Identity Create(string email, string upn, string samAccountName, string displayName)
+        public Identity Create(string email, string upn, string externalIdentity, string displayName)
         {
             return new Identity(LdapAuthentication.ProviderName)
                 .WithClaim(ClaimDescriptor.EmailClaimType, email, true)
                 .WithClaim(UpnClaimType, upn, true)
-                .WithClaim(SamAccountNameClaimType, samAccountName, true)
+                .WithClaim(ExternalIdentityClaimType, externalIdentity, true)
                 .WithClaim(ClaimDescriptor.DisplayNameClaimType, displayName, false);
         }
     }

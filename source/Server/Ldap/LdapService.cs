@@ -9,7 +9,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         private readonly ISystemLog log;
         private readonly ILdapObjectNameNormalizer objectNameNormalizer;
         private readonly ILdapContextProvider contextProvider;
-        private readonly IUserPrincipalFinder _userPrincipalFinder;
+        private readonly IUserPrincipalFinder userPrincipalFinder;
 
         public LdapService(ISystemLog log,
             ILdapObjectNameNormalizer objectNameNormalizer,
@@ -19,7 +19,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             this.log = log;
             this.objectNameNormalizer = objectNameNormalizer;
             this.contextProvider = contextProvider;
-            _userPrincipalFinder = userPrincipalFinder;
+            this.userPrincipalFinder = userPrincipalFinder;
         }
 
         public UserValidationResult ValidateCredentials(string username, string password, CancellationToken cancellationToken)
@@ -28,38 +28,33 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
             objectNameNormalizer.NormalizeName(username, out username, out var domain);
 
-            using (var context = contextProvider.GetContext())
+            using var context = contextProvider.GetContext();
+            var identityName = objectNameNormalizer.BuildUserName(username, domain);
+            var principal = userPrincipalFinder.FindByIdentity(context, identityName);
+
+            if (principal == null)
             {
-                var identityName = objectNameNormalizer.BuildUserName(username, domain);
-                var principal = _userPrincipalFinder.FindByIdentity(context, identityName);
-
-                if (principal == null)
-                {
-                    var searchedContext = domain ?? context.BaseDN;
-                    log.Info($"A principal identifiable by '{identityName}' was not found in '{searchedContext}'");
-                    if (username.Contains("@"))
-                    {
-                        return new UserValidationResult("Invalid username or password.  UPN format may not be supported for your domain configuration.");
-                    }
-                    return new UserValidationResult("Invalid username or password.");
-                }
-
-                try
-                {
-                    log.Verbose($"Calling Bind (\"{principal.DN}\")");
-                    context.LdapConnection.Bind(principal.DN, password);
-                }
-                catch (Exception)
-                {
-                    log.Warn($"Principal '{principal.DN}' (Domain: '{domain}') could not be logged on via LDAP.");
-
-                    return new UserValidationResult("Invalid username or password.");
-                }
-
-                log.Verbose($"Credentials for '{identityName}' validated, mapped to principal '{principal.SamAccountName}'");
-
-                return new UserValidationResult(principal);
+                var searchedContext = domain ?? context.BaseDN;
+                log.Info($"A principal identifiable by '{identityName}' was not found in '{searchedContext}'");
+                return username.Contains("@")
+                    ? new UserValidationResult("Invalid username or password.  UPN format may not be supported for your domain configuration.")
+                    : new UserValidationResult("Invalid username or password.");
             }
+
+            try
+            {
+                log.Verbose($"Calling Bind (\"{principal.DN}\")");
+                context.LdapConnection.Bind(principal.DN, password);
+            }
+            catch (Exception)
+            {
+                log.Warn($"Principal '{principal.DN}' (Domain: '{domain}') could not be logged on via LDAP.");
+                return new UserValidationResult("Invalid username or password.");
+            }
+
+            log.Verbose($"Credentials for '{identityName}' validated, mapped to principal '{principal.ExternalIdentity}'");
+
+            return new UserValidationResult(principal);
         }
 
         public UserValidationResult FindByIdentity(string username)
@@ -69,7 +64,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             using (var context = contextProvider.GetContext())
             {
                 var identityName = objectNameNormalizer.BuildUserName(username, domain);
-                var principal = _userPrincipalFinder.FindByIdentity(context, identityName);
+                var principal = userPrincipalFinder.FindByIdentity(context, identityName);
 
                 if (principal == null)
                 {

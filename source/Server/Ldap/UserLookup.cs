@@ -39,18 +39,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
             objectNameNormalizer.NormalizeName(searchTerm, out var partialName, out var domain);
 
-            using (var context = contextProvider.GetContext())
-            {
-                if (cancellationToken.IsCancellationRequested) return null;
+            using var context = contextProvider.GetContext();
+            if (cancellationToken.IsCancellationRequested) return null;
 
-                var identities = userPrincipalFinder.SearchUser(context, searchTerm);
+            var identities = userPrincipalFinder.SearchUser(context, searchTerm);
 
-                var identityResources = identities.Distinct(new UserPrincipalComparer())
-                    .Select(u => identityCreator.Create(u.Mail, u.UPN, u.SamAccountName, u.DisplayName).ToResource())
-                    .ToArray();
+            var identityResources = identities.Distinct(new UserPrincipalComparer())
+                .Select(u => identityCreator.Create(u.Mail, u.UPN, u.ExternalIdentity, u.DisplayName).ToResource())
+                .ToArray();
 
-                return ResultFromExtension<ExternalUserLookupResult>.Success(new ExternalUserLookupResult(identityResources));
-            }
+            return ResultFromExtension<ExternalUserLookupResult>.Success(new ExternalUserLookupResult(identityResources));
         }
     }
 

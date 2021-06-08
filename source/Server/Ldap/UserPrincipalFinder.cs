@@ -6,16 +6,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public interface IUserPrincipalFinder
     {
-        UserPrincipal FindByIdentity(LdapContext context, string samAccountName);
+        UserPrincipal FindByIdentity(LdapContext context, string externalIdentity);
 
         IEnumerable<UserPrincipal> SearchUser(LdapContext context, string searchToken);
     }
 
     public class UserPrincipalFinder : IUserPrincipalFinder
     {
-        public UserPrincipal FindByIdentity(LdapContext context, string samAccountName)
+        public UserPrincipal FindByIdentity(LdapContext context, string externalIdentity)
         {
-            var escapedName = ToLdapUserName(samAccountName);
+            var escapedName = ToLdapUserName(externalIdentity);
             var lsc = context.LdapConnection.Search(
                 context.BaseDN,
                 LdapConnection.ScopeSub,
@@ -46,7 +46,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 DisplayName = searchResult.TryGetAttribute(context.UserDisplayNameAttribute)?.StringValue,
                 UPN = searchResult.TryGetAttribute(context.UserPrincipalNameAttribute)?.StringValue,
                 Groups = searchResult.TryGetAttribute(context.UserMembershipAttribute)?.StringValueArray,
-                SamAccountName = searchResult.TryGetAttribute(context.UserNameAttribute)?.StringValue,
+                ExternalIdentity = searchResult.TryGetAttribute(context.UserNameAttribute)?.StringValue,
                 Mail = searchResult.TryGetAttribute(context.UserEmailAttribute)?.StringValue
             };
         }

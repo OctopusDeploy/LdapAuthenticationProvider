@@ -43,7 +43,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public int Priority => 100;
 
-        public IResultFromExtension<IUser> ValidateCredentials(string username, string password, CancellationToken cancellationToken)
+        public IResultFromExtension<IUser> ValidateCredentials(string username, string password,
+            CancellationToken cancellationToken)
         {
             if (!configurationStore.GetIsEnabled())
             {
@@ -78,19 +79,33 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             return GetOrCreateUser(result, cancellationToken);
         }
 
-        internal IResultFromExtension<IUser> GetOrCreateUser(UserValidationResult principal, CancellationToken cancellationToken)
+        internal IResultFromExtension<IUser> GetOrCreateUser(UserValidationResult principal,
+            CancellationToken cancellationToken)
         {
-            var samAccountName = principal.SamAccountName;
+            var externalIdentity = principal.ExternalIdentity;
             var displayName = principal.DisplayName;
             var emailAddress = principal.EmailAddress;
             var userPrincipalName = principal.UserPrincipalName;
 
-            if (string.IsNullOrWhiteSpace(samAccountName))
+            var attributeErrorTemplate =
+                "Octopus is configured to use the '{0}' attribute as the external identity for LDAP users. " +
+                "Please make sure this user has a valid '{0}' attribute.";
+
+            if (string.IsNullOrWhiteSpace(externalIdentity))
             {
-                log.Error($"We couldn't find a valid external identity to use for the LDAP user '{displayName}' with email address '{emailAddress}'.");
+                log.Error($"We couldn't find a valid external identity to use for the LDAP user '{displayName}' with email address '{emailAddress}' for the user account named '{userPrincipalName}'. "
+                          + string.Format(attributeErrorTemplate, configurationStore.GetUserPrincipalNameAttribute()));
             }
 
-            var authenticatingIdentity = identityCreator.Create(emailAddress, userPrincipalName, samAccountName, displayName);
+            if (string.IsNullOrWhiteSpace(userPrincipalName))
+            {
+                log.Error($"The user principal name was not returned from the LDAP server for the LDAP user '{displayName}' with email address '{emailAddress}'."
+                          + string.Format(attributeErrorTemplate, configurationStore.GetUserPrincipalNameAttribute()));
+
+                ResultFromExtension.Failed("We were unable to find the user principal name when attempting to sign in with LDAP.  Please contact your administrator to resolve this.");
+            }
+
+            var authenticatingIdentity = identityCreator.Create(emailAddress, userPrincipalName, externalIdentity, displayName);
 
             var users = userStore.GetByIdentity(authenticatingIdentity);
 
@@ -111,18 +126,19 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 var anyLdapIdentity = user.Identities.FirstOrDefault(p => p.IdentityProviderName == LdapAuthentication.ProviderName);
                 if (anyLdapIdentity == null)
                 {
-                    return ResultFromExtension<IUser>.Success(userStore.AddIdentity(user.Id, authenticatingIdentity, cancellationToken));
+                    return ResultFromExtension<IUser>.Success(userStore.AddIdentity(user.Id, authenticatingIdentity,
+                        cancellationToken));
                 }
 
                 foreach (var identity in user.Identities.Where(p => p.IdentityProviderName == LdapAuthentication.ProviderName))
                 {
-                    if (identity.Claims[IdentityCreator.SamAccountNameClaimType].Value == samAccountName ||
+                    if (identity.Claims[IdentityCreator.ExternalIdentityClaimType].Value == externalIdentity ||
                         identity.Claims[IdentityCreator.UpnClaimType].Value == userPrincipalName)
                     {
                         // if we partially matched but the samAccountName or UPN is the same then this is the same user.
                         identity.Claims[IdentityCreator.UpnClaimType].Value = userPrincipalName;
                         identity.Claims[ClaimDescriptor.EmailClaimType].Value = emailAddress;
-                        identity.Claims[IdentityCreator.SamAccountNameClaimType].Value = samAccountName;
+                        identity.Claims[IdentityCreator.ExternalIdentityClaimType].Value = externalIdentity;
                         identity.Claims[ClaimDescriptor.DisplayNameClaimType].Value = displayName;
 
                         return ResultFromExtension<IUser>.Success(userStore.UpdateIdentity(user.Id, identity, cancellationToken));
@@ -131,7 +147,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                     {
                         // we found a single other user in our DB that wasn't an exact match, but matched on some fields, so see if that user is still
                         // in ldap
-                        var otherUserPrincipal = ldapService.FindByIdentity(identity.Claims[IdentityCreator.SamAccountNameClaimType].Value);
+                        var otherUserPrincipal = ldapService.FindByIdentity(identity.Claims[IdentityCreator.ExternalIdentityClaimType].Value);
 
                         if (!otherUserPrincipal.Success)
                         {
@@ -139,7 +155,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                             // and we need to modify the existing user in our DB.
                             identity.Claims[ClaimDescriptor.EmailClaimType].Value = emailAddress;
                             identity.Claims[IdentityCreator.UpnClaimType].Value = userPrincipalName;
-                            identity.Claims[IdentityCreator.SamAccountNameClaimType].Value = samAccountName;
+                            identity.Claims[IdentityCreator.ExternalIdentityClaimType].Value = externalIdentity;
                             identity.Claims[ClaimDescriptor.DisplayNameClaimType].Value = displayName;
 
                             return ResultFromExtension<IUser>.Success(userStore.UpdateIdentity(user.Id, identity, cancellationToken));
@@ -156,7 +172,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         IResultFromExtension<IUser> CreateNewUser(CancellationToken cancellationToken, UserValidationResult principal, Identity authenticatingIdentity)
         {
             if (!configurationStore.GetAllowAutoUserCreation())
-                return ResultFromExtension<IUser>.Failed("User could not be located and auto user creation is not enabled.");
+                return ResultFromExtension<IUser>.Failed("User could not be located, and auto user creation is not enabled.");
 
             var userCreateResult = userStore.Create(
                 principal.UserPrincipalName,

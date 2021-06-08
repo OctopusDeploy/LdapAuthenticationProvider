@@ -37,18 +37,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
             objectNameNormalizer.NormalizeName(name, out var normalisedName, out var domain);
 
-            using (var context = contextProvider.GetContext())
-            {
-                if (cancellationToken.IsCancellationRequested) return null;
+            using var context = contextProvider.GetContext();
+            if (cancellationToken.IsCancellationRequested) return null;
 
-                var identityName = objectNameNormalizer.BuildUserName(normalisedName, domain);
-                var match = userPrincipalFinder.FindByIdentity(context, identityName);
+            var identityName = objectNameNormalizer.BuildUserName(normalisedName, domain);
+            var match = userPrincipalFinder.FindByIdentity(context, identityName);
 
-                if (match == null)
-                    return null;
+            if (match == null)
+                return null;
 
-                return identityCreator.Create(match.Mail, match.UPN, match.SamAccountName, match.DisplayName);
-            }
+            return identityCreator.Create(match.Mail, match.UPN, match.ExternalIdentity, match.DisplayName);
         }
     }
 }
