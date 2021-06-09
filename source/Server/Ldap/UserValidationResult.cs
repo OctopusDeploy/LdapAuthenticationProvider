@@ -3,7 +3,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
     public class UserValidationResult
     {
         public UserValidationResult(UserPrincipal userPrincipal)
-            : this(userPrincipal.UPN, userPrincipal.ExternalIdentity, userPrincipal.DisplayName, userPrincipal.Mail)
+            : this(userPrincipal.UserPrincipalName, userPrincipal.ExternalIdentity, userPrincipal.DisplayName, userPrincipal.Email)
         {
         }
 

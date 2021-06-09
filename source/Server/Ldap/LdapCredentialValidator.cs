@@ -78,24 +78,24 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             var emailAddress = principal.EmailAddress;
             var userPrincipalName = principal.UserPrincipalName;
 
-            const string attributeErrorTemplate = "Octopus is configured to use the '{0}' attribute as the external identity for LDAP users. " +
+            const string attributeErrorTemplate = "Octopus is configured to use the '{0}' attribute as the {1} for LDAP users. " +
                                                   "Please make sure this user has a valid '{0}' attribute.";
-            const string contactAdminMessage = "Please contact your administrator to resolve this.";
+            const string failMessageTemplate = "We were unable to find a valid {0} when attempting to sign in with LDAP. Please contact your administrator to resolve this.";
 
             if (string.IsNullOrWhiteSpace(externalIdentity))
             {
                 log.Error($"We couldn't find a valid external identity to use for the LDAP user '{displayName}' with email address '{emailAddress}' for the user account named '{userPrincipalName}'. "
-                          + string.Format(attributeErrorTemplate, configurationStore.GetUserPrincipalNameAttribute()));
+                          + string.Format(attributeErrorTemplate, configurationStore.GetUserNameAttribute(), "external identity"));
 
-                return ResultFromExtension<IUser>.Failed($"We were unable to find a valid external identity when attempting to sign in with LDAP.\r\n{contactAdminMessage}");
+                return ResultFromExtension<IUser>.Failed(string.Format(failMessageTemplate, "external identity"));
             }
 
             if (string.IsNullOrWhiteSpace(userPrincipalName))
             {
-                log.Error($"The user principal name was not returned from the LDAP server for the LDAP user '{displayName}' with email address '{emailAddress}'."
-                          + string.Format(attributeErrorTemplate, configurationStore.GetUserPrincipalNameAttribute()));
+                log.Error($"We couldn't find a valid user principal name to use for the LDAP user '{displayName}' with email address '{emailAddress}'."
+                          + string.Format(attributeErrorTemplate, configurationStore.GetUserPrincipalNameAttribute(), "user principal name"));
 
-                return ResultFromExtension<IUser>.Failed($"We were unable to find the user principal name when attempting to sign in with LDAP. {contactAdminMessage}");
+                return ResultFromExtension<IUser>.Failed(string.Format(failMessageTemplate, "user principal name"));
             }
 
             var authenticatingIdentity = identityCreator.Create(emailAddress, userPrincipalName, externalIdentity, displayName);

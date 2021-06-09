@@ -1,6 +1,9 @@
 using Octopus.Diagnostics;
 using System;
 using System.Threading;
+using Octopus.Data.Model.User;
+using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
+using Octopus.Server.Extensibility.Results;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
@@ -36,6 +39,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             {
                 var searchedContext = domain ?? context.BaseDN;
                 log.Info($"A principal identifiable by '{identityName}' was not found in '{searchedContext}'");
+
                 return username.Contains("@")
                     ? new UserValidationResult("Invalid username or password.  UPN format may not be supported for your domain configuration.")
                     : new UserValidationResult("Invalid username or password.");
@@ -43,16 +47,15 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
             try
             {
-                log.Verbose($"Calling Bind (\"{principal.DN}\")");
-                context.LdapConnection.Bind(principal.DN, password);
+                log.Verbose($"Calling Bind (\"{principal.DistinguishedName}\")");
+                context.LdapConnection.Bind(principal.DistinguishedName, password);
+                log.Verbose($"Credentials for '{identityName}' validated, mapped to principal '{principal.ExternalIdentity}'");
             }
             catch (Exception)
             {
-                log.Warn($"Principal '{principal.DN}' (Domain: '{domain}') could not be logged on via LDAP.");
+                log.Warn($"Principal '{principal.DistinguishedName}' (Domain: '{domain}') could not be logged on via LDAP.");
                 return new UserValidationResult("Invalid username or password.");
             }
-
-            log.Verbose($"Credentials for '{identityName}' validated, mapped to principal '{principal.ExternalIdentity}'");
 
             return new UserValidationResult(principal);
         }
@@ -61,18 +64,15 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         {
             objectNameNormalizer.NormalizeName(username, out username, out var domain);
 
-            using (var context = contextProvider.GetContext())
-            {
-                var identityName = objectNameNormalizer.BuildUserName(username, domain);
-                var principal = userPrincipalFinder.FindByIdentity(context, identityName);
+            using var context = contextProvider.GetContext();
+            var identityName = objectNameNormalizer.BuildUserName(username, domain);
+            var principal = userPrincipalFinder.FindByIdentity(context, identityName);
 
-                if (principal == null)
-                {
-                    var searchedContext = domain ?? context.BaseDN;
-                    return new UserValidationResult($"A principal identifiable by '{identityName}' was not found in '{searchedContext}'");
-                }
+            if (principal != null)
                 return new UserValidationResult(principal);
-            }
+
+            var searchedContext = domain ?? context.BaseDN;
+            return new UserValidationResult($"A principal identifiable by '{identityName}' was not found in '{searchedContext}'");
         }
     }
 }

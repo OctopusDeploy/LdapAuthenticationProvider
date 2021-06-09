@@ -42,12 +42,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         {
             return new UserPrincipal
             {
-                DN = searchResult.Dn,
+                DistinguishedName = searchResult.Dn,
                 DisplayName = searchResult.TryGetAttribute(context.UserDisplayNameAttribute)?.StringValue,
-                UPN = searchResult.TryGetAttribute(context.UserPrincipalNameAttribute)?.StringValue,
+                UserPrincipalName = searchResult.TryGetAttribute(context.UserPrincipalNameAttribute)?.StringValue,
                 Groups = searchResult.TryGetAttribute(context.UserMembershipAttribute)?.StringValueArray,
                 ExternalIdentity = searchResult.TryGetAttribute(context.UserNameAttribute)?.StringValue,
-                Mail = searchResult.TryGetAttribute(context.UserEmailAttribute)?.StringValue
+                Email = searchResult.TryGetAttribute(context.UserEmailAttribute)?.StringValue
             };
         }
 
