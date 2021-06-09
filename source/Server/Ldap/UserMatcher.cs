@@ -38,7 +38,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             objectNameNormalizer.NormalizeName(name, out var normalisedName, out var domain);
 
             using var context = contextProvider.GetContext();
-            if (cancellationToken.IsCancellationRequested) return null;
+
+            if (cancellationToken.IsCancellationRequested)
+                return null;
 
             var identityName = objectNameNormalizer.BuildUserName(normalisedName, domain);
             var match = userPrincipalFinder.FindByIdentity(context, identityName);

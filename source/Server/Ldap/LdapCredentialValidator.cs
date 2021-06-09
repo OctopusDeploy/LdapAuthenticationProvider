@@ -43,25 +43,20 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public int Priority => 100;
 
-        public IResultFromExtension<IUser> ValidateCredentials(string username, string password,
-            CancellationToken cancellationToken)
+        public IResultFromExtension<IUser> ValidateCredentials(string username, string password, CancellationToken cancellationToken)
         {
             if (!configurationStore.GetIsEnabled())
-            {
                 return ResultFromExtension<IUser>.ExtensionDisabled();
-            }
 
             if (username == null) throw new ArgumentNullException(nameof(username));
 
             log.Verbose($"Validating credentials provided for '{username}'...");
 
             var validatedUser = ldapService.ValidateCredentials(username, password, cancellationToken);
-            if (!string.IsNullOrWhiteSpace(validatedUser.ValidationMessage))
-            {
-                return ResultFromExtension<IUser>.Failed(validatedUser.ValidationMessage);
-            }
 
-            return GetOrCreateUser(validatedUser, cancellationToken);
+            return string.IsNullOrWhiteSpace(validatedUser.ValidationMessage)
+                ? GetOrCreateUser(validatedUser, cancellationToken)
+                : ResultFromExtension<IUser>.Failed(validatedUser.ValidationMessage);
         }
 
         public IResultFromExtension<IUser> GetOrCreateUser(string username, CancellationToken cancellationToken)
@@ -71,25 +66,20 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
             var result = ldapService.FindByIdentity(username);
 
-            if (!string.IsNullOrWhiteSpace(result.ValidationMessage))
-            {
-                throw new ArgumentException(result.ValidationMessage);
-            }
-
-            return GetOrCreateUser(result, cancellationToken);
+            return string.IsNullOrWhiteSpace(result.ValidationMessage)
+                ? GetOrCreateUser(result, cancellationToken)
+                : throw new ArgumentException(result.ValidationMessage);
         }
 
-        internal IResultFromExtension<IUser> GetOrCreateUser(UserValidationResult principal,
-            CancellationToken cancellationToken)
+        internal IResultFromExtension<IUser> GetOrCreateUser(UserValidationResult principal, CancellationToken cancellationToken)
         {
             var externalIdentity = principal.ExternalIdentity;
             var displayName = principal.DisplayName;
             var emailAddress = principal.EmailAddress;
             var userPrincipalName = principal.UserPrincipalName;
 
-            var attributeErrorTemplate =
-                "Octopus is configured to use the '{0}' attribute as the external identity for LDAP users. " +
-                "Please make sure this user has a valid '{0}' attribute.";
+            const string attributeErrorTemplate = "Octopus is configured to use the '{0}' attribute as the external identity for LDAP users. " +
+                                                  "Please make sure this user has a valid '{0}' attribute.";
 
             if (string.IsNullOrWhiteSpace(externalIdentity))
             {
@@ -106,29 +96,22 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             }
 
             var authenticatingIdentity = identityCreator.Create(emailAddress, userPrincipalName, externalIdentity, displayName);
-
             var users = userStore.GetByIdentity(authenticatingIdentity);
 
             var existingMatchingUser = users.SingleOrDefault(u => u.Identities != null && u.Identities.Any(identity =>
                 identity.IdentityProviderName == LdapAuthentication.ProviderName &&
                 identity.Equals(authenticatingIdentity)));
 
-            // if we can find a user where all identifiers match exactly then we know for sure that's the user
-            // who just logged in.
+            // if we can find a user where all identifiers match exactly then we know for sure that's the user who just logged in.
             if (existingMatchingUser != null)
-            {
                 return ResultFromExtension<IUser>.Success(existingMatchingUser);
-            }
 
             foreach (var user in users)
             {
                 // if we haven't converted the old externalId into the new identity then set it up now
                 var anyLdapIdentity = user.Identities.FirstOrDefault(p => p.IdentityProviderName == LdapAuthentication.ProviderName);
                 if (anyLdapIdentity == null)
-                {
-                    return ResultFromExtension<IUser>.Success(userStore.AddIdentity(user.Id, authenticatingIdentity,
-                        cancellationToken));
-                }
+                    return ResultFromExtension<IUser>.Success(userStore.AddIdentity(user.Id, authenticatingIdentity, cancellationToken));
 
                 foreach (var identity in user.Identities.Where(p => p.IdentityProviderName == LdapAuthentication.ProviderName))
                 {
@@ -145,8 +128,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                     }
                     else
                     {
-                        // we found a single other user in our DB that wasn't an exact match, but matched on some fields, so see if that user is still
-                        // in ldap
+                        // we found a single other user in our DB that wasn't an exact match, but matched on some fields, so see if that user is still in ldap
                         var otherUserPrincipal = ldapService.FindByIdentity(identity.Claims[IdentityCreator.ExternalIdentityClaimType].Value);
 
                         if (!otherUserPrincipal.Success)

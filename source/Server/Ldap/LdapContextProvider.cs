@@ -13,10 +13,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         private readonly Lazy<ILdapConfigurationStore> ldapConfiguration;
         private readonly ISystemLog log;
 
-        public LdapContextProvider(
-            Lazy<ILdapConfigurationStore> ldapConfiguration,
-            ISystemLog log
-            )
+        public LdapContextProvider(Lazy<ILdapConfigurationStore> ldapConfiguration, ISystemLog log)
         {
             this.ldapConfiguration = ldapConfiguration;
             this.log = log;
@@ -61,7 +58,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 throw new Exception($"Unable to connect to the LDAP server.  Please see your administrator if this re-occurs.  Error code {ex.ResultCode}", ex);
             }
         }
-
 
         private bool RemoteCertificateValidation(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
