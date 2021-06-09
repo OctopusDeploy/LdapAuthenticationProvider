@@ -62,7 +62,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             }
         }
 
-
         private bool RemoteCertificateValidation(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
             if (sslPolicyErrors == SslPolicyErrors.None)
