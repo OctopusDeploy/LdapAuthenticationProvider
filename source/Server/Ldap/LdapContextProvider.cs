@@ -58,7 +58,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             }
             catch (LdapException ex)
             {
-                throw new Exception($"Unable to connect to the LDAP server.  Please see your administrator if this re-occurs.  Error code {ex.ResultCode}");
+                throw new Exception($"Unable to connect to the LDAP server.  Please see your administrator if this re-occurs.  Error code {ex.ResultCode}", ex);
             }
         }
 
