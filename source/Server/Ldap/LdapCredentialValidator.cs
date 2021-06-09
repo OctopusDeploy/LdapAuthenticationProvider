@@ -43,8 +43,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public int Priority => 100;
 
-        public IResultFromExtension<IUser> ValidateCredentials(string username, string password,
-            CancellationToken cancellationToken)
+        public IResultFromExtension<IUser> ValidateCredentials(string username, string password, CancellationToken cancellationToken)
         {
             if (!configurationStore.GetIsEnabled())
                 return ResultFromExtension<IUser>.ExtensionDisabled();
@@ -79,9 +78,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             var emailAddress = principal.EmailAddress;
             var userPrincipalName = principal.UserPrincipalName;
 
-            var attributeErrorTemplate =
-                "Octopus is configured to use the '{0}' attribute as the external identity for LDAP users. " +
-                "Please make sure this user has a valid '{0}' attribute.";
+            const string attributeErrorTemplate = "Octopus is configured to use the '{0}' attribute as the external identity for LDAP users. " +
+                                                  "Please make sure this user has a valid '{0}' attribute.";
 
             if (string.IsNullOrWhiteSpace(externalIdentity))
             {
@@ -98,7 +96,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             }
 
             var authenticatingIdentity = identityCreator.Create(emailAddress, userPrincipalName, externalIdentity, displayName);
-
             var users = userStore.GetByIdentity(authenticatingIdentity);
 
             var existingMatchingUser = users.SingleOrDefault(u => u.Identities != null && u.Identities.Any(identity =>
@@ -107,9 +104,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
             // if we can find a user where all identifiers match exactly then we know for sure that's the user who just logged in.
             if (existingMatchingUser != null)
-            {
                 return ResultFromExtension<IUser>.Success(existingMatchingUser);
-            }
 
             foreach (var user in users)
             {
