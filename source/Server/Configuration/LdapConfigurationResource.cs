@@ -7,6 +7,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 {
     public class LdapConfigurationResource : ExtensionConfigurationResource
     {
+        public LdapConfigurationResource()
+        {
+            Id = "authentication-ldap";
+        }
+
         public const string ServerDescription = "Set the server URL.";
         public const string PortDescription = "Set the port using to connect.";
         public const string UseSslDescription = "Sets whether to use Secure Socket Layer to connect to LDAP.";

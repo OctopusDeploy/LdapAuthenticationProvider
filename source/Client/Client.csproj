@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <AssemblyName>Octopus.Server.Extensibility.Authentication.Ldap</AssemblyName>
+        <RootNamespace>Octopus.Server.Extensibility.Authentication.Ldap</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Octopus.Server.Extensibility" Version="14.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="..\Server\Configuration\LdapConfigurationResource.cs">
+        <Link>Configuration\LdapConfigurationResource.cs</Link>
+      </Compile>
+    </ItemGroup>
+
+</Project>
