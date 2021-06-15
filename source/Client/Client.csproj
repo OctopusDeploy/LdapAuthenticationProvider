@@ -2,18 +2,12 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <AssemblyName>Octopus.Server.Extensibility.Authentication.Ldap</AssemblyName>
-        <RootNamespace>Octopus.Server.Extensibility.Authentication.Ldap</RootNamespace>
+        <AssemblyName>Octopus.Client.Extensibility.Authentication.Ldap</AssemblyName>
+        <RootNamespace>Octopus.Client.Extensibility.Authentication.Ldap</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Octopus.Server.Extensibility" Version="14.0.4" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Include="..\Server\Configuration\LdapConfigurationResource.cs">
-        <Link>Configuration\LdapConfigurationResource.cs</Link>
-      </Compile>
+      <PackageReference Include="Octopus.Client" Version="11.0.0" />
     </ItemGroup>
 
 </Project>

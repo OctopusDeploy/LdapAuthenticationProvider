@@ -1,12 +1,17 @@
-﻿using Octopus.Server.Extensibility.Extensions.Infrastructure.Configuration;
-using System.ComponentModel;
-using Octopus.Server.MessageContracts;
-using Octopus.Server.MessageContracts.Attributes;
+﻿using System.ComponentModel;
+using Octopus.Client.Extensibility.Attributes;
+using Octopus.Client.Model;
+using Octopus.Client.Extensibility.Extensions.Infrastructure.Configuration;
 
-namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
+namespace Octopus.Client.Extensibility.Authentication.Ldap.Configuration
 {
-    public class LdapConfigurationResource : ExtensionConfigurationResource
+   public class LdapConfigurationResource : ExtensionConfigurationResource
     {
+        public LdapConfigurationResource()
+        {
+            Id = "authentication-ldap";
+        }
+
         public const string ServerDescription = "Set the server URL.";
         public const string PortDescription = "Set the port using to connect.";
         public const string UseSslDescription = "Sets whether to use Secure Socket Layer to connect to LDAP.";
