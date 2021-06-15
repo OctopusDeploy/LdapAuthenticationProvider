@@ -85,7 +85,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             if (string.IsNullOrWhiteSpace(externalIdentity))
             {
                 log.Error($"We couldn't find a valid external identity to use for the LDAP user '{displayName}' with email address '{emailAddress}' for the user account named '{userPrincipalName}'. "
-                          + string.Format(attributeErrorTemplate, configurationStore.GetUserNameAttribute(), "external identity"));
+                          + string.Format(attributeErrorTemplate, configurationStore.GetUsernameAttribute(), "external identity"));
 
                 return ResultFromExtension<IUser>.Failed(string.Format(failMessageTemplate, "external identity"));
             }

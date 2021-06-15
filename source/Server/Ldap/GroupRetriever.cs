@@ -57,7 +57,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 }
                 else
                 {
-                    log.WarnFormat("Unable to retrieve groups for samAccountName {0}", externalIdentity);
+                    log.WarnFormat("Unable to retrieve groups for external identity '{0}'", externalIdentity);
                 }
             }
 

@@ -94,14 +94,14 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             SetProperty(doc => doc.DefaultDomain = defaultDomain);
         }
 
-        public string GetUserNameAttribute()
+        public string GetUsernameAttribute()
         {
-            return GetProperty(doc => doc.AttributeMapping.UserNameAttribute);
+            return GetProperty(doc => doc.AttributeMapping.UsernameAttribute);
         }
 
-        public void SetUserNameAttribute(string samAccountNameAttribute)
+        public void SetUsernameAttribute(string usernameAttribute)
         {
-            SetProperty(doc => doc.AttributeMapping.UserNameAttribute = samAccountNameAttribute);
+            SetProperty(doc => doc.AttributeMapping.UsernameAttribute = usernameAttribute);
         }
 
         public string GetUserFilter()

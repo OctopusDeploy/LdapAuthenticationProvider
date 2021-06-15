@@ -42,7 +42,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 {
                     LdapConnection = con,
                     BaseDN = ldapConfiguration.Value.GetBaseDn(),
-                    UserNameAttribute = ldapConfiguration.Value.GetUserNameAttribute(),
+                    UserNameAttribute = ldapConfiguration.Value.GetUsernameAttribute(),
                     UserFilter = ldapConfiguration.Value.GetUserFilter(),
                     GroupFilter = ldapConfiguration.Value.GetGroupFilter(),
                     GroupNameAttribute = ldapConfiguration.Value.GetGroupNameAttribute(),

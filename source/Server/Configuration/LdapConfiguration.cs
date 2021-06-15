@@ -5,7 +5,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 {
     public class LdapConfiguration : ExtensionConfigurationDocument
     {
-        public LdapConfiguration() : base(LdapConfigurationStore.SingletonId, "Ldap", "Octopus Deploy (contributed by Thomas Unger)", "1.0")
+        public LdapConfiguration() : base(LdapConfigurationStore.SingletonId, "LDAP", "Octopus Deploy (contributed by Thomas Unger)", "1.0")
         {
             AllowAutoUserCreation = true;
         }
@@ -50,7 +50,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
     public class LdapMappingConfiguration
     {
-        public string UserNameAttribute { get; set; } = "sAMAccountName";
+        public string UsernameAttribute { get; set; } = "sAMAccountName";
 
         public string UserDisplayNameAttribute { get; set; } = "displayName";
 

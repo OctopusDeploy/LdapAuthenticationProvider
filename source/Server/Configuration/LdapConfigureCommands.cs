@@ -64,10 +64,10 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 ldapConfiguration.Value.SetDefaultDomain(v);
                 log.Info("LDAP Default Domain set");
             });
-            yield return new ConfigureCommandOption("ldapSamAccountNameAttribute=", LdapMappingConfigurationResource.UserNameAttributeDescription, v =>
+            yield return new ConfigureCommandOption("ldapUserIdentifierAttribute=", LdapMappingConfigurationResource.UsernameAttributeDescription, v =>
             {
-                ldapConfiguration.Value.SetUserNameAttribute(v);
-                log.Info("LDAP SamAccountNameAttribute set to: " + v);
+                ldapConfiguration.Value.SetUsernameAttribute(v);
+                log.Info("LDAP UsernameAttribute set to: " + v);
             });
             yield return new ConfigureCommandOption("ldapUserFilter=", LdapConfigurationResource.UserFilterDescription, v =>
             {

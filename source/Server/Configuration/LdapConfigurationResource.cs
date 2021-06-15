@@ -77,13 +77,29 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Writeable]
         public bool AllowAutoUserCreation { get; set; }
 
+        [DisplayName("Enable Referral Following")]
+        [Description(ReferralFollowingEnabledDescription)]
+        [Writeable]
+        public bool ReferralFollowingEnabled { get; set; }
+
+        [DisplayName("Referral Hop Limit`")]
+        [Description(ReferralHopLimitDescription)]
+        [Writeable]
+        public bool ReferralHopLimit { get; set; }
+
+        [DisplayName("Constraint Time Limit")]
+        [Description(ConstraintTimeLimitDescription)]
+        [Writeable]
+        public bool ConstraintTimeLimit { get; set; }
+
+
         [DisplayName("Attribute Mapping")]
         public LdapMappingConfigurationResource AttributeMapping { get; set; } = new LdapMappingConfigurationResource();
     }
 
     public class LdapMappingConfigurationResource
     {
-        public const string UserNameAttributeDescription = "Set the name of the LDAP attribute containing the username, which is used to authenticate via the logon form.";
+        public const string UsernameAttributeDescription = "Set the name of the LDAP attribute containing the username, which is used to authenticate via the logon form.";
         public const string UserDisplayNameAttributeDescription = "Set the name of the LDAP attribute containing the user's full name.";
         public const string UserPrincipalNameAttributeDescription = "Set the name of the LDAP attribute containing the user's principal name.";
         public const string UserMembershipAttributeDescription = "Set the name of the LDAP attribute to use when loading the user's groups.";
@@ -91,9 +107,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public const string GroupNameAttributeDescription = "Set the name of the LDAP attribute containing the group's name.";
 
         [DisplayName("Username Attribute")]
-        [Description(UserNameAttributeDescription)]
+        [Description(UsernameAttributeDescription)]
         [Writeable]
-        public string UserNameAttribute { get; set; }
+        public string UsernameAttribute { get; set; }
 
         [DisplayName("User Display Name Attribute")]
         [Description(UserDisplayNameAttributeDescription)]
