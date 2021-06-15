@@ -85,12 +85,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [DisplayName("Referral Hop Limit`")]
         [Description(ReferralHopLimitDescription)]
         [Writeable]
-        public bool ReferralHopLimit { get; set; }
+        public int ReferralHopLimit { get; set; }
 
         [DisplayName("Constraint Time Limit")]
         [Description(ConstraintTimeLimitDescription)]
         [Writeable]
-        public bool ConstraintTimeLimit { get; set; }
+        public int ConstraintTimeLimit { get; set; }
 
 
         [DisplayName("Attribute Mapping")]
