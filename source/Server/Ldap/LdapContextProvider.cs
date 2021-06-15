@@ -36,7 +36,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 con.Bind(ldapConfiguration.Value.GetConnectUsername(), ldapConfiguration.Value.GetConnectPassword().Value);
                 con.Constraints.ReferralFollowing = ldapConfiguration.Value.GetReferralFollowingEnabled();
                 con.Constraints.HopLimit = ldapConfiguration.Value.GetReferralHopLimit();
-                con.Constraints.TimeLimit = ldapConfiguration.Value.GetConstraintTimeLimit();
+                con.Constraints.TimeLimit = ldapConfiguration.Value.GetConstraintTimeLimit() * 1000;
 
                 return new LdapContext
                 {
