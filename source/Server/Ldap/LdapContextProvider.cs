@@ -57,7 +57,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 log.Error(ex, $"Unable to connect to the LDAP server. Error code {ex.ResultCode}");
                 throw new LdapAuthenticationException($"Unable to connect to the LDAP server.  Please see your administrator if this re-occurs.  Error code {ex.ResultCode}", ex);
             }
-        }x
+        }
 
         private bool RemoteCertificateValidation(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
