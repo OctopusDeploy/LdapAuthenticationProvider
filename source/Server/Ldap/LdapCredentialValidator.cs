@@ -66,8 +66,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             }
             catch (Exception ex)
             {
-                log.Error(ex, "Failed validating credentials for LDAP provider.");
-                return ResultFromExtension<IUser>.Failed("Unable to validate credentials for LDAP provider.");
+                log.Error(ex, "Failed validating credentials with LDAP provider.");
+                return ResultFromExtension<IUser>.Failed("Unable to validate credentials with LDAP provider.");
             }
         }
 
