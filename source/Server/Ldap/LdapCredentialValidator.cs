@@ -14,16 +14,17 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public class LdapCredentialValidator : ILdapCredentialValidator
     {
-        private readonly ISystemLog log;
-        private readonly ILdapObjectNameNormalizer objectNameNormalizer;
-        private readonly IUpdateableUserStore userStore;
-        private readonly ILdapConfigurationStore configurationStore;
-        private readonly IIdentityCreator identityCreator;
-        private readonly ILdapService ldapService;
+        readonly ISystemLog log;
+        readonly ILdapObjectNameNormalizer objectNameNormalizer;
+        readonly IUpdateableUserStore userStore;
+        readonly ILdapConfigurationStore configurationStore;
+        readonly IIdentityCreator identityCreator;
+        readonly ILdapService ldapService;
 
         internal static string EnvironmentUserDomainName = Environment.UserDomainName;
 
         public string IdentityProviderName => LdapAuthentication.ProviderName;
+        public int Priority => 100;
 
         public LdapCredentialValidator(
             ISystemLog log,
@@ -40,8 +41,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             this.identityCreator = identityCreator;
             this.ldapService = ldapService;
         }
-
-        public int Priority => 100;
 
         public IResultFromExtension<IUser> ValidateCredentials(string username, string password, CancellationToken cancellationToken)
         {
