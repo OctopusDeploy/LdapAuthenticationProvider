@@ -44,9 +44,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             var ldapIdentities = user.Identities.Where(p => p.IdentityProviderName == LdapAuthentication.ProviderName);
             foreach (var ldapIdentity in ldapIdentities)
             {
-                var externalIdentity = ldapIdentity.Claims[IdentityCreator.ExternalIdentityClaimType].Value;
+                var uniqueAccountName = ldapIdentity.Claims[IdentityCreator.UniqueAccountNameClaimType].Value;
 
-                var result = groupLocator.GetGroupIdsForUser(externalIdentity, cancellationToken);
+                var result = groupLocator.GetGroupIdsForUser(uniqueAccountName, cancellationToken);
                 if (result.WasAbleToRetrieveGroups)
                 {
                     foreach (var groupId in result.GroupsIds.Where(g => !newGroups.Contains(g)))
@@ -57,7 +57,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 }
                 else
                 {
-                    log.WarnFormat("Unable to retrieve groups for external identity '{0}'", externalIdentity);
+                    log.WarnFormat("Unable to retrieve groups for unique account name '{0}'", uniqueAccountName);
                 }
             }
 

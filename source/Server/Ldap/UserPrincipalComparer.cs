@@ -11,7 +11,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public int GetHashCode(UserPrincipal obj)
         {
-            return obj.ExternalIdentity.GetHashCode();
+            return obj.UniqueAccountName.GetHashCode();
         }
     }
 }

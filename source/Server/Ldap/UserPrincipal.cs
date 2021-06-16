@@ -4,7 +4,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public class UserPrincipal
     {
-        public string ExternalIdentity { get; set; }
+        public string UniqueAccountName { get; set; }
 
         public string DisplayName { get; set; }
 

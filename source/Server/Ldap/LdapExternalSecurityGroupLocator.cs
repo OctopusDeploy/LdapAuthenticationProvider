@@ -71,27 +71,27 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             return results.OrderBy(o => o.DisplayName).ToArray();
         }
 
-        public LdapExternalSecurityGroupLocatorResult GetGroupIdsForUser(string externalIdentity, CancellationToken cancellationToken)
+        public LdapExternalSecurityGroupLocatorResult GetGroupIdsForUser(string username, CancellationToken cancellationToken)
         {
-            if (externalIdentity == null)
-                throw new ArgumentNullException(nameof(externalIdentity), "The external identity is null, indicating we were not able to associate this Octopus User Account with an identifier from LDAP.");
+            if (username == null)
+                throw new ArgumentNullException(nameof(username), "The username is null, indicating we were not able to associate this Octopus user account with an identifier from LDAP.");
 
             try
             {
-                log.Verbose($"Finding external security groups for '{externalIdentity}'...");
+                log.Verbose($"Finding external security groups for '{username}'...");
 
-                objectNameNormalizer.NormalizeName(externalIdentity, out externalIdentity, out var domain);
+                objectNameNormalizer.NormalizeName(username, out username, out var domain);
 
                 using var context = contextProvider.GetContext();
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var identityName = objectNameNormalizer.BuildUserName(externalIdentity, domain);
-                var principal = userPrincipalFinder.FindByIdentity(context, identityName);
+                var uniqueAccountName = objectNameNormalizer.BuildUserName(username, domain);
+                var principal = userPrincipalFinder.FindByIdentity(context, uniqueAccountName);
 
                 if (principal == null)
                 {
                     var searchedContext = domain ?? context.BaseDN;
-                    log.Trace($"While loading security groups, a principal identifiable by '{identityName}' was not found in '{searchedContext}'");
+                    log.Trace($"While loading security groups, a principal identifiable by '{uniqueAccountName}' was not found in '{searchedContext}'");
                     return new LdapExternalSecurityGroupLocatorResult();
                 }
 
@@ -105,7 +105,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             }
             catch (Exception ex)
             {
-                log.ErrorFormat(ex, "LDAP search for {0} failed.", externalIdentity);
+                log.ErrorFormat(ex, "LDAP search for {0} failed.", username);
                 return new LdapExternalSecurityGroupLocatorResult();
             }
         }

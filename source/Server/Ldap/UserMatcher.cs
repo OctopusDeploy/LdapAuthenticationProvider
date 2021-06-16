@@ -48,7 +48,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             if (match == null)
                 return null;
 
-            return identityCreator.Create(match.Email, match.UserPrincipalName, match.ExternalIdentity, match.DisplayName);
+            return identityCreator.Create(match.Email, match.UserPrincipalName, match.UniqueAccountName, match.DisplayName);
         }
     }
 }

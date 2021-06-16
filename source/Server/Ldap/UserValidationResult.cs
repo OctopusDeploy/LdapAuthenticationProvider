@@ -3,14 +3,14 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
     public class UserValidationResult
     {
         public UserValidationResult(UserPrincipal userPrincipal)
-            : this(userPrincipal.UserPrincipalName, userPrincipal.ExternalIdentity, userPrincipal.DisplayName, userPrincipal.Email)
+            : this(userPrincipal.UserPrincipalName, userPrincipal.UniqueAccountName, userPrincipal.DisplayName, userPrincipal.Email)
         {
         }
 
-        public UserValidationResult(string userPrincipalName, string externalIdentity, string displayName, string emailAddress)
+        public UserValidationResult(string userPrincipalName, string uniqueAccountName, string displayName, string emailAddress)
         {
             UserPrincipalName = userPrincipalName;
-            ExternalIdentity = externalIdentity;
+            UniqueAccountName = uniqueAccountName;
             DisplayName = displayName;
             EmailAddress = emailAddress;
 
@@ -23,7 +23,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         }
 
         public string UserPrincipalName { get; }
-        public string ExternalIdentity { get; }
+        public string UniqueAccountName { get; }
 
         public string DisplayName { get; }
         public string EmailAddress { get; }

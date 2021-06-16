@@ -42,7 +42,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 {
                     LdapConnection = con,
                     BaseDN = ldapConfiguration.Value.GetBaseDn(),
-                    UserNameAttribute = ldapConfiguration.Value.GetUsernameAttribute(),
+                    UniqueAccountNameAttribute = ldapConfiguration.Value.GetUniqueAccountNameAttribute(),
                     UserFilter = ldapConfiguration.Value.GetUserFilter(),
                     GroupFilter = ldapConfiguration.Value.GetGroupFilter(),
                     GroupNameAttribute = ldapConfiguration.Value.GetGroupNameAttribute(),
@@ -54,7 +54,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             }
             catch (LdapException ex)
             {
-                log.Error(ex, $"Unable to connect to the LDAP server. Error code {ex.ResultCode}");
                 throw new LdapAuthenticationException($"Unable to connect to the LDAP server.  Please see your administrator if this re-occurs.  Error code {ex.ResultCode}", ex);
             }
         }

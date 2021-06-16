@@ -39,7 +39,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapReferralFollowingEnabled", ConfigurationDocumentStore.GetReferralFollowingEnabled().ToString(), isEnabled, "Referral Following Enabled");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapConstraintTimeLimit", ConfigurationDocumentStore.GetConstraintTimeLimit().ToString(), isEnabled, "Constraint Time Limit (seconds)");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapReferralHopLimit", ConfigurationDocumentStore.GetReferralHopLimit().ToString(), isEnabled, "Referral Hop Limit");
-            yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUsernameAttribute", ConfigurationDocumentStore.GetUsernameAttribute(), isEnabled, "Username Attribute");
+            yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUniqueAccountNameAttribute", ConfigurationDocumentStore.GetUniqueAccountNameAttribute(), isEnabled, "Unique Account Name Attribute");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserDisplayNameAttribute", ConfigurationDocumentStore.GetUserDisplayNameAttribute(), isEnabled, "User Display Name Attribute");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserPrincipalNameAttribute", ConfigurationDocumentStore.GetUserPrincipalNameAttribute(), isEnabled, "User Principal Name Attribute");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserMembershipAttribute", ConfigurationDocumentStore.GetUserMembershipAttribute(), isEnabled, "User Membership Attribute");

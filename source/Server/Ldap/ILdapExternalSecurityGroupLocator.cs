@@ -5,6 +5,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public interface ILdapExternalSecurityGroupLocator : ICanSearchExternalGroups
     {
-        LdapExternalSecurityGroupLocatorResult GetGroupIdsForUser(string externalIdentity, CancellationToken cancellationToken);
+        LdapExternalSecurityGroupLocatorResult GetGroupIdsForUser(string username, CancellationToken cancellationToken);
     }
 }

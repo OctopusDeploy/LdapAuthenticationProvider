@@ -11,8 +11,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public LdapApi()
         {
-            Add<ListSecurityGroupsAction>("GET", ApiExternalGroupsSearch, RouteCategory.Raw, new SecuredWhenEnabledEndpointInvocation<ILdapConfigurationStore>(), "Search for LDAP groups", "Ldap");
-            Add<UserLookupAction>("GET", ApiExternalUsersSearch, RouteCategory.Raw, new SecuredWhenEnabledEndpointInvocation<ILdapConfigurationStore>(), "Search for LDAP users", "Ldap");
+            Add<ListSecurityGroupsAction>("GET", ApiExternalGroupsSearch, RouteCategory.Raw, new SecuredWhenEnabledEndpointInvocation<ILdapConfigurationStore>(), "Search for LDAP groups", "LDAP");
+            Add<UserLookupAction>("GET", ApiExternalUsersSearch, RouteCategory.Raw, new SecuredWhenEnabledEndpointInvocation<ILdapConfigurationStore>(), "Search for LDAP users", "LDAP");
         }
     }
 }

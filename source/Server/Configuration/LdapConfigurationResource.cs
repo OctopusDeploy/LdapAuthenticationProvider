@@ -92,24 +92,23 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Writeable]
         public int ConstraintTimeLimit { get; set; }
 
-
         [DisplayName("Attribute Mapping")]
         public LdapMappingConfigurationResource AttributeMapping { get; set; } = new LdapMappingConfigurationResource();
     }
 
     public class LdapMappingConfigurationResource
     {
-        public const string UsernameAttributeDescription = "Set the name of the LDAP attribute containing the username, which is used to authenticate via the logon form.";
+        public const string UniqueAccountNameAttributeDescription = "Set the name of the LDAP attribute containing the unique account name, which is used to authenticate via the logon form.  This will be 'sAMAccountName' for Active Directory.";
         public const string UserDisplayNameAttributeDescription = "Set the name of the LDAP attribute containing the user's full name.";
         public const string UserPrincipalNameAttributeDescription = "Set the name of the LDAP attribute containing the user's principal name.";
         public const string UserMembershipAttributeDescription = "Set the name of the LDAP attribute to use when loading the user's groups.";
         public const string UserEmailAttributeDescription = "Set the name of the LDAP attribute containing the user's email address.";
         public const string GroupNameAttributeDescription = "Set the name of the LDAP attribute containing the group's name.";
 
-        [DisplayName("Username Attribute")]
-        [Description(UsernameAttributeDescription)]
+        [DisplayName("Unique Account Name Attribute")]
+        [Description(UniqueAccountNameAttributeDescription)]
         [Writeable]
-        public string UsernameAttribute { get; set; }
+        public string UniqueAccountNameAttribute { get; set; }
 
         [DisplayName("User Display Name Attribute")]
         [Description(UserDisplayNameAttributeDescription)]

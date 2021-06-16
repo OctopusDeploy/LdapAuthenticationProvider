@@ -50,7 +50,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
     public class LdapMappingConfiguration
     {
-        public string UsernameAttribute { get; set; } = "sAMAccountName";
+        public string UniqueAccountNameAttribute { get; set; } = "sAMAccountName";
 
         public string UserDisplayNameAttribute { get; set; } = "displayName";
 
