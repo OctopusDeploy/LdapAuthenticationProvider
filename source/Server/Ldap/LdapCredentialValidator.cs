@@ -47,9 +47,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         public IResultFromExtension<IUser> ValidateCredentials(string username, string password, CancellationToken cancellationToken)
         {
             if (!configurationStore.GetIsEnabled())
-            {
                 return ResultFromExtension<IUser>.ExtensionDisabled();
-            }
 
             if (string.IsNullOrWhiteSpace(username))
                 return ResultFromExtension<IUser>.Failed("No username provided");
@@ -58,11 +56,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             {
                 log.Verbose($"Validating credentials provided for '{username}'...");
 
-                var validatedUser = ldapService.ValidateCredentials(username, password, cancellationToken);
+                var result = ldapService.ValidateCredentials(username, password, cancellationToken);
 
-                return string.IsNullOrWhiteSpace(validatedUser.ValidationMessage)
-                    ? GetOrCreateUser(validatedUser, cancellationToken)
-                    : ResultFromExtension<IUser>.Failed(validatedUser.ValidationMessage);
+                return string.IsNullOrWhiteSpace(result.ValidationMessage)
+                    ? GetOrCreateUser(result, cancellationToken)
+                    : ResultFromExtension<IUser>.Failed(result.ValidationMessage);
             }
             catch (Exception ex)
             {
@@ -73,21 +71,18 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public IResultFromExtension<IUser> GetOrCreateUser(string username, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(username))
+                return ResultFromExtension<IUser>.Failed("No username provided");
+
             try
             {
-                if (string.IsNullOrWhiteSpace(username))
-                    return ResultFromExtension<IUser>.Failed("No username provided");
-
                 var result = ldapService.FindByIdentity(username);
 
-                if (!string.IsNullOrWhiteSpace(result.ValidationMessage))
-                {
-                    return ResultFromExtension<IUser>.Failed(result.ValidationMessage);
-                }
-
-                return GetOrCreateUser(result, cancellationToken);
+                return string.IsNullOrWhiteSpace(result.ValidationMessage)
+                    ? GetOrCreateUser(result, cancellationToken)
+                    : ResultFromExtension<IUser>.Failed(result.ValidationMessage);
             }
-            catch(LdapException ex)
+            catch (LdapException ex)
             {
                 log.Error(ex, "Failed while getting or creating the user.");
                 return ResultFromExtension<IUser>.Failed(username);
