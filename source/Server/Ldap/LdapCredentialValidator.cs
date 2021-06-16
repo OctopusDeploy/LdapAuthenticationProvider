@@ -9,6 +9,7 @@ using Octopus.Server.Extensibility.Results;
 using System;
 using System.Linq;
 using System.Threading;
+using Novell.Directory.Ldap;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
@@ -46,21 +47,26 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         public IResultFromExtension<IUser> ValidateCredentials(string username, string password, CancellationToken cancellationToken)
         {
             if (!configurationStore.GetIsEnabled())
-            {
                 return ResultFromExtension<IUser>.ExtensionDisabled();
-            }
 
-            if (username == null) throw new ArgumentNullException(nameof(username));
+            if (string.IsNullOrWhiteSpace(username))
+                return ResultFromExtension<IUser>.Failed("No username provided");
 
-            log.Verbose($"Validating credentials provided for '{username}'...");
-
-            var validatedUser = ldapService.ValidateCredentials(username, password, cancellationToken);
-            if (!string.IsNullOrWhiteSpace(validatedUser.ValidationMessage))
+            try
             {
-                return ResultFromExtension<IUser>.Failed(validatedUser.ValidationMessage);
-            }
+                log.Verbose($"Validating credentials provided for '{username}'...");
 
-            return GetOrCreateUser(validatedUser, cancellationToken);
+                var result = ldapService.ValidateCredentials(username, password, cancellationToken);
+
+                return string.IsNullOrWhiteSpace(result.ValidationMessage)
+                    ? GetOrCreateUser(result, cancellationToken)
+                    : ResultFromExtension<IUser>.Failed(result.ValidationMessage);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex, "Failed validating credentials with LDAP provider.");
+                return ResultFromExtension<IUser>.Failed("Unable to validate credentials with LDAP provider.");
+            }
         }
 
         public IResultFromExtension<IUser> GetOrCreateUser(string username, CancellationToken cancellationToken)
@@ -68,17 +74,22 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             if (string.IsNullOrWhiteSpace(username))
                 return ResultFromExtension<IUser>.Failed("No username provided");
 
-            var result = ldapService.FindByIdentity(username);
-
-            if (!string.IsNullOrWhiteSpace(result.ValidationMessage))
+            try
             {
-                throw new ArgumentException(result.ValidationMessage);
-            }
+                var result = ldapService.FindByIdentity(username);
 
-            return GetOrCreateUser(result, cancellationToken);
+                return string.IsNullOrWhiteSpace(result.ValidationMessage)
+                    ? GetOrCreateUser(result, cancellationToken)
+                    : ResultFromExtension<IUser>.Failed(result.ValidationMessage);
+            }
+            catch (LdapException ex)
+            {
+                log.Error(ex, "Failed while getting or creating the user.");
+                return ResultFromExtension<IUser>.Failed(username);
+            }
         }
 
-        internal IResultFromExtension<IUser> GetOrCreateUser(UserValidationResult principal, CancellationToken cancellationToken)
+        IResultFromExtension<IUser> GetOrCreateUser(UserValidationResult principal, CancellationToken cancellationToken)
         {
             var samAccountName = principal.SamAccountName;
             var displayName = principal.DisplayName;
