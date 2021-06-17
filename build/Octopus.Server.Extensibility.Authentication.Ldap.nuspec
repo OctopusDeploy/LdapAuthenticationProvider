@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd" xmlns:octopus="http://octopus.org">
   <metadata>
-    <id>Octopus.Server.Extensibility.Authentication.Ldap</id>
+    <id>Octopus.Server.Extensibility.Authentication.LDAP</id>
     <title>Octopus Server Extensibility Authentication - Ldap</title>
     <version>$version$</version>
     <authors>Octopus Deploy</authors>
     <owners>Octopus Deploy</owners>
-    <summary>Octopus Deploy Ldap authentication provider.</summary>
+    <summary>Octopus Deploy LDAP authentication provider.</summary>
     <description>
-      Implements the Ldap authentication provider.
+      Implements the LDAP authentication provider.
     </description>
     <releaseNotes></releaseNotes>
     <language>en-US</language>

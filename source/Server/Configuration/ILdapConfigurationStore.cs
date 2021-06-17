@@ -29,8 +29,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         string GetDefaultDomain();
         void SetDefaultDomain(string defaultDomain);
 
-        string GetUserNameAttribute();
-        void SetUserNameAttribute(string userNameAttribute);
+        string GetUniqueAccountNameAttribute();
+        void SetUniqueAccountNameAttribute(string uniqueAccountNameAttribute);
 
         string GetUserFilter();
         void SetUserFilter(string userFilter);

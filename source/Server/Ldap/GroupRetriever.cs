@@ -44,9 +44,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             var ldapIdentities = user.Identities.Where(p => p.IdentityProviderName == LdapAuthentication.ProviderName);
             foreach (var ldapIdentity in ldapIdentities)
             {
-                var samAccountName = ldapIdentity.Claims[IdentityCreator.SamAccountNameClaimType].Value;
+                var uniqueAccountName = ldapIdentity.Claims[IdentityCreator.UniqueAccountNameClaimType].Value;
 
-                var result = groupLocator.GetGroupIdsForUser(samAccountName, cancellationToken);
+                var result = groupLocator.GetGroupIdsForUser(uniqueAccountName, cancellationToken);
                 if (result.WasAbleToRetrieveGroups)
                 {
                     foreach (var groupId in result.GroupsIds.Where(g => !newGroups.Contains(g)))
@@ -57,14 +57,14 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 }
                 else
                 {
-                    log.WarnFormat("Couldn't retrieve groups for samAccountName {0}", samAccountName);
+                    log.WarnFormat("Unable to retrieve groups for unique account name '{0}'", uniqueAccountName);
                 }
             }
 
             if (!wasAbleToRetrieveSomeGroups)
             {
-                log.ErrorFormat("Couldn't retrieve groups for user {0}", user.Username);
-                return ResultFromExtension<ExternalGroupResult>.Failed($"Couldn't retrieve groups for user {user.Username}");
+                log.ErrorFormat("Unable to retrieve groups for user {0}", user.Username);
+                return ResultFromExtension<ExternalGroupResult>.Failed($"Unable to retrieve groups for user {user.Username}");
             }
 
             return ResultFromExtension<ExternalGroupResult>.Success(new ExternalGroupResult(newGroups.Select(g => g).ToArray()));
