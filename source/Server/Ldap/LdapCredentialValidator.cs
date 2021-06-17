@@ -132,25 +132,26 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 {
                     // if we partially matched but the uniqueAccountName or UPN is the same then this is the same user, so we will need to update user in our DB.
                     var identityMatchesSameUser = identity.Claims[IdentityCreator.UniqueAccountNameClaimType].Value == uniqueAccountName ||
-                                                      identity.Claims[IdentityCreator.UserPrincipleNameClaimType].Value == userPrincipalName;
+                                                  identity.Claims[IdentityCreator.UserPrincipleNameClaimType].Value == userPrincipalName;
 
-                    if (!identityMatchesSameUser)
+                    if (identityMatchesSameUser)
+                    {
+                        SetClaimValuesOnIdentity(identity, emailAddress, userPrincipalName, uniqueAccountName, displayName);
+                        return ResultFromExtension<IUser>.Success(userStore.UpdateIdentity(user.Id, identity, cancellationToken));
+                    }
+                    else
                     {
                         // we found a single other user in our DB that wasn't an exact match, but matched on some fields, so see if that user is still in ldap
                         var otherUserPrincipal = ldapService.FindByIdentity(identity.Claims[IdentityCreator.UniqueAccountNameClaimType].Value);
 
-
                         if (otherUserPrincipal.Success)
-                            continue;  // otherUserPrincipal still exists in ldap, so what we have here is probably a new user, but we need to keep checking.
+                            continue; // otherUserPrincipal still exists in ldap, so what we have here is probably a new user, but we need to keep checking
 
-                        // else we couldn't find a match for the existing DB user's uniqueAccountName in ldap, assume their details have been updated in ldap
+                        // we couldn't find a match for the existing DB user's uniqueAccountName in ldap, assume their details have been updated in ldap
                         // and we need to modify the existing user in our DB.
+                        SetClaimValuesOnIdentity(identity, emailAddress, userPrincipalName, uniqueAccountName, displayName);
+                        return ResultFromExtension<IUser>.Success(userStore.UpdateIdentity(user.Id, identity, cancellationToken));
                     }
-
-                    SetClaimValuesOnIdentity(identity, emailAddress, userPrincipalName, uniqueAccountName, displayName);
-                    var updatedUser = userStore.UpdateIdentity(user.Id, identity, cancellationToken);
-
-                    return ResultFromExtension<IUser>.Success(updatedUser);
                 }
             }
 
