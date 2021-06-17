@@ -139,11 +139,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                         // we found a single other user in our DB that wasn't an exact match, but matched on some fields, so see if that user is still in ldap
                         var otherUserPrincipal = ldapService.FindByIdentity(identity.Claims[IdentityCreator.UniqueAccountNameClaimType].Value);
 
-                        // otherUserPrincipal still exists in ldap, so what we have here is probably a new user, but we need to keep checking.
-                        if (otherUserPrincipal.Success)
-                            continue;
 
-                        // we couldn't find a match for the existing DB user's uniqueAccountName in ldap, assume their details have been updated in ldap
+                        if (otherUserPrincipal.Success)
+                            continue;  // otherUserPrincipal still exists in ldap, so what we have here is probably a new user, but we need to keep checking.
+
+                        // else we couldn't find a match for the existing DB user's uniqueAccountName in ldap, assume their details have been updated in ldap
                         // and we need to modify the existing user in our DB.
                     }
 
