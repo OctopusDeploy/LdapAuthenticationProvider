@@ -69,5 +69,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
             return ResultFromExtension<ExternalGroupResult>.Success(new ExternalGroupResult(newGroups.Select(g => g).ToArray()));
         }
+
+        
     }
 }
