@@ -4,6 +4,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Identities
 {
     public interface IIdentityCreator
     {
-        Identity Create(string email, string upn, string samAccountName, string displayName);
+        Identity Create(string email, string userPrincipleName, string uniqueAccountName, string displayName);
     }
 }
