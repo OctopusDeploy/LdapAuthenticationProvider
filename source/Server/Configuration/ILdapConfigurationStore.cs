@@ -14,6 +14,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         void SetUseSsl(bool useSsl);
         bool GetUseSsl();
 
+        void SetUseStartTls(bool useStartTls);
+        bool GetUseStartTls();
+
         void SetIgnoreSslErrors(bool ignoreSslErrors);
         bool GetIgnoreSslErrors();
 

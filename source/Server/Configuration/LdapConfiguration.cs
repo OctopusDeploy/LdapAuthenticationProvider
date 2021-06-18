@@ -16,6 +16,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         public bool UseSsl { get; set; }
 
+        public bool UseStartTls { get; set; }
+
         public bool IgnoreSslErrors { get; set; }
 
         public string ConnectUsername { get; set; }

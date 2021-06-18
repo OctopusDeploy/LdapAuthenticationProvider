@@ -37,6 +37,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 ldapConfiguration.Value.SetPort(port);
                 log.Info("LDAP Port set to: " + port);
             });
+            yield return new ConfigureCommandOption("ldapUseStartTls=", LdapConfigurationResource.UseStartTlsDescription, v =>
+            {
+                bool.TryParse(v, out var useStartTls);
+                ldapConfiguration.Value.SetUseStartTls(useStartTls);
+                log.Info("LDAP UseStartTls set to: " + useStartTls);
+            });
             yield return new ConfigureCommandOption("ldapUseSsl=", LdapConfigurationResource.UseSslDescription, v =>
             {
                 bool.TryParse(v, out var useSsl);

@@ -28,6 +28,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapServer", ConfigurationDocumentStore.GetServer(), isEnabled && !string.IsNullOrWhiteSpace(ConfigurationDocumentStore.GetServer()), "Server");
             yield return new ConfigurationValue<int>("Octopus.WebPortal.LdapPort", ConfigurationDocumentStore.GetPort(), isEnabled, "Port");
             yield return new ConfigurationValue<bool>("Octopus.WebPortal.LdapUseSsl", ConfigurationDocumentStore.GetUseSsl(), isEnabled, "Use SSL");
+            yield return new ConfigurationValue<bool>("Octopus.WebPortal.LdapUseStartTls", ConfigurationDocumentStore.GetUseStartTls(), isEnabled, "Use StartTLS");
             yield return new ConfigurationValue<bool>("Octopus.WebPortal.LdapIgnoreSslErrors", ConfigurationDocumentStore.GetIgnoreSslErrors(), isEnabled, "Ignore SSL errors");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUsername", ConfigurationDocumentStore.GetConnectUsername(), isEnabled, "Username");
             yield return new ConfigurationValue<SensitiveString>("Octopus.WebPortal.LdapPassword", ConfigurationDocumentStore.GetConnectPassword(), isEnabled, "Password");

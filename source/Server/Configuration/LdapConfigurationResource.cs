@@ -9,6 +9,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
     {
         public const string ServerDescription = "Set the server URL.";
         public const string PortDescription = "Set the port using to connect.";
+        public const string UseStartTlsDescription = "Sets whether to upgrade to TLS after connecting to LDAP.";
         public const string UseSslDescription = "Sets whether to use Secure Socket Layer to connect to LDAP.";
         public const string IgnoreSslErrorsDescription = "Sets whether to ignore certificate validation errors.";
         public const string UsernameDescription = "Set the user DN to query LDAP.";
@@ -36,6 +37,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Description(UseSslDescription)]
         [Writeable]
         public bool UseSsl { get; set; }
+
+        [DisplayName("Use StartTLS")]
+        [Description(UseStartTlsDescription)]
+        [Writeable]
+        public bool UseStartTls { get; set; }
 
         [DisplayName("Ignore SSL errors")]
         [Description(IgnoreSslErrorsDescription)]

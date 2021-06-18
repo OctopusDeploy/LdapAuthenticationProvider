@@ -45,6 +45,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             return GetProperty(doc => doc.UseSsl);
         }
 
+        public void SetUseStartTls(bool useStartTls)
+        {
+            SetProperty(doc => doc.UseStartTls = useStartTls);
+        }
+
+        public bool GetUseStartTls()
+        {
+            return GetProperty(doc => doc.UseStartTls);
+        }
+
         public void SetIgnoreSslErrors(bool ignoreSslErrors)
         {
             SetProperty(doc => doc.IgnoreSslErrors = ignoreSslErrors);
