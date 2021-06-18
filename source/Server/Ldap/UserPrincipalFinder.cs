@@ -1,6 +1,7 @@
 using Novell.Directory.Ldap;
 using System.Collections.Generic;
 using System.Linq;
+using Octopus.Server.Extensibility.Authentication.Ldap.Model;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
@@ -45,7 +46,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 DistinguishedName = searchResult.Dn,
                 DisplayName = searchResult.TryGetAttribute(context.UserDisplayNameAttribute)?.StringValue,
                 UserPrincipalName = searchResult.TryGetAttribute(context.UserPrincipalNameAttribute)?.StringValue,
-                Groups = searchResult.TryGetAttribute(context.UserMembershipAttribute)?.StringValueArray,
+                Groups = searchResult.TryGetAttribute(context.UserMembershipAttribute)?.StringValueArray.ToGroupDistinguishedNames(),
                 UniqueAccountName = searchResult.TryGetAttribute(context.UniqueAccountNameAttribute)?.StringValue,
                 Email = searchResult.TryGetAttribute(context.UserEmailAttribute)?.StringValue
             };

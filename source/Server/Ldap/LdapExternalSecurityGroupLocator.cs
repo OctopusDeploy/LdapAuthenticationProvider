@@ -8,16 +8,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Octopus.Server.Extensibility.Authentication.Ldap.Model;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public class LdapExternalSecurityGroupLocator : ILdapExternalSecurityGroupLocator
     {
-        private readonly ISystemLog log;
-        private readonly ILdapContextProvider contextProvider;
-        private readonly ILdapObjectNameNormalizer objectNameNormalizer;
-        private readonly ILdapConfigurationStore configurationStore;
-        private readonly IUserPrincipalFinder userPrincipalFinder;
+        readonly ISystemLog log;
+        readonly ILdapContextProvider contextProvider;
+        readonly ILdapObjectNameNormalizer objectNameNormalizer;
+        readonly ILdapConfigurationStore configurationStore;
+        readonly IUserPrincipalFinder userPrincipalFinder;
+        readonly INestedGroupFinder nestedGroupFinder;
 
         public string IdentityProviderName => LdapAuthentication.ProviderName;
 
@@ -26,13 +28,15 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             ILdapContextProvider contextProvider,
             ILdapObjectNameNormalizer objectNameNormalizer,
             ILdapConfigurationStore configurationStore,
-            IUserPrincipalFinder userPrincipalFinder)
+            IUserPrincipalFinder userPrincipalFinder,
+            INestedGroupFinder nestedGroupFinder)
         {
             this.log = log;
             this.contextProvider = contextProvider;
             this.objectNameNormalizer = objectNameNormalizer;
             this.configurationStore = configurationStore;
             this.userPrincipalFinder = userPrincipalFinder;
+            this.nestedGroupFinder = nestedGroupFinder;
         }
 
         public IResultFromExtension<ExternalSecurityGroupResult> Search(string name, CancellationToken cancellationToken)
@@ -95,9 +99,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                     return new LdapExternalSecurityGroupLocatorResult();
                 }
 
+                var groups = nestedGroupFinder.GetAllParentGroups(context, 3, principal.Groups);
+
+
                 cancellationToken.ThrowIfCancellationRequested();
 
-                return new LdapExternalSecurityGroupLocatorResult(principal.Groups.ToList());
+                return new LdapExternalSecurityGroupLocatorResult(principal.Groups);
             }
             catch (OperationCanceledException)
             {
