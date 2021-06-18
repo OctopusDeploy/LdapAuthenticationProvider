@@ -79,7 +79,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Writeable]
         public string NestedGroupFilter { get; set; }
 
-        [DisplayName("NestedGroupSearchDepth")]
+        [DisplayName("Nested Group Search Depth")]
         [Description(NestedGroupSearchDepthDescription)]
         [Writeable]
         public int NestedGroupSearchDepth { get; set; }
