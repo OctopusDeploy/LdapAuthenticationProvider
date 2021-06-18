@@ -99,12 +99,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                     return new LdapExternalSecurityGroupLocatorResult();
                 }
 
-                var groups = nestedGroupFinder.GetAllParentGroups(context, 3, principal.Groups);
+                var groups = nestedGroupFinder.FindAllParentGroups(context, configurationStore.GetNestedGroupSearchDepth(), principal.Groups);
 
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                return new LdapExternalSecurityGroupLocatorResult(principal.Groups);
+                return new LdapExternalSecurityGroupLocatorResult(groups);
             }
             catch (OperationCanceledException)
             {

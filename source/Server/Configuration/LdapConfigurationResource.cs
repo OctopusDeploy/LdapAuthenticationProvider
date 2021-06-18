@@ -15,12 +15,14 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public const string PasswordDescription = "Set the password to query LDAP.";
         public const string BaseDnDescription = "Set the root distinguished name (DN) to query LDAP.";
         public const string DefaultDomainDescription = "Set the default domain when none is given in the logon form. Optional.";
-        public const string UserFilterDescription = "The filter to use when searching valid users.";
-        public const string GroupFilterDescription = "The filter to use when searching valid user groups.";
+        public const string UserFilterDescription = "The filter to use when searching valid users.  '*' is replaced with a normalized version of the username.";
+        public const string GroupFilterDescription = "The filter to use when searching valid user groups.  '*' is replaced with the group name.";
         public const string AllowAutoUserCreationDescription = "Whether unknown users will be automatically created upon successful login.";
         public const string ReferralFollowingEnabledDescription = "Sets whether to allow referral following.";
         public const string ReferralHopLimitDescription = "Sets the maximum number of referrals to follow during automatic referral following.";
-        public const string ConstraintTimeLimitDescription = "Sets the time limit in seconds for LDAP operations on the directory.  0 specifies no limit.";
+        public const string ConstraintTimeLimitDescription = "Sets the time limit in seconds for LDAP operations on the directory.  '0' specifies no limit.";
+        public const string NestedGroupSearchDepthDescription = "Specifies how many levels of nesting will be searched. Set to '0' to disabled searching for nested groups.";
+        public const string NestedGroupFilterDescription = "The filter to use when searching for nested groups. '*' is replaced by the distinguished name of the initial group.";
 
         [DisplayName("Server")]
         [Description(ServerDescription)]
@@ -71,6 +73,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Description(GroupFilterDescription)]
         [Writeable]
         public string GroupFilter { get; set; }
+
+        [DisplayName("Nested Group Filter")]
+        [Description(NestedGroupFilterDescription)]
+        [Writeable]
+        public string NestedGroupFilter { get; set; }
+
+        [DisplayName("NestedGroupSearchDepth")]
+        [Description(NestedGroupSearchDepthDescription)]
+        [Writeable]
+        public int NestedGroupSearchDepth { get; set; }
 
         [DisplayName("Allow Auto User Creation")]
         [Description(AllowAutoUserCreationDescription)]

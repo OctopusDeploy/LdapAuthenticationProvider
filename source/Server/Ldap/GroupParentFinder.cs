@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Novell.Directory.Ldap;
+using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
 using Octopus.Server.Extensibility.Authentication.Ldap.Model;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap
@@ -12,6 +13,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
     public class GroupParentFinder : IGroupParentFinder
     {
+        readonly ILdapConfigurationStore store;
+        public GroupParentFinder(ILdapConfigurationStore store)
+        {
+            this.store = store;
+        }
+
         public IEnumerable<GroupDistinguishedName> FindParentGroups(LdapContext context, GroupDistinguishedName name)
         {
             var attributesToRetrieve = new[] {"cn", "dn", "uniqueMember"};
@@ -19,7 +26,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             var result = context.LdapConnection.Search(
                 context.BaseDN,
                 LdapConnection.ScopeSub,
-                "(&(objectClass=groupOfUniqueNames)(uniqueMember=*))".Replace("*", name.ToString()),
+                store.GetNestedGroupFilter().Replace("*", name.ToString()),
                 attributesToRetrieve,
                 false
             );

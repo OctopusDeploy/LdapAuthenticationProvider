@@ -6,7 +6,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public interface INestedGroupFinder
     {
-        IEnumerable<GroupDistinguishedName> GetAllParentGroups(LdapContext context, int depth, IEnumerable<GroupDistinguishedName> names);
+        IEnumerable<GroupDistinguishedName> FindAllParentGroups(LdapContext context, int depth, IEnumerable<GroupDistinguishedName> names);
     }
 
     public class NestedGroupFinder : INestedGroupFinder
@@ -18,23 +18,23 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             this.parentFinder = parentFinder;
         }
 
-        public IEnumerable<GroupDistinguishedName> GetAllParentGroups(LdapContext context, int depth, IEnumerable<GroupDistinguishedName> names)
+        public IEnumerable<GroupDistinguishedName> FindAllParentGroups(LdapContext context, int searchDepth, IEnumerable<GroupDistinguishedName> names)
         {
             var groups = new HashSet<GroupDistinguishedName>(names.Distinct());
-            var nextGroups = (IEnumerable<GroupDistinguishedName>)groups;
+            var nextGroups = groups.Select(g => g).ToList();
 
-            while (nextGroups.Any() && depth > 0)
+            while (nextGroups.Any() && searchDepth > 0)
             {
                 var newGroups = nextGroups.SelectMany(group => parentFinder.FindParentGroups(context, group));
 
                 //If we already have a returned group in the groups list, then we don't want to add it again.
-                nextGroups = newGroups.Where(ng => !groups.Contains(ng));
+                nextGroups = newGroups.Where(ng => !groups.Contains(ng)).ToList();
                 groups.UnionWith(nextGroups);
 
-                depth--;
+                searchDepth--;
             }
 
-            return groups;
+            return groups; // Note that this also returns the passed-in groups
         }
     }
 }

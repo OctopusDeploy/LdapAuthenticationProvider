@@ -15,176 +15,65 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         public override string Id => SingletonId;
 
-        public string GetServer()
-        {
-            return GetProperty(doc => doc.Server);
-        }
+        public string GetServer() => GetProperty(doc => doc.Server);
+        public void SetServer(string server) => SetProperty(doc => doc.Server = server);
 
-        public void SetServer(string server)
-        {
-            SetProperty(doc => doc.Server = server);
-        }
+        public int GetPort() => GetProperty(doc => doc.Port);
+        public void SetPort(int port) => SetProperty(doc => doc.Port = port);
 
-        public int GetPort()
-        {
-            return GetProperty(doc => doc.Port);
-        }
+        public void SetUseSsl(bool useSsl) => SetProperty(doc => doc.UseSsl = useSsl);
+        public bool GetUseSsl() => GetProperty(doc => doc.UseSsl);
 
-        public void SetPort(int port)
-        {
-            SetProperty(doc => doc.Port = port);
-        }
+        public void SetIgnoreSslErrors(bool ignoreSslErrors) => SetProperty(doc => doc.IgnoreSslErrors = ignoreSslErrors);
+        public bool GetIgnoreSslErrors() => GetProperty(doc => doc.IgnoreSslErrors);
 
-        public void SetUseSsl(bool useSsl)
-        {
-            SetProperty(doc => doc.UseSsl = useSsl);
-        }
+        public string GetConnectUsername() => GetProperty(doc => doc.ConnectUsername);
+        public void SetConnectUsername(string username) => SetProperty(doc => doc.ConnectUsername = username);
 
-        public bool GetUseSsl()
-        {
-            return GetProperty(doc => doc.UseSsl);
-        }
+        public SensitiveString GetConnectPassword() => GetProperty(doc => doc.ConnectPassword);
+        public void SetConnectPassword(SensitiveString password) => SetProperty(doc => doc.ConnectPassword = password);
 
-        public void SetIgnoreSslErrors(bool ignoreSslErrors)
-        {
-            SetProperty(doc => doc.IgnoreSslErrors = ignoreSslErrors);
-        }
+        public string GetBaseDn() => GetProperty(doc => doc.BaseDn);
+        public void SetBaseDn(string baseDn) => SetProperty(doc => doc.BaseDn = baseDn);
 
-        public bool GetIgnoreSslErrors()
-        {
-            return GetProperty(doc => doc.IgnoreSslErrors);
-        }
+        public string GetDefaultDomain() => GetProperty(doc => doc.DefaultDomain);
+        public void SetDefaultDomain(string defaultDomain) => SetProperty(doc => doc.DefaultDomain = defaultDomain);
 
-        public string GetConnectUsername()
-        {
-            return GetProperty(doc => doc.ConnectUsername);
-        }
+        public string GetUniqueAccountNameAttribute() => GetProperty(doc => doc.AttributeMapping.UniqueAccountNameAttribute);
+        public void SetUniqueAccountNameAttribute(string uniqueAccountNameAttribute) => SetProperty(doc => doc.AttributeMapping.UniqueAccountNameAttribute = uniqueAccountNameAttribute);
 
-        public void SetConnectUsername(string username)
-        {
-            SetProperty(doc => doc.ConnectUsername = username);
-        }
+        public string GetUserFilter() => GetProperty(doc => doc.UserFilter);
+        public void SetUserFilter(string userFilter) => SetProperty(doc => doc.UserFilter = userFilter);
 
-        public SensitiveString GetConnectPassword()
-        {
-            return GetProperty(doc => doc.ConnectPassword);
-        }
+        public string GetGroupFilter() => GetProperty(doc => doc.GroupFilter);
+        public void SetGroupFilter(string groupFilter) => SetProperty(doc => doc.GroupFilter = groupFilter);
+        
+        public string GetNestedGroupFilter() => GetProperty(doc => doc.NestedGroupFilter);
+        public void SetNestedGroupFilter(string nestedGroupFilter) => SetProperty(doc => doc.NestedGroupFilter = nestedGroupFilter);
 
-        public void SetConnectPassword(SensitiveString password)
-        {
-            SetProperty(doc => doc.ConnectPassword = password);
-        }
+        public int GetNestedGroupSearchDepth() => GetProperty(doc => doc.NestedGroupSearchDepth);
+        public void SetNestedGroupSearchDepth(int nestedGroupSearchDepth) => SetProperty(doc => doc.NestedGroupSearchDepth = nestedGroupSearchDepth);
 
-        public string GetBaseDn()
-        {
-            return GetProperty(doc => doc.BaseDn);
-        }
+        public bool GetAllowAutoUserCreation() => GetProperty(doc => doc.AllowAutoUserCreation);
+        public void SetAllowAutoUserCreation(bool allowAutoUserCreation) => SetProperty(doc => doc.AllowAutoUserCreation = allowAutoUserCreation);
 
-        public void SetBaseDn(string baseDn)
-        {
-            SetProperty(doc => doc.BaseDn = baseDn);
-        }
+        public string GetUserDisplayNameAttribute() => GetProperty(doc => doc.AttributeMapping.UserDisplayNameAttribute);
+        public void SetUserDisplayNameAttribute(string userDisplayNameAttribute) => SetProperty(doc => doc.AttributeMapping.UserDisplayNameAttribute = userDisplayNameAttribute);
 
-        public string GetDefaultDomain()
-        {
-            return GetProperty(doc => doc.DefaultDomain);
-        }
 
-        public void SetDefaultDomain(string defaultDomain)
-        {
-            SetProperty(doc => doc.DefaultDomain = defaultDomain);
-        }
+        public string GetUserPrincipalNameAttribute() => GetProperty(doc => doc.AttributeMapping.UserPrincipalNameAttribute);
 
-        public string GetUniqueAccountNameAttribute()
-        {
-            return GetProperty(doc => doc.AttributeMapping.UniqueAccountNameAttribute);
-        }
+        public void SetUserPrincipalNameAttribute(string userPrincipalNameAttribute) => SetProperty(doc => doc.AttributeMapping.UserPrincipalNameAttribute = userPrincipalNameAttribute);
 
-        public void SetUniqueAccountNameAttribute(string uniqueAccountNameAttribute)
-        {
-            SetProperty(doc => doc.AttributeMapping.UniqueAccountNameAttribute = uniqueAccountNameAttribute);
-        }
+        public string GetUserMembershipAttribute() => GetProperty(doc => doc.AttributeMapping.UserMembershipAttribute);
+        public void SetUserMembershipAttribute(string userMembershipAttribute) => SetProperty(doc => doc.AttributeMapping.UserMembershipAttribute = userMembershipAttribute);
 
-        public string GetUserFilter()
-        {
-            return GetProperty(doc => doc.UserFilter);
-        }
+        public string GetUserEmailAttribute() => GetProperty(doc => doc.AttributeMapping.UserEmailAttribute);
+        public void SetUserEmailAttribute(string userEmailAttribute) => SetProperty(doc => doc.AttributeMapping.UserEmailAttribute = userEmailAttribute);
 
-        public void SetUserFilter(string userFilter)
-        {
-            SetProperty(doc => doc.UserFilter = userFilter);
-        }
-
-        public string GetGroupFilter()
-        {
-            return GetProperty(doc => doc.GroupFilter);
-        }
-
-        public void SetGroupFilter(string groupFilter)
-        {
-            SetProperty(doc => doc.GroupFilter = groupFilter);
-        }
-
-        public bool GetAllowAutoUserCreation()
-        {
-            return GetProperty(doc => doc.AllowAutoUserCreation);
-        }
-
-        public void SetAllowAutoUserCreation(bool allowAutoUserCreation)
-        {
-            SetProperty(doc => doc.AllowAutoUserCreation = allowAutoUserCreation);
-        }
-
-        public string GetUserDisplayNameAttribute()
-        {
-            return GetProperty(doc => doc.AttributeMapping.UserDisplayNameAttribute);
-        }
-
-        public void SetUserDisplayNameAttribute(string userDisplayNameAttribute)
-        {
-            SetProperty(doc => doc.AttributeMapping.UserDisplayNameAttribute = userDisplayNameAttribute);
-        }
-
-        public string GetUserPrincipalNameAttribute()
-        {
-            return GetProperty(doc => doc.AttributeMapping.UserPrincipalNameAttribute);
-        }
-
-        public void SetUserPrincipalNameAttribute(string userPrincipalNameAttribute)
-        {
-            SetProperty(doc => doc.AttributeMapping.UserPrincipalNameAttribute = userPrincipalNameAttribute);
-        }
-
-        public string GetUserMembershipAttribute()
-        {
-            return GetProperty(doc => doc.AttributeMapping.UserMembershipAttribute);
-        }
-
-        public void SetUserMembershipAttribute(string userMembershipAttribute)
-        {
-            SetProperty(doc => doc.AttributeMapping.UserMembershipAttribute = userMembershipAttribute);
-        }
-
-        public string GetUserEmailAttribute()
-        {
-            return GetProperty(doc => doc.AttributeMapping.UserEmailAttribute);
-        }
-
-        public void SetUserEmailAttribute(string userEmailAttribute)
-        {
-            SetProperty(doc => doc.AttributeMapping.UserEmailAttribute = userEmailAttribute);
-        }
-
-        public string GetGroupNameAttribute()
-        {
-            return GetProperty(doc => doc.AttributeMapping.GroupNameAttribute);
-        }
-
-        public void SetGroupNameAttribute(string groupNameAttribute)
-        {
-            SetProperty(doc => doc.AttributeMapping.GroupNameAttribute = groupNameAttribute);
-        }
-
+        public string GetGroupNameAttribute() => GetProperty(doc => doc.AttributeMapping.GroupNameAttribute);
+        public void SetGroupNameAttribute(string groupNameAttribute) => SetProperty(doc => doc.AttributeMapping.GroupNameAttribute = groupNameAttribute);
+        
         public bool GetReferralFollowingEnabled() => GetProperty(doc => doc.ReferralFollowingEnabled);
         public void SetReferralFollowingEnabled(bool enabled) => SetProperty(doc => doc.ReferralFollowingEnabled = enabled);
 
@@ -193,6 +82,5 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         public int GetConstraintTimeLimit() => GetProperty(doc => doc.ConstraintTimeLimit);
         public void SetConstraintTimeLimit(int timeLimit) => SetProperty(doc => doc.ConstraintTimeLimit = timeLimit);
-
     }
 }

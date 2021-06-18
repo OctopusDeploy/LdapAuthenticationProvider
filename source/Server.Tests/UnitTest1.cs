@@ -36,6 +36,8 @@ namespace Server.Tests
             store.GetUniqueAccountNameAttribute().Returns("cn");
             store.GetUserFilter().Returns("(&(objectClass=inetOrgPerson)(cn=*))");
             store.GetGroupFilter().Returns("(&(objectClass=groupOfUniqueNames)(cn=*))");
+            store.GetNestedGroupFilter().Returns("(&(objectClass=groupOfUniqueNames)(uniqueMember=*))");
+            store.GetNestedGroupSearchDepth().Returns(5);
             store.GetGroupNameAttribute().Returns("cn");
             store.GetUserDisplayNameAttribute().Returns("displayName");
             store.GetUserEmailAttribute().Returns("mail");
@@ -49,7 +51,7 @@ namespace Server.Tests
             var contextProvider = new LdapContextProvider(lazyStore, log);
             var principalFinder = new UserPrincipalFinder();
 
-            var locator = new LdapExternalSecurityGroupLocator(log, contextProvider, new LdapObjectNameNormalizer(lazyStore), store, principalFinder);
+            var locator = new LdapExternalSecurityGroupLocator(log, contextProvider, new LdapObjectNameNormalizer(lazyStore), store, principalFinder, new NestedGroupFinder(new GroupParentFinder(store)));
 
            // var groupIds = locator.GetGroupIdsForUser("maintainer", new CancellationToken());
 
