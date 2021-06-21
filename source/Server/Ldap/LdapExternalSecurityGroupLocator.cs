@@ -101,7 +101,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
                 var groups = nestedGroupFinder.FindAllParentGroups(context, configurationStore.GetNestedGroupSearchDepth(), principal.Groups);
 
-
                 cancellationToken.ThrowIfCancellationRequested();
 
                 return new LdapExternalSecurityGroupLocatorResult(groups);
