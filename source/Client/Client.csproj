@@ -2,8 +2,17 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <AssemblyName>Octopus.Client.Extensibility.Authentication.Ldap</AssemblyName>
         <RootNamespace>Octopus.Client.Extensibility.Authentication.Ldap</RootNamespace>
+        <AssemblyName>Octopus.Client.Extensibility.Authentication.Ldap</AssemblyName>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <Authors>Octopus Deploy</Authors>
+        <Company>Octopus Deploy Pty. Ltd.</Company>
+        <Product>Octopus Deploy Client Extensibility</Product>
+        <Description>Octopus Deploy Client Extensibility for LDAP</Description>
+        <PackageId>Octopus.Client.Extensibility.Authentication.Ldap</PackageId>
+        <PackageIconUrl>http://i.octopusdeploy.com/resources/Avatar3_360.png</PackageIconUrl>
+        <PackageLicenseUrl>https://github.com/OctopusDeploy/LdapAuthenticationProvider/blob/main/LICENSE.md</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/OctopusDeploy/LdapAuthenticationProvider</PackageProjectUrl>
     </PropertyGroup>
 
     <ItemGroup>
