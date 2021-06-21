@@ -11,9 +11,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
     public class LdapContextProvider : ILdapContextProvider
     {
         private readonly Lazy<ILdapConfigurationStore> ldapConfiguration;
-        private readonly ISystemLog log;
+        private readonly ILog log;
 
-        public LdapContextProvider(Lazy<ILdapConfigurationStore> ldapConfiguration, ISystemLog log)
+        public LdapContextProvider(Lazy<ILdapConfigurationStore> ldapConfiguration, ILog log)
         {
             this.ldapConfiguration = ldapConfiguration;
             this.log = log;
@@ -28,14 +28,20 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 options.UseSsl();
                 options.ConfigureRemoteCertificateValidationCallback(RemoteCertificateValidation);
             }
+            else if(ldapConfiguration.Value.GetUseStartTls())
+            {
+                options.ConfigureRemoteCertificateValidationCallback(RemoteCertificateValidation);
+            }
 
             try
             {
                 var con = new LdapConnection(options);
                 con.Connect(ldapConfiguration.Value.GetServer(), ldapConfiguration.Value.GetPort());
-                if(ldapConfiguration.Value.GetUseStartTls())
+                if (ldapConfiguration.Value.GetUseStartTls())
+                {
                     con.StartTls();
-                con.Bind(ldapConfiguration.Value.GetConnectUsername(), ldapConfiguration.Value.GetConnectPassword().Value);
+                }
+                con.Bind(ldapConfiguration.Value.GetConnectUsername(), ldapConfiguration.Value.GetConnectPassword()?.Value);
                 con.Constraints.ReferralFollowing = ldapConfiguration.Value.GetReferralFollowingEnabled();
                 con.Constraints.HopLimit = ldapConfiguration.Value.GetReferralHopLimit();
                 con.Constraints.TimeLimit = ldapConfiguration.Value.GetConstraintTimeLimit() * 1000;
