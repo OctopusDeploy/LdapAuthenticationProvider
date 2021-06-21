@@ -1,4 +1,5 @@
-﻿using Octopus.Data.Model;
+﻿using System;
+using Octopus.Data.Model;
 using Octopus.Data.Storage.Configuration;
 using Octopus.Server.Extensibility.Extensions.Infrastructure.Configuration;
 
@@ -94,14 +95,14 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             SetProperty(doc => doc.DefaultDomain = defaultDomain);
         }
 
-        public string GetUserNameAttribute()
+        public string GetUniqueAccountNameAttribute()
         {
-            return GetProperty(doc => doc.AttributeMapping.UserNameAttribute);
+            return GetProperty(doc => doc.AttributeMapping.UniqueAccountNameAttribute);
         }
 
-        public void SetUserNameAttribute(string samAccountNameAttribute)
+        public void SetUniqueAccountNameAttribute(string uniqueAccountNameAttribute)
         {
-            SetProperty(doc => doc.AttributeMapping.UserNameAttribute = samAccountNameAttribute);
+            SetProperty(doc => doc.AttributeMapping.UniqueAccountNameAttribute = uniqueAccountNameAttribute);
         }
 
         public string GetUserFilter()

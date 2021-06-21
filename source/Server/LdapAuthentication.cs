@@ -2,6 +2,6 @@
 {
     public class LdapAuthentication
     {
-        public const string ProviderName = "Ldap";
+        public const string ProviderName = "LDAP";
     }
 }

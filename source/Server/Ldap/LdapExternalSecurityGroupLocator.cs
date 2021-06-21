@@ -52,56 +52,52 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             string domain;
             string partialGroupName;
             objectNameNormalizer.NormalizeName(name, out partialGroupName, out domain);
-            using (var context = contextProvider.GetContext())
+            using var context = contextProvider.GetContext();
+            var filterToken = $"*{partialGroupName}*";
+            var lsc = context.LdapConnection.Search(
+                context.BaseDN,
+                LdapConnection.ScopeSub,
+                context.GroupFilter?.Replace("*", filterToken),
+                new[] { context.GroupNameAttribute },
+                false
+            );
+            var searchResults = lsc.ToList();
+            results.AddRange(searchResults.Select(x => new ExternalSecurityGroup
             {
-                var filterToken = $"*{partialGroupName}*";
-                var lsc = context.LdapConnection.Search(
-                    context.BaseDN,
-                    LdapConnection.ScopeSub,
-                    context.GroupFilter?.Replace("*", filterToken),
-                    new[] { context.GroupNameAttribute },
-                    false
-                    );
-                var searchResults = lsc.ToList();
-                results.AddRange(searchResults.Select(x => new ExternalSecurityGroup
-                {
-                    Id = x.Dn,
-                    DisplayName = x.GetAttribute(context.GroupNameAttribute).StringValue
-                }));
-            }
+                Id = x.Dn,
+                DisplayName = x.GetAttribute(context.GroupNameAttribute).StringValue
+            }));
 
             return results.OrderBy(o => o.DisplayName).ToArray();
         }
 
-        public LdapExternalSecurityGroupLocatorResult GetGroupIdsForUser(string samAccountName, CancellationToken cancellationToken)
+        public LdapExternalSecurityGroupLocatorResult GetGroupIdsForUser(string username, CancellationToken cancellationToken)
         {
-            if (samAccountName == null) throw new ArgumentNullException(nameof(samAccountName), "The external identity is null indicating we were not able to associate this Octopus User Account with an identifier from LDAP.");
+            if (username == null)
+                throw new ArgumentNullException(nameof(username), "The username is null, indicating we were not able to associate this Octopus user account with an identifier from LDAP.");
 
             try
             {
-                log.Verbose($"Finding external security groups for '{samAccountName}'...");
+                log.Verbose($"Finding external security groups for '{username}'...");
 
-                objectNameNormalizer.NormalizeName(samAccountName, out samAccountName, out var domain);
+                objectNameNormalizer.NormalizeName(username, out username, out var domain);
 
-                using (var context = contextProvider.GetContext())
+                using var context = contextProvider.GetContext();
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var uniqueAccountName = objectNameNormalizer.BuildUserName(username, domain);
+                var principal = userPrincipalFinder.FindByIdentity(context, uniqueAccountName);
+
+                if (principal == null)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    var identityName = objectNameNormalizer.BuildUserName(samAccountName, domain);
-                    var principal = userPrincipalFinder.FindByIdentity(context, identityName);
-
-                    if (principal == null)
-                    {
-                        var searchedContext = domain ?? context.BaseDN;
-                        log.Trace(
-                            $"While loading security groups, a principal identifiable by '{identityName}' was not found in '{searchedContext}'");
-                        return new LdapExternalSecurityGroupLocatorResult();
-                    }
-
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    return new LdapExternalSecurityGroupLocatorResult(principal.Groups.ToList());
+                    var searchedContext = domain ?? context.BaseDN;
+                    log.Trace($"While loading security groups, a principal identifiable by '{uniqueAccountName}' was not found in '{searchedContext}'");
+                    return new LdapExternalSecurityGroupLocatorResult();
                 }
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                return new LdapExternalSecurityGroupLocatorResult(principal.Groups.ToList());
             }
             catch (OperationCanceledException)
             {
@@ -109,7 +105,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             }
             catch (Exception ex)
             {
-                log.ErrorFormat(ex, "LDAP search for {0} failed.", samAccountName);
+                log.ErrorFormat(ex, "LDAP search for {0} failed.", username);
                 return new LdapExternalSecurityGroupLocatorResult();
             }
         }

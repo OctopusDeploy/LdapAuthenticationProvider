@@ -4,15 +4,15 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public class UserPrincipal
     {
-        public string SamAccountName { get; set; }
+        public string UniqueAccountName { get; set; }
 
         public string DisplayName { get; set; }
 
-        public string DN { get; set; }
+        public string DistinguishedName { get; set; }
 
-        public string UPN { get; set; }
+        public string UserPrincipalName { get; set; }
 
-        public string Mail { get; set; }
+        public string Email { get; set; }
 
         public IEnumerable<string> Groups { get; set; }
     }

@@ -6,16 +6,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public interface IUserPrincipalFinder
     {
-        UserPrincipal FindByIdentity(LdapContext context, string samAccountName);
+        UserPrincipal FindByIdentity(LdapContext context, string uniqueAccountName);
 
         IEnumerable<UserPrincipal> SearchUser(LdapContext context, string searchToken);
     }
 
     public class UserPrincipalFinder : IUserPrincipalFinder
     {
-        public UserPrincipal FindByIdentity(LdapContext context, string samAccountName)
+        public UserPrincipal FindByIdentity(LdapContext context, string uniqueAccountName)
         {
-            var escapedName = ToLdapUserName(samAccountName);
+            var escapedName = ToLdapUniqueAccountName(uniqueAccountName);
             var lsc = context.LdapConnection.Search(
                 context.BaseDN,
                 LdapConnection.ScopeSub,
@@ -27,7 +27,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                     context.UserMembershipAttribute,
                     context.UserPrincipalNameAttribute,
                     context.UserEmailAttribute,
-                    context.UserNameAttribute
+                    context.UniqueAccountNameAttribute
                 },
                 false
                 );
@@ -42,27 +42,27 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         {
             return new UserPrincipal
             {
-                DN = searchResult.Dn,
+                DistinguishedName = searchResult.Dn,
                 DisplayName = searchResult.TryGetAttribute(context.UserDisplayNameAttribute)?.StringValue,
-                UPN = searchResult.TryGetAttribute(context.UserPrincipalNameAttribute)?.StringValue,
+                UserPrincipalName = searchResult.TryGetAttribute(context.UserPrincipalNameAttribute)?.StringValue,
                 Groups = searchResult.TryGetAttribute(context.UserMembershipAttribute)?.StringValueArray,
-                SamAccountName = searchResult.TryGetAttribute(context.UserNameAttribute)?.StringValue,
-                Mail = searchResult.TryGetAttribute(context.UserEmailAttribute)?.StringValue
+                UniqueAccountName = searchResult.TryGetAttribute(context.UniqueAccountNameAttribute)?.StringValue,
+                Email = searchResult.TryGetAttribute(context.UserEmailAttribute)?.StringValue
             };
         }
 
         /// <summary>
-        /// Escapes username for ldap queries.
+        /// Escapes uniqueAccountName for ldap queries.
         /// </summary>
-        private string ToLdapUserName(string userName)
+        private string ToLdapUniqueAccountName(string uniqueAccountName)
         {
             // \e is simple backslash \ in LDAP, convert to recognized delimiter.
-            return userName.Replace("\\", "\\5C");
+            return uniqueAccountName.Replace("\\", "\\5C");
         }
 
         public IEnumerable<UserPrincipal> SearchUser(LdapContext context, string searchToken)
         {
-            var searchTerm = $"*{ToLdapUserName(searchToken)}*";
+            var searchTerm = $"*{ToLdapUniqueAccountName(searchToken)}*";
             var lsc = context.LdapConnection.Search(
                 context.BaseDN,
                 LdapConnection.ScopeSub,
@@ -74,7 +74,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                     context.UserMembershipAttribute,
                     context.UserPrincipalNameAttribute,
                     context.UserEmailAttribute,
-                    context.UserNameAttribute
+                    context.UniqueAccountNameAttribute
                 },
                 false
                 );

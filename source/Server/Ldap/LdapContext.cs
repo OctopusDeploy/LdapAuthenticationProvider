@@ -13,7 +13,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public string GroupFilter { get; internal set; }
 
-        public string UserNameAttribute { get; internal set; }
+        public string UniqueAccountNameAttribute { get; internal set; }
 
         public string UserDisplayNameAttribute { get; internal set; }
 
