@@ -21,7 +21,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         public IEnumerable<GroupDistinguishedName> FindAllParentGroups(LdapContext context, int searchDepth, IEnumerable<GroupDistinguishedName> names)
         {
             var groups = new HashSet<GroupDistinguishedName>(names.Distinct());
-            var nextGroups = groups.Select(g => g).ToList();
+            var nextGroups = groups.ToList();
 
             while (nextGroups.Any() && searchDepth > 0)
             {
