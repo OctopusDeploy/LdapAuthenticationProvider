@@ -126,7 +126,7 @@ namespace Ldap.Tests
             }
 
             /// <summary>
-            /// This tells us what test this is in the test result output.
+            /// This tells us what test this is in the result output.
             /// </summary>
             public override string ToString()
             {
@@ -145,17 +145,15 @@ namespace Ldap.Tests
 
             public IEnumerable<GroupDistinguishedName> FindParentGroups(LdapContext context, GroupDistinguishedName name)
             {
-                //Get all the groups who have a child named name
+                //Get all the groups who have a child with the dn matching the value of name
                 return groups.Where(g => g.Children.Any(c => c == name))
-                    .Select(g => g);
+                             .Select(g => g);
             }
         }
 
         internal class Group : GroupDistinguishedName
         {
-            //internal GroupDistinguishedName Name { get; }
             internal List<Group> Children { get; } = new List<Group>();
-            //Group Parent { get; }
 
             internal Group(string name) : base(name)
             {
@@ -164,7 +162,6 @@ namespace Ldap.Tests
             internal Group(string name, Group parent) : this(name)
             {
                 parent.Children.Add(this);
-                //Parent = parent;
             }
         }
     }
