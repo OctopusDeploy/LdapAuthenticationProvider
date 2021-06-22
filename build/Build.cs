@@ -1,3 +1,4 @@
+using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.Execution;
@@ -78,7 +79,7 @@ class Build : NukeBuild
         .Produces(ArtifactsDirectory / "*.nupkg")
         .Executes(() =>
         {
-            Logger.Info("Packing  LDAP Authentication Provider v{0}", OctoVersionInfo.FullSemVer);
+            Logger.Info("Packing LDAP Authentication Provider v{0}", OctoVersionInfo.FullSemVer);
 
             DotNetPack(_ => _
                 .SetProject(Solution)
@@ -90,6 +91,16 @@ class Build : NukeBuild
                 .SetVerbosity(DotNetVerbosity.Normal)
                 .SetProperty("NuspecFile", "../../build/Octopus.Server.Extensibility.Authentication.Ldap.nuspec")
                 .SetProperty("NuspecProperties", $"Version={OctoVersionInfo.NuGetVersion}"));
+
+            DotNetPack(_ => _
+                .SetProject(RootDirectory / "source/Client/Client.csproj")
+                .SetVersion(OctoVersionInfo.FullSemVer)
+                .SetConfiguration(Configuration)
+                .SetOutputDirectory(ArtifactsDirectory)
+                .EnableNoBuild()
+                .DisableIncludeSymbols()
+                .SetVerbosity(DotNetVerbosity.Normal)
+                .SetProperty("NuspecProperties", $"Version={OctoVersionInfo.NuGetVersion}"));
         });
 
     Target CopyToLocalPackages => _ => _
@@ -99,16 +110,21 @@ class Build : NukeBuild
         {
             EnsureExistingDirectory(LocalPackagesDir);
             ArtifactsDirectory.GlobFiles("*.nupkg")
-                .ForEach(package => CopyFileToDirectory(package, LocalPackagesDir));
+                .ForEach(package =>
+                {
+                    CopyFileToDirectory(package, LocalPackagesDir);
+                });
         });
 
     Target OutputPackagesToPush => _ => _
         .DependsOn(Pack)
         .Executes(() =>
         {
-            ArtifactsDirectory.GlobFiles("*.nupkg")
+            var artifactPaths = ArtifactsDirectory.GlobFiles("*.nupkg")
                 .NotEmpty()
-                .ForEach(package => System.Console.WriteLine($"::set-output name=packages_to_push::{package}"));
+                .Select(p => p.ToString());
+
+            System.Console.WriteLine($"::set-output name=packages_to_push::{string.Join(',', artifactPaths)}");
         });
 
     Target Default => _ => _
