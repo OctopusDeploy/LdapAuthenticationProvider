@@ -18,23 +18,24 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             this.parentFinder = parentFinder;
         }
 
+        /// <returns>Returns all ancestor DNs, as well as the passed in group DNs.</returns>
         public IEnumerable<GroupDistinguishedName> FindAllParentGroups(LdapContext context, int searchDepth, IEnumerable<GroupDistinguishedName> names)
         {
             var groups = new HashSet<GroupDistinguishedName>(names.Distinct());
-            var nextGroups = groups.ToList();
+            var nextGroups = groups;
 
             while (nextGroups.Any() && searchDepth > 0)
             {
                 var newGroups = nextGroups.SelectMany(group => parentFinder.FindParentGroups(context, group));
 
-                //If we already have a returned group in the groups list, then we don't want to add it again.
-                nextGroups = newGroups.Where(ng => !groups.Contains(ng)).ToList();
+                //If we already have a returned group in the groups list, then we don't want to add it again. This also stops circular references from causing issues.
+                nextGroups = newGroups.Where(ng => !groups.Contains(ng)).ToHashSet();
                 groups.UnionWith(nextGroups);
 
                 searchDepth--;
             }
 
-            return groups; // Note that this also returns the passed-in groups
+            return groups;
         }
     }
 }
