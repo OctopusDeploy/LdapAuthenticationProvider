@@ -26,7 +26,13 @@ In Octopus Deploy, navigate to Configuration -> Settings -> LDAP.
 |Default Domain|This value is prepended to the username when no domain part is provided in the login form (format: DOMAIN\USERNAME). Can be left empty, in that case no domain is prepended.|
 |User Filter|The filter to use when searching valid users. The wildcard * will be replaced with the search expression.|(&(objectClass=person)(sAMAccountName=*))|
 |Group Filter|The filter to use when searching valid user groups. The wildcard * will be replaced with the search expression.|(&(objectClass=group)(cn=*))|
-|Username Attribute|The name of the LDAP attribute containing the username, which is used to authenticate users attempting to log in to Octopus.|sAMAccountName|
+|Nested Group Filter|The filter to use when searching for nested groups. The wildcard * will be replaced by the distinguished name of the initial group.|(&(objectClass=group)(uniqueMember=*))|
+|Nested Group Search Depth|Specifies how many levels of nesting will be searched. Set to '0' to disable searching for nested groups.|5|
+|Allow Auto User Creation|Specifies whether users not already set up in Octopus Deploy will be automatically created upon successful LDAP login.|false|
+|Referral Following Enabled|Sets whether or not to allow referral following.|true|
+|Referral Hop Limit|Sets the maximum number of referrals to follow during automatic referral following.|10|
+|Constraint Time Limit|Sets the time limit in seconds for LDAP operations on the directory.  '0' specifies no limit.|0|
+|Unique Account Name Attribute|Set the name of the LDAP attribute containing the unique account name, which is used to authenticate via the logon form.  This will be 'sAMAccountName' for Active Directory.|sAMAccountName|
 |User Display Name Attribute|The name of the LDAP attribute containing the user's full name.|displayName|
 |User Principal Name Attribute|The name of the LDAP attribute containing the user's principal name.|userPrincipalName|
 |User Membership Attribute|The name of the LDAP attribute to use when loading the user's groups.|memberOf|
