@@ -21,7 +21,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public const string ReferralFollowingEnabledDescription = "Sets whether to allow referral following.";
         public const string ReferralHopLimitDescription = "Sets the maximum number of referrals to follow during automatic referral following.";
         public const string ConstraintTimeLimitDescription = "Sets the time limit in seconds for LDAP operations on the directory.  '0' specifies no limit.";
-        public const string NestedGroupSearchDepthDescription = "Specifies how many levels of nesting will be searched. Set to '0' to disabled searching for nested groups.";
+        public const string NestedGroupSearchDepthDescription = "Specifies how many levels of nesting will be searched. Set to '0' to disable searching for nested groups.";
         public const string NestedGroupFilterDescription = "The filter to use when searching for nested groups. '*' is replaced by the distinguished name of the initial group.";
 
         [DisplayName("Server")]
