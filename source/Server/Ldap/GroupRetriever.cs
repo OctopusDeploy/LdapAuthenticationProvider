@@ -7,6 +7,7 @@ using Octopus.Server.Extensibility.Results;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Octopus.Server.Extensibility.Authentication.Ldap.Model;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
@@ -40,7 +41,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             // if the user has multiple, unique identities assigned then the group list should be the distinct union of the groups from
             // all of the identities
             var wasAbleToRetrieveSomeGroups = false;
-            var newGroups = new HashSet<string>();
+            var newGroups = new HashSet<GroupDistinguishedName>();
             var ldapIdentities = user.Identities.Where(p => p.IdentityProviderName == LdapAuthentication.ProviderName);
             foreach (var ldapIdentity in ldapIdentities)
             {
@@ -49,7 +50,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 var result = groupLocator.GetGroupIdsForUser(uniqueAccountName, cancellationToken);
                 if (result.WasAbleToRetrieveGroups)
                 {
-                    foreach (var groupId in result.GroupsIds.Where(g => !newGroups.Contains(g)))
+                    foreach (var groupId in result.GroupDistinguishedNames.Where(g => !newGroups.Contains(g)))
                     {
                         newGroups.Add(groupId);
                     }
@@ -67,7 +68,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 return ResultFromExtension<ExternalGroupResult>.Failed($"Unable to retrieve groups for user {user.Username}");
             }
 
-            return ResultFromExtension<ExternalGroupResult>.Success(new ExternalGroupResult(newGroups.Select(g => g).ToArray()));
+            var groupsDNs = newGroups.Select(g => g.ToString());
+            return ResultFromExtension<ExternalGroupResult>.Success(new ExternalGroupResult(groupsDNs));
         }
     }
 }

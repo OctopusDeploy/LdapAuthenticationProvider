@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Octopus.Server.Extensibility.Authentication.Ldap.Model;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
@@ -14,6 +15,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public string Email { get; set; }
 
-        public IEnumerable<string> Groups { get; set; }
+        public IEnumerable<GroupDistinguishedName> Groups { get; set; }
     }
 }

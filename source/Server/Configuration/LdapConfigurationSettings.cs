@@ -35,6 +35,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapDefaultDomain", ConfigurationDocumentStore.GetBaseDn(), isEnabled, "Default Domain");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserFilter", ConfigurationDocumentStore.GetUserFilter(), isEnabled, "User Filter");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapGroupFilter", ConfigurationDocumentStore.GetGroupFilter(), isEnabled, "Group Filter");
+            yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapNestedGroupFilter", ConfigurationDocumentStore.GetNestedGroupFilter(), isEnabled, "Nested Group Filter");
+            yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapNestedGroupSearchDepth", ConfigurationDocumentStore.GetNestedGroupSearchDepth().ToString(), isEnabled, "Nested Group Search Depth");
             yield return new ConfigurationValue<bool>("Octopus.WebPortal.LdapAllowAutoUserCreation=", ConfigurationDocumentStore.GetAllowAutoUserCreation(), isEnabled, "Allow Auto User Creation");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapReferralFollowingEnabled", ConfigurationDocumentStore.GetReferralFollowingEnabled().ToString(), isEnabled, "Referral Following Enabled");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapConstraintTimeLimit", ConfigurationDocumentStore.GetConstraintTimeLimit().ToString(), isEnabled, "Constraint Time Limit (seconds)");

@@ -72,6 +72,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 .As<IUseAuthenticationIdentities>()
                 .AsSelf()
                 .InstancePerDependency();
+
+            builder.RegisterType<NestedGroupFinder>().As<INestedGroupFinder>().SingleInstance();
+            builder.RegisterType<GroupParentFinder>().As<IGroupParentFinder>().SingleInstance();
         }
     }
 }

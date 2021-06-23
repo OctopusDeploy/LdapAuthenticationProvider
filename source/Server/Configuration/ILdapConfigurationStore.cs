@@ -38,6 +38,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         string GetGroupFilter();
         void SetGroupFilter(string groupFilter);
 
+        string GetNestedGroupFilter();
+        void SetNestedGroupFilter(string nestedGroupFilter);
+
+        int GetNestedGroupSearchDepth();
+        void SetNestedGroupSearchDepth(int nestedGroupSearchDepth);
+
         bool GetAllowAutoUserCreation();
         void SetAllowAutoUserCreation(bool allowAutoUserCreation);
 

@@ -79,6 +79,23 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 ldapConfiguration.Value.SetGroupFilter(v);
                 log.Info("LDAP Group Filter set to: " + v);
             });
+            yield return new ConfigureCommandOption("ldapNestedGroupFilter=", LdapConfigurationResource.NestedGroupFilterDescription, v =>
+            {
+                ldapConfiguration.Value.SetNestedGroupFilter(v);
+                log.Info("LDAP Nested Group Filter set to: " + v);
+            });
+            yield return new ConfigureCommandOption("ldapNestedGroupSearchDepth=", LdapConfigurationResource.NestedGroupSearchDepthDescription, v =>
+            {
+                if (int.TryParse(v, out var searchDepth) && searchDepth >= 0)
+                {
+                    ldapConfiguration.Value.SetNestedGroupSearchDepth(searchDepth);
+                    log.Info("LDAP Nested Group Search Depth set to: " + v);
+                }
+                else
+                {
+                    log.Warn($"Invalid LDAP NestedGroupSearchDepth specified: {v}. Value must be a number equal to, or greater than zero.");
+                }
+            });
             yield return new ConfigureCommandOption("ldapAllowAutoUserCreation=", LdapConfigurationResource.AllowAutoUserCreationDescription, v =>
             {
                 var isAllowed = bool.Parse(v);
