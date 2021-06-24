@@ -39,9 +39,15 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             });
             yield return new ConfigureCommandOption("ldapEncryptionMethod=", LdapConfigurationResource.EncryptionMethodDescription, v =>
             {
-                var encryptionMethod = (EncryptionMethod) Enum.Parse(typeof(EncryptionMethod), v);
-                ldapConfiguration.Value.SetEncryptionMethod(encryptionMethod);
-                log.Info("Encryption Method set to: " + encryptionMethod);
+                if (Enum.TryParse(v, true, out EncryptionMethod encryptionMethod))
+                {
+                    ldapConfiguration.Value.SetEncryptionMethod(encryptionMethod);
+                    log.Info("Encryption Method set to: " + encryptionMethod);
+                }
+                else
+                {
+                    log.Error($"Invalid value for ldapEncryptionMethod: '{v}'.  Should be one of the following: 'None', 'SSL', 'StartTLS'.");
+                }
             });
             yield return new ConfigureCommandOption("ldapIgnoreSslErrors=", LdapConfigurationResource.IgnoreSslErrorsDescription, v =>
             {
