@@ -14,7 +14,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         public int Port { get; set; } = 389;
 
-        public bool UseSsl { get; set; }
+        public EncryptionMethod EncryptionMethod { get; set; } = EncryptionMethod.None;
 
         public bool IgnoreSslErrors { get; set; }
 

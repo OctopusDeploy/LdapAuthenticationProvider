@@ -37,11 +37,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 ldapConfiguration.Value.SetPort(port);
                 log.Info("LDAP Port set to: " + port);
             });
-            yield return new ConfigureCommandOption("ldapUseSsl=", LdapConfigurationResource.UseSslDescription, v =>
+            yield return new ConfigureCommandOption("ldapEncryptionMethod=", LdapConfigurationResource.EncryptionMethodDescription, v =>
             {
-                bool.TryParse(v, out var useSsl);
-                ldapConfiguration.Value.SetUseSsl(useSsl);
-                log.Info("LDAP UseSsl set to: " + useSsl);
+                var encryptionMethod = (EncryptionMethod) Enum.Parse(typeof(EncryptionMethod), v);
+                ldapConfiguration.Value.SetEncryptionMethod(encryptionMethod);
+                log.Info("Encryption Method set to: " + encryptionMethod);
             });
             yield return new ConfigureCommandOption("ldapIgnoreSslErrors=", LdapConfigurationResource.IgnoreSslErrorsDescription, v =>
             {

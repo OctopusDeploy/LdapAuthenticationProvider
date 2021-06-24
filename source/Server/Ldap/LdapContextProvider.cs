@@ -23,15 +23,23 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         {
             var options = new LdapConnectionOptions();
 
-            if (ldapConfiguration.Value.GetUseSsl())
+            if (ldapConfiguration.Value.GetEncryptionMethod() == EncryptionMethod.SSL)
             {
                 options.UseSsl();
+                options.ConfigureRemoteCertificateValidationCallback(RemoteCertificateValidation);
+            }
+            else if (ldapConfiguration.Value.GetEncryptionMethod() == EncryptionMethod.StartTLS)
+            {
                 options.ConfigureRemoteCertificateValidationCallback(RemoteCertificateValidation);
             }
 
             try
             {
                 var con = new LdapConnection(options);
+
+                if (ldapConfiguration.Value.GetEncryptionMethod() == EncryptionMethod.StartTLS)
+                    con.StartTls();
+
                 con.Connect(ldapConfiguration.Value.GetServer(), ldapConfiguration.Value.GetPort());
                 con.Bind(ldapConfiguration.Value.GetConnectUsername(), ldapConfiguration.Value.GetConnectPassword().Value);
                 con.Constraints.ReferralFollowing = ldapConfiguration.Value.GetReferralFollowingEnabled();

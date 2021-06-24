@@ -27,6 +27,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public void Dispose()
         {
+            if(LdapConnection?.Tls == true)
+                LdapConnection.StopTls();
+            
             LdapConnection?.Dispose();
         }
     }
