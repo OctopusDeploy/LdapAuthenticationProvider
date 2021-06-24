@@ -21,8 +21,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public int GetPort() => GetProperty(doc => doc.Port);
         public void SetPort(int port) => SetProperty(doc => doc.Port = port);
 
-        public void SetEncryptionMethod(EncryptionMethod encryptionMethod) => SetProperty(doc => doc.EncryptionMethod = encryptionMethod);
-        public EncryptionMethod GetEncryptionMethod() => GetProperty(doc => doc.EncryptionMethod);
+        public void SetSecurityProtocol(SecurityProtocol securityProtocol) => SetProperty(doc => doc.SecurityProtocol = securityProtocol);
+        public SecurityProtocol GetSecurityProtocol() => GetProperty(doc => doc.SecurityProtocol);
 
         public void SetIgnoreSslErrors(bool ignoreSslErrors) => SetProperty(doc => doc.IgnoreSslErrors = ignoreSslErrors);
         public bool GetIgnoreSslErrors() => GetProperty(doc => doc.IgnoreSslErrors);

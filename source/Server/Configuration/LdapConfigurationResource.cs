@@ -5,17 +5,11 @@ using Octopus.Server.MessageContracts.Attributes;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 {
-    public enum EncryptionMethod
-    {
-        None,
-        SSL,
-        StartTLS
-    }
     public class LdapConfigurationResource : ExtensionConfigurationResource
     {
         public const string ServerDescription = "Set the server URL.";
         public const string PortDescription = "Set the port using to connect.";
-        public const string EncryptionMethodDescription = "Sets the encryption method used to secure the connection (None, SSL, or StartTLS).";
+        public const string SecurityProtocolDescription = "Sets the security protocol to use in securing the connection (None, StartTLS, or SSL).";
         public const string IgnoreSslErrorsDescription = "Sets whether to ignore certificate validation errors.";
         public const string UsernameDescription = "Set the user DN to query LDAP.";
         public const string PasswordDescription = "Set the password to query LDAP.";
@@ -41,10 +35,10 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public int Port { get; set; }
 
         [DisplayName("Connection Security Method")]
-        [Description(EncryptionMethodDescription)]
+        [Description(SecurityProtocolDescription)]
         [Writeable]
         [HasOptions(SelectMode.Single)]
-        public EncryptionMethod EncryptionMethod { get; set; }
+        public SecurityProtocol SecurityProtocol { get; set; }
 
         [DisplayName("Ignore SSL errors")]
         [Description(IgnoreSslErrorsDescription)]

@@ -23,12 +23,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         {
             var options = new LdapConnectionOptions();
 
-            if (ldapConfiguration.Value.GetEncryptionMethod() == EncryptionMethod.SSL)
+            if (ldapConfiguration.Value.GetSecurityProtocol() == SecurityProtocol.SSL)
             {
                 options.UseSsl();
                 options.ConfigureRemoteCertificateValidationCallback(RemoteCertificateValidation);
             }
-            else if (ldapConfiguration.Value.GetEncryptionMethod() == EncryptionMethod.StartTLS)
+            else if (ldapConfiguration.Value.GetSecurityProtocol() == SecurityProtocol.StartTLS)
             {
                 options.ConfigureRemoteCertificateValidationCallback(RemoteCertificateValidation);
             }
@@ -37,7 +37,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             {
                 var con = new LdapConnection(options);
 
-                if (ldapConfiguration.Value.GetEncryptionMethod() == EncryptionMethod.StartTLS)
+                if (ldapConfiguration.Value.GetSecurityProtocol() == SecurityProtocol.StartTLS)
                     con.StartTls();
 
                 con.Connect(ldapConfiguration.Value.GetServer(), ldapConfiguration.Value.GetPort());

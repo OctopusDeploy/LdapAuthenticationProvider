@@ -37,16 +37,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 ldapConfiguration.Value.SetPort(port);
                 log.Info("LDAP Port set to: " + port);
             });
-            yield return new ConfigureCommandOption("ldapEncryptionMethod=", LdapConfigurationResource.EncryptionMethodDescription, v =>
+            yield return new ConfigureCommandOption("ldapSecurityProtocol=", LdapConfigurationResource.SecurityProtocolDescription, v =>
             {
-                if (Enum.TryParse(v, true, out EncryptionMethod encryptionMethod))
+                if (Enum.TryParse(v, true, out SecurityProtocol securityProtocol))
                 {
-                    ldapConfiguration.Value.SetEncryptionMethod(encryptionMethod);
-                    log.Info("Encryption Method set to: " + encryptionMethod);
+                    ldapConfiguration.Value.SetSecurityProtocol(securityProtocol);
+                    log.Info("Security protocol set to: " + securityProtocol);
                 }
                 else
                 {
-                    log.Error($"Invalid value for ldapEncryptionMethod: '{v}'.  Should be one of the following: 'None', 'SSL', 'StartTLS'.");
+                    log.Error($"Invalid value for ldapSecurityProtocol: '{v}'.  Should be one of the following: 'None', 'StartTLS', or 'SSL'.");
                 }
             });
             yield return new ConfigureCommandOption("ldapIgnoreSslErrors=", LdapConfigurationResource.IgnoreSslErrorsDescription, v =>

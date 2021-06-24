@@ -11,8 +11,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         int GetPort();
         void SetPort(int port);
 
-        void SetEncryptionMethod(EncryptionMethod encryptionMethod);
-        EncryptionMethod GetEncryptionMethod();
+        void SetSecurityProtocol(SecurityProtocol securityProtocol);
+        SecurityProtocol GetSecurityProtocol();
 
         void SetIgnoreSslErrors(bool ignoreSslErrors);
         bool GetIgnoreSslErrors();
