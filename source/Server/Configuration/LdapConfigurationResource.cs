@@ -34,7 +34,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Writeable]
         public int Port { get; set; }
 
-        [DisplayName("Connection Security Method")]
+        [DisplayName("Security Protocol")]
         [Description(SecurityProtocolDescription)]
         [Writeable]
         [HasOptions(SelectMode.Single)]
