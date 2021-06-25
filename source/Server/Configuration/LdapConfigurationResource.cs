@@ -105,7 +105,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Writeable]
         public int ConstraintTimeLimit { get; set; }
 
-        [DisplayName("Attribute Mapping")] public LdapMappingConfigurationResource AttributeMapping { get; set; } = new LdapMappingConfigurationResource();
+        [DisplayName("Attribute Mapping")]
+        public LdapMappingConfigurationResource AttributeMapping { get; set; } = new LdapMappingConfigurationResource();
     }
 
     public class LdapMappingConfigurationResource
