@@ -8,9 +8,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 {
     public class LdapConfigurationResource : ExtensionConfigurationResource
     {
-        readonly ISystemLog log;
-        SensitiveValue connectPassword;
-        
         public const string ServerDescription = "Set the server URL.";
         public const string PortDescription = "Set the port using to connect.";
         public const string UseSslDescription = "Sets whether to use Secure Socket Layer to connect to LDAP.";
@@ -27,11 +24,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public const string ConstraintTimeLimitDescription = "Sets the time limit in seconds for LDAP operations on the directory.  '0' specifies no limit.";
         public const string NestedGroupSearchDepthDescription = "Specifies how many levels of nesting will be searched. Set to '0' to disable searching for nested groups.";
         public const string NestedGroupFilterDescription = "The filter to use when searching for nested groups. '*' is replaced by the distinguished name of the initial group.";
-
-        public LdapConfigurationResource(ISystemLog log)
-        {
-            this.log = log;
-        }
 
         [DisplayName("Server")]
         [Description(ServerDescription)]
@@ -61,15 +53,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [DisplayName("Password")]
         [Description(PasswordDescription)]
         [Writeable]
-        public SensitiveValue ConnectPassword
-        {
-            get => connectPassword;
-            set
-            {
-                log.WithSensitiveValue(value.ToString());
-                connectPassword = value;
-            }
-        }
+        public SensitiveValue ConnectPassword { get; set; }
 
         [DisplayName("Base DN")]
         [Description(BaseDnDescription)]
