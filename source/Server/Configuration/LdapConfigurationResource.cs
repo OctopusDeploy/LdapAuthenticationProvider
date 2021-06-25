@@ -1,5 +1,6 @@
 ﻿using Octopus.Server.Extensibility.Extensions.Infrastructure.Configuration;
 using System.ComponentModel;
+using Octopus.Diagnostics;
 using Octopus.Server.MessageContracts;
 using Octopus.Server.MessageContracts.Attributes;
 
