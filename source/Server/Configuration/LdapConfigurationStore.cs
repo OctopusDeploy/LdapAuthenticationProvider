@@ -21,8 +21,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public int GetPort() => GetProperty(doc => doc.Port);
         public void SetPort(int port) => SetProperty(doc => doc.Port = port);
 
-        public void SetUseSsl(bool useSsl) => SetProperty(doc => doc.UseSsl = useSsl);
-        public bool GetUseSsl() => GetProperty(doc => doc.UseSsl);
+        public void SetSecurityProtocol(SecurityProtocol securityProtocol) => SetProperty(doc => doc.SecurityProtocol = securityProtocol);
+        public SecurityProtocol GetSecurityProtocol() => GetProperty(doc => doc.SecurityProtocol);
 
         public void SetIgnoreSslErrors(bool ignoreSslErrors) => SetProperty(doc => doc.IgnoreSslErrors = ignoreSslErrors);
         public bool GetIgnoreSslErrors() => GetProperty(doc => doc.IgnoreSslErrors);
@@ -57,12 +57,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public bool GetAllowAutoUserCreation() => GetProperty(doc => doc.AllowAutoUserCreation);
         public void SetAllowAutoUserCreation(bool allowAutoUserCreation) => SetProperty(doc => doc.AllowAutoUserCreation = allowAutoUserCreation);
 
+        //Attributes
         public string GetUserDisplayNameAttribute() => GetProperty(doc => doc.AttributeMapping.UserDisplayNameAttribute);
         public void SetUserDisplayNameAttribute(string userDisplayNameAttribute) => SetProperty(doc => doc.AttributeMapping.UserDisplayNameAttribute = userDisplayNameAttribute);
 
-
         public string GetUserPrincipalNameAttribute() => GetProperty(doc => doc.AttributeMapping.UserPrincipalNameAttribute);
-
         public void SetUserPrincipalNameAttribute(string userPrincipalNameAttribute) => SetProperty(doc => doc.AttributeMapping.UserPrincipalNameAttribute = userPrincipalNameAttribute);
 
         public string GetUserMembershipAttribute() => GetProperty(doc => doc.AttributeMapping.UserMembershipAttribute);

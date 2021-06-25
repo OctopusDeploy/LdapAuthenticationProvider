@@ -23,9 +23,13 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         {
             var options = new LdapConnectionOptions();
 
-            if (ldapConfiguration.Value.GetUseSsl())
+            if (ldapConfiguration.Value.GetSecurityProtocol() == SecurityProtocol.SSL)
             {
                 options.UseSsl();
+                options.ConfigureRemoteCertificateValidationCallback(RemoteCertificateValidation);
+            }
+            else if (ldapConfiguration.Value.GetSecurityProtocol() == SecurityProtocol.StartTLS)
+            {
                 options.ConfigureRemoteCertificateValidationCallback(RemoteCertificateValidation);
             }
 
@@ -33,6 +37,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             {
                 var con = new LdapConnection(options);
                 con.Connect(ldapConfiguration.Value.GetServer(), ldapConfiguration.Value.GetPort());
+
+                //This must occur after connecting, but before binding.
+                if (ldapConfiguration.Value.GetSecurityProtocol() == SecurityProtocol.StartTLS)
+                    con.StartTls();
+
                 con.Bind(ldapConfiguration.Value.GetConnectUsername(), ldapConfiguration.Value.GetConnectPassword().Value);
                 con.Constraints.ReferralFollowing = ldapConfiguration.Value.GetReferralFollowingEnabled();
                 con.Constraints.HopLimit = ldapConfiguration.Value.GetReferralHopLimit();
