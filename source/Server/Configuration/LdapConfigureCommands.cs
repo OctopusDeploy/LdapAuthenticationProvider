@@ -2,7 +2,6 @@
 using Octopus.Server.Extensibility.Extensions.Infrastructure.Configuration;
 using System;
 using System.Collections.Generic;
-using Octopus.Server.Extensibility.HostServices.Infrastructure;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 {
