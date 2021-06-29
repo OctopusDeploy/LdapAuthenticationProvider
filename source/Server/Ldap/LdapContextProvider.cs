@@ -54,6 +54,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                     UniqueAccountNameAttribute = ldapConfiguration.Value.GetUniqueAccountNameAttribute(),
                     UserFilter = ldapConfiguration.Value.GetUserFilter(),
                     GroupFilter = ldapConfiguration.Value.GetGroupFilter(),
+                    NestedGroupFilter = ldapConfiguration.Value.GetNestedGroupFilter(),
                     GroupNameAttribute = ldapConfiguration.Value.GetGroupNameAttribute(),
                     UserDisplayNameAttribute = ldapConfiguration.Value.GetUserDisplayNameAttribute(),
                     UserEmailAttribute = ldapConfiguration.Value.GetUserEmailAttribute(),
