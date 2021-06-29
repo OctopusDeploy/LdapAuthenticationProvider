@@ -34,7 +34,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public int NestedGroupSearchDepth { get; set; } = 5;
         public bool AllowAutoUserCreation { get; set; }
 
-        public bool ReferralFollowingEnabled { get; set; } = true;
+        public bool ReferralFollowingEnabled { get; set; } = false;
 
         /// <summary>
         /// Defaults to 10, as specified in the Novell LDAP library.
