@@ -40,7 +40,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
             if (principal == null)
             {
-                var searchedContext = domain ?? context.BaseDN;
+                var searchedContext = domain ?? context.UserBaseDN;
                 log.Info($"A principal identifiable by '{uniqueAccountName}' was not found in '{searchedContext}'");
 
                 return username.Contains("@")
@@ -75,7 +75,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             if (principal != null)
                 return new UserValidationResult(principal);
 
-            var searchedContext = domain ?? context.BaseDN;
+            var searchedContext = domain ?? context.UserBaseDN;
             return new UserValidationResult($"A principal identifiable by '{uniqueAccountName}' was not found in '{searchedContext}'");
         }
     }

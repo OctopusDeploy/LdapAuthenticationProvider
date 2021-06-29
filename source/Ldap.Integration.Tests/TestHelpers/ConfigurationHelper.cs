@@ -30,7 +30,7 @@ namespace Ldap.Integration.Tests.TestHelpers
                     user: user,
                     password: password)
                 .WithUserSettings(
-                    baseDn: "cn=Users,dc=mycompany,dc=local",
+                    userBaseDn: "cn=Users,dc=mycompany,dc=local",
                     userFilter: "(&(objectClass=person)(sAMAccountName=*))")
                 .WithUserAttributes(
                     uniqueAccountNameAttribute: "sAMAccountName",
@@ -61,7 +61,7 @@ namespace Ldap.Integration.Tests.TestHelpers
                     user: user,
                     password: password)
                 .WithUserSettings(
-                    baseDn: "dc=domain1,dc=local",
+                    userBaseDn: "dc=domain1,dc=local",
                     userFilter: "(&(objectClass=inetOrgPerson)(cn=*))")
                 .WithUserAttributes(
                     uniqueAccountNameAttribute: "cn",

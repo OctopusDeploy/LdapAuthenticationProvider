@@ -31,7 +31,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             yield return new ConfigurationValue<bool>("Octopus.WebPortal.LdapIgnoreSslErrors", ConfigurationDocumentStore.GetIgnoreSslErrors(), isEnabled, "Ignore SSL errors");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUsername", ConfigurationDocumentStore.GetConnectUsername(), isEnabled, "Username");
             yield return new ConfigurationValue<SensitiveString>("Octopus.WebPortal.LdapPassword", ConfigurationDocumentStore.GetConnectPassword(), isEnabled, "Password");
-            yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapBaseDn", ConfigurationDocumentStore.GetBaseDn(), isEnabled, "Base DN");
+            yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserBaseDn", ConfigurationDocumentStore.GetUserBaseDn(), isEnabled, "User Base DN");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapDefaultDomain", ConfigurationDocumentStore.GetDefaultDomain(), isEnabled, "Default Domain");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserFilter", ConfigurationDocumentStore.GetUserFilter(), isEnabled, "User Filter");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapGroupBaseDn", ConfigurationDocumentStore.GetGroupBaseDn(), isEnabled, "Group Base DN");

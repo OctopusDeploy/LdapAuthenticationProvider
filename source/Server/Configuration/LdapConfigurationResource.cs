@@ -14,7 +14,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public const string IgnoreSslErrorsDescription = "Sets whether to ignore certificate validation errors.";
         public const string UsernameDescription = "Set the user DN to query LDAP.";
         public const string PasswordDescription = "Set the password to query LDAP.";
-        public const string BaseDnDescription = "Set the root distinguished name (DN) to query LDAP for Users.";
+        public const string UserBaseDnDescription = "Set the root distinguished name (DN) to query LDAP for Users.";
         public const string DefaultDomainDescription = "Set the default domain when none is given in the logon form. Optional.";
         public const string UserFilterDescription = "The filter to use when searching valid users.  '*' is replaced with a normalized version of the username.";
         public const string GroupBaseDnDescription = "Set the root distinguished name (DN) to query LDAP for Groups.";
@@ -57,10 +57,10 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Writeable]
         public SensitiveValue ConnectPassword { get; set; }
 
-        [DisplayName("Base DN")]
-        [Description(BaseDnDescription)]
+        [DisplayName("User Base DN")]
+        [Description(UserBaseDnDescription)]
         [Writeable]
-        public string BaseDN { get; set; }
+        public string UserBaseDN { get; set; }
 
         [DisplayName("Default Domain")]
         [Description(DefaultDomainDescription)]

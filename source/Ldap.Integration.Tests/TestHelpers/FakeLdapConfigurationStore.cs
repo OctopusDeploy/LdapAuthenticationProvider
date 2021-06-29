@@ -14,7 +14,7 @@ namespace Ldap.Integration.Tests.TestHelpers
 
         public bool GetAllowAutoUserCreation() => _configuration.AllowAutoUserCreation;
 
-        public string GetBaseDn() => _configuration.BaseDn;
+        public string GetUserBaseDn() => _configuration.UserBaseDn;
 
         public string GetGroupBaseDn() => _configuration.GroupBaseDn;
 
@@ -67,7 +67,7 @@ namespace Ldap.Integration.Tests.TestHelpers
             throw new NotImplementedException();
         }
 
-        public void SetBaseDn(string baseDn)
+        public void SetUserBaseDn(string userBaseDn)
         {
             throw new NotImplementedException();
         }

@@ -22,7 +22,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         public SensitiveString ConnectPassword { get; set; }
 
-        public string BaseDn { get; set; }
+        public string UserBaseDn { get; set; }
 
         public string GroupBaseDn { get; set; }
 

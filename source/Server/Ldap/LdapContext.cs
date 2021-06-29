@@ -7,7 +7,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
     {
         public LdapConnection LdapConnection { get; internal set; }
 
-        public string BaseDN { get; internal set; }
+        public string UserBaseDN { get; internal set; }
 
         public string UserFilter { get; internal set; }
 

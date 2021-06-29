@@ -23,9 +23,9 @@ namespace Ldap.Integration.Tests.TestHelpers
             return configuration;
         }
 
-        internal static LdapConfiguration WithUserSettings(this LdapConfiguration configuration, string baseDn, string userFilter)
+        internal static LdapConfiguration WithUserSettings(this LdapConfiguration configuration, string userBaseDn, string userFilter)
         {
-            configuration.BaseDn = baseDn;
+            configuration.UserBaseDn = userBaseDn;
             configuration.UserFilter = userFilter;
 
             return configuration;
