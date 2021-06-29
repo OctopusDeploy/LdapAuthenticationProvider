@@ -32,7 +32,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         public string GroupFilter { get; set; } = "(&(objectClass=group)(cn=*))";
 
-        public string NestedGroupFilter { get; set; } = "(&(objectClass=group)(uniqueMember=*))";
+        public string NestedGroupFilter { get; set; } = "(&(objectClass=group)(member=*))";
         public int NestedGroupSearchDepth { get; set; } = 5;
         public bool AllowAutoUserCreation { get; set; }
 
