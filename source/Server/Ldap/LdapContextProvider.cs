@@ -54,6 +54,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 {
                     LdapConnection = con,
                     BaseDN = ldapConfiguration.Value.GetBaseDn(),
+                    GroupBaseDN = ldapConfiguration.Value.GetGroupBaseDn(),
                     UniqueAccountNameAttribute = ldapConfiguration.Value.GetUniqueAccountNameAttribute(),
                     UserFilter = ldapConfiguration.Value.GetUserFilter(),
                     GroupFilter = ldapConfiguration.Value.GetGroupFilter(),

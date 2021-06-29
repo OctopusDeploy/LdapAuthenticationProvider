@@ -24,6 +24,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         public string BaseDn { get; set; }
 
+        public string GroupBaseDn { get; set; }
+
         public string DefaultDomain { get; set; }
 
         public string UserFilter { get; set; } = "(&(objectClass=person)(sAMAccountName=*))";

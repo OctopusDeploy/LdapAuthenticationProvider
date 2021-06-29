@@ -65,6 +65,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 ldapConfiguration.Value.SetBaseDn(v);
                 log.Info("LDAP Base DN set");
             });
+            yield return new ConfigureCommandOption("ldapGroupBaseDn=", LdapConfigurationResource.GroupBaseDnDescription, v =>
+            {
+                ldapConfiguration.Value.SetGroupBaseDn(v);
+                log.Info("LDAP Group Base DN set");
+            });
             yield return new ConfigureCommandOption("ldapDefaultDomain=", LdapConfigurationResource.DefaultDomainDescription, v =>
             {
                 ldapConfiguration.Value.SetDefaultDomain(v);

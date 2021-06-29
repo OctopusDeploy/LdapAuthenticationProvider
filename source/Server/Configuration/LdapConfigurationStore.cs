@@ -43,6 +43,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public string GetBaseDn() => GetProperty(doc => doc.BaseDn);
         public void SetBaseDn(string baseDn) => SetProperty(doc => doc.BaseDn = baseDn);
 
+        public string GetGroupBaseDn() => GetProperty(doc => doc.GroupBaseDn);
+        public void SetGroupBaseDn(string groupBaseDn) => SetProperty(doc => doc.GroupBaseDn = groupBaseDn);
+
         public string GetDefaultDomain() => GetProperty(doc => doc.DefaultDomain);
         public void SetDefaultDomain(string defaultDomain) => SetProperty(doc => doc.DefaultDomain = defaultDomain);
 

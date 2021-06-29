@@ -26,6 +26,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         string GetBaseDn();
         void SetBaseDn(string baseDn);
 
+        string GetGroupBaseDn();
+        void SetGroupBaseDn(string groupBaseDn);
+
         string GetDefaultDomain();
         void SetDefaultDomain(string defaultDomain);
 

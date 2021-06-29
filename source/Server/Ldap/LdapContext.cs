@@ -11,6 +11,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public string UserFilter { get; internal set; }
 
+        public string GroupBaseDN { get; internal set; }
+
         public string GroupFilter { get; internal set; }
 
         public string NestedGroupFilter { get; internal set; }

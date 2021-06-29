@@ -21,6 +21,7 @@ namespace Octopus.Client.Extensibility.Authentication.Ldap.Configuration
         public const string BaseDnDescription = "Set the root distinguished name (DN) to query LDAP.";
         public const string DefaultDomainDescription = "Set the default domain when none is given in the logon form. Optional.";
         public const string UserFilterDescription = "The filter to use when searching valid users.";
+        public const string GroupBaseDnDescription = "Set the root distinguished name (DN) to query LDAP for Groups.";
         public const string GroupFilterDescription = "The filter to use when searching valid user groups.";
         public const string AllowAutoUserCreationDescription = "Whether unknown users will be automatically created upon successful login.";
 
@@ -68,6 +69,11 @@ namespace Octopus.Client.Extensibility.Authentication.Ldap.Configuration
         [Description(UserFilterDescription)]
         [Writeable]
         public string UserFilter { get; set; }
+
+        [DisplayName("Group Base DN")]
+        [Description(GroupBaseDnDescription)]
+        [Writeable]
+        public string GroupBaseDN { get; set; }
 
         [DisplayName("Group Filter")]
         [Description(GroupFilterDescription)]

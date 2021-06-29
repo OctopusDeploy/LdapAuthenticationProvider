@@ -16,6 +16,8 @@ namespace Ldap.Integration.Tests.TestHelpers
 
         public string GetBaseDn() => _configuration.BaseDn;
 
+        public string GetGroupBaseDn() => _configuration.GroupBaseDn;
+
         public object GetConfiguration() => _configuration;
 
         public SensitiveString GetConnectPassword() => _configuration.ConnectPassword;
@@ -66,6 +68,11 @@ namespace Ldap.Integration.Tests.TestHelpers
         }
 
         public void SetBaseDn(string baseDn)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetGroupBaseDn(string groupBaseDn)
         {
             throw new NotImplementedException();
         }

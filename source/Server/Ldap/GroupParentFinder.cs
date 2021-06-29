@@ -18,7 +18,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             var attributesToRetrieve = new[] {"cn", "dn" };
 
             var result = context.LdapConnection.Search(
-                context.BaseDN,
+                context.GroupBaseDN,
                 LdapConnection.ScopeSub,
                 context.NestedGroupFilter.Replace("*", name.ToString()),
                 attributesToRetrieve,

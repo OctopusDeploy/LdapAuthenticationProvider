@@ -42,8 +42,9 @@ namespace Ldap.Integration.Tests.TestHelpers
             return configuration;
         }
 
-        internal static LdapConfiguration WithGroupSettings(this LdapConfiguration configuration, string groupFilter, string nestedGroupFilter)
+        internal static LdapConfiguration WithGroupSettings(this LdapConfiguration configuration, string groupBaseDn, string groupFilter, string nestedGroupFilter)
         {
+            configuration.GroupBaseDn = groupBaseDn;
             configuration.GroupFilter = groupFilter;
             configuration.NestedGroupFilter = nestedGroupFilter;
 

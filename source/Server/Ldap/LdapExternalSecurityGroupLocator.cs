@@ -59,7 +59,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             using var context = contextProvider.GetContext();
             var filterToken = $"*{partialGroupName}*";
             var lsc = context.LdapConnection.Search(
-                context.BaseDN,
+                context.GroupBaseDN,
                 LdapConnection.ScopeSub,
                 context.GroupFilter?.Replace("*", filterToken),
                 new[] { context.GroupNameAttribute },

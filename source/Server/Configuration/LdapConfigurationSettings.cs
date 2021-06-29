@@ -34,6 +34,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapBaseDn", ConfigurationDocumentStore.GetBaseDn(), isEnabled, "Base DN");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapDefaultDomain", ConfigurationDocumentStore.GetBaseDn(), isEnabled, "Default Domain");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserFilter", ConfigurationDocumentStore.GetUserFilter(), isEnabled, "User Filter");
+            yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapGroupBaseDn", ConfigurationDocumentStore.GetGroupBaseDn(), isEnabled, "Group Base DN");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapGroupFilter", ConfigurationDocumentStore.GetGroupFilter(), isEnabled, "Group Filter");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapNestedGroupFilter", ConfigurationDocumentStore.GetNestedGroupFilter(), isEnabled, "Nested Group Filter");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapNestedGroupSearchDepth", ConfigurationDocumentStore.GetNestedGroupSearchDepth().ToString(), isEnabled, "Nested Group Search Depth");

@@ -15,16 +15,6 @@ namespace Ldap.Integration.Tests.TestHelpers
         const string ENVVAR_OPENLDAP_USER = "OCTOPUS_LDAP_OPENLDAP_USER";
         const string ENVVAR_OPENLDAP_PASSWORD = "OCTOPUS_LDAP_OPENLDAP_PASSWORD";
 
-        public static LdapConfiguration GetBaseConfiguration()
-        {
-            return new LdapConfiguration
-            {
-                ReferralFollowingEnabled = true,
-                ReferralHopLimit = 20
-            }
-            .Enabled();
-        }
-
         public static LdapConfiguration GetActiveDirectoryConfiguration()
         {
             var server = Environment.GetEnvironmentVariable(ENVVAR_AD_SERVER);
@@ -40,7 +30,7 @@ namespace Ldap.Integration.Tests.TestHelpers
                     user: user,
                     password: password)
                 .WithUserSettings(
-                    baseDn: "dc=mycompany,dc=local",
+                    baseDn: "cn=Users,dc=mycompany,dc=local",
                     userFilter: "(&(objectClass=person)(sAMAccountName=*))")
                 .WithUserAttributes(
                     uniqueAccountNameAttribute: "sAMAccountName",
@@ -49,6 +39,7 @@ namespace Ldap.Integration.Tests.TestHelpers
                     userMembershipAttribute: "memberOf",
                     userEmailAttribute: "mail")
                 .WithGroupSettings(
+                    groupBaseDn: "ou=Groups,dc=mycompany,dc=local",
                     groupFilter: "(&(objectClass=group)(cn=*))",
                     nestedGroupFilter: "(&(objectClass=group)(member=*))")
                 .WithGroupAttributes(
@@ -79,6 +70,7 @@ namespace Ldap.Integration.Tests.TestHelpers
                     userMembershipAttribute: "memberOf",
                     userEmailAttribute: "mail")
                 .WithGroupSettings(
+                    groupBaseDn: "dc=domain1,dc=local",
                     groupFilter: "(&(objectClass=groupOfUniqueNames)(cn=*))",
                     nestedGroupFilter: "(&(objectClass=groupOfUniqueNames)(uniqueMember=*))")
                 .WithGroupAttributes(
