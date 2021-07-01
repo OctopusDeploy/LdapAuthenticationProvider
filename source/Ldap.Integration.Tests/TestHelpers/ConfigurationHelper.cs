@@ -48,9 +48,9 @@ namespace Ldap.Integration.Tests.TestHelpers
 
         public static LdapConfiguration GetOpenLdapConfiguration()
         {
-            var server = Environment.GetEnvironmentVariable(ENVVAR_OPENLDAP_SERVER);
-            var port = Convert.ToInt32(Environment.GetEnvironmentVariable(ENVVAR_OPENLDAP_PORT));
-            var user = Environment.GetEnvironmentVariable(ENVVAR_OPENLDAP_USER);
+            var server = Environment.GetEnvironmentVariable(ENVVAR_OPENLDAP_SERVER) ?? "localhost";
+            var port = Convert.ToInt32(Environment.GetEnvironmentVariable(ENVVAR_OPENLDAP_PORT) ?? "389");
+            var user = Environment.GetEnvironmentVariable(ENVVAR_OPENLDAP_USER) ?? "cn=admin,dc=domain1,dc=local";
             var password = Environment.GetEnvironmentVariable(ENVVAR_OPENLDAP_PASSWORD);
 
             return new LdapConfiguration()

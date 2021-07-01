@@ -38,7 +38,7 @@ namespace Ldap.Integration.Tests
         internal void CreatesAUserFromOpenLDAP()
         {
             // Arrange
-            var userName = "developer";
+            var userName = "developer1";
 
             var fixture = FixtureHelper.CreateLdapCredentialValidator(ConfigurationHelper.GetOpenLdapConfiguration(), userName);
 
@@ -50,13 +50,13 @@ namespace Ldap.Integration.Tests
 
             var createdUser = ((ResultFromExtension<IUser>)result).Value;
 
-            Assert.Equal("developer", createdUser.Username);
-            Assert.Equal("Developer User", createdUser.DisplayName);
-            Assert.Equal("developer@gmail.com", createdUser.EmailAddress);
-            Assert.Equal("developer", createdUser.Identities.First().Claims["uan"].Value);
-            Assert.Equal("developer", createdUser.Identities.First().Claims["upn"].Value);
-            Assert.Equal("developer@gmail.com", createdUser.Identities.First().Claims["email"].Value);
-            Assert.Equal("Developer User", createdUser.Identities.First().Claims["dn"].Value);
+            Assert.Equal("developer1", createdUser.Username);
+            Assert.Equal("Developer User 1", createdUser.DisplayName);
+            Assert.Equal("developer1@gmail.com", createdUser.EmailAddress);
+            Assert.Equal("developer1", createdUser.Identities.First().Claims["uan"].Value);
+            Assert.Equal("developer1", createdUser.Identities.First().Claims["upn"].Value);
+            Assert.Equal("developer1@gmail.com", createdUser.Identities.First().Claims["email"].Value);
+            Assert.Equal("Developer User 1", createdUser.Identities.First().Claims["dn"].Value);
         }
     }
 }

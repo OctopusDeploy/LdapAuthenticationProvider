@@ -1,0 +1,35 @@
+# docker compose file for spinning up a local development stack with persistent volumes and a shared network
+version: '3.7'
+
+services:
+
+  ldap_server:
+    image: octopusdeploy/openldap:development
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      LDAP_ADMIN_PASSWORD: ${OCTOPUS_LDAP_OPENLDAP_PASSWORD}
+      LDAP_BASE_DN: dc=domain1,dc=local
+    ports:
+      - 389:389
+    volumes:
+      - ldap_data:/var/lib/ldap
+      - ldap_config:/etc/ldap/slapd.d
+
+  ldap_server_admin:
+    image: osixia/phpldapadmin:0.7.2
+    ports:
+      - 8090:80
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: ldap_server
+      PHPLDAPADMIN_HTTPS: 'false'
+
+networks: 
+  default: 
+    external: 
+      name: openldap_network
+
+volumes:
+  ldap_data:
+  ldap_config:

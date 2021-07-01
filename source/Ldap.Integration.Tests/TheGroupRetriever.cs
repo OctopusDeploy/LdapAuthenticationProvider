@@ -42,12 +42,13 @@ namespace Ldap.Integration.Tests
         internal void ReadsGroupsForAUserFromOpenLDAP()
         {
             // Arrange
-            var user = new FakeUser("developer");
+            var user = new FakeUser("developer1");
 
             var expectedGroups = new[]
             {
-                "cn=Maintaners,ou=Groups,dc=domain1,dc=local",
-                "cn=SubMaintainers,cn=Maintaners,ou=Groups,dc=domain1,dc=local"
+                "cn=Maintainers,ou=Groups,dc=domain1,dc=local",
+                "cn=Developers,ou=Groups,dc=domain1,dc=local",
+                "cn=DeveloperGroup1,ou=Groups,dc=domain1,dc=local"
             };
 
             var fixture = FixtureHelper.CreateFixtureGroupRetriever(ConfigurationHelper.GetOpenLdapConfiguration());

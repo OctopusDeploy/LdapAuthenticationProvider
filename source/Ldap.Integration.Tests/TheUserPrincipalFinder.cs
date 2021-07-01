@@ -30,11 +30,15 @@ namespace Ldap.Integration.Tests
         [Fact]
         internal void FindsAUserFromOpenLDAP()
         {
-            var userName = "developer";
-            var expectedDistinguishedName = "cn=developer,dc=domain1,dc=local";
+            var userName = "developer1";
+            var expectedDistinguishedName = "cn=developer1,dc=domain1,dc=local";
+            var expectedUpn = "developer1";
+            var expectedUan = "developer1";
+            var expectedEmail = "developer1@gmail.com";
+            var expectedDisplayName = "Developer User 1";
             var expectedGroups = new[]
             {
-                "cn=SubMaintainers,cn=Maintaners,ou=Groups,dc=domain1,dc=local"
+                "cn=DeveloperGroup1,ou=Groups,dc=domain1,dc=local"
             };
 
             var contextFixture = FixtureHelper.CreateLdapContext(ConfigurationHelper.GetOpenLdapConfiguration());
@@ -43,9 +47,12 @@ namespace Ldap.Integration.Tests
 
             Assert.NotNull(user);
             Assert.Equal(expectedDistinguishedName, user.DistinguishedName, true);
+            Assert.Equal(expectedUan, user.UniqueAccountName, true);
+            Assert.Equal(expectedUpn, user.UserPrincipalName, true);
+            Assert.Equal(expectedEmail, user.Email, true);
+            Assert.Equal(expectedDisplayName, user.DisplayName, true);
             Assert.Equal(expectedGroups.Length, user.Groups.Count());
             Assert.Equal(expectedGroups.Select(x => x.ToLowerInvariant()).OrderBy(x => x), user.Groups.Select(x => x.Value.ToLowerInvariant()).OrderBy(x => x));
         }
-
     }
 }
