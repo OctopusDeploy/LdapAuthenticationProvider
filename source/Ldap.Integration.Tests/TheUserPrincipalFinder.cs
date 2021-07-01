@@ -10,11 +10,15 @@ namespace Ldap.Integration.Tests
         [Fact]
         internal void FindsAUserFromActiveDirectory()
         {
-            var userName = "developerA";
-            var expectedDistinguishedName = "cn=developer A,cn=Users,dc=mycompany,dc=local";
+            var userName = "developer1";
+            var expectedDistinguishedName = "cn=developer1,cn=Users,dc=mycompany,dc=local";
+            var expectedUpn = "developer1@mycompany.local";
+            var expectedUan = "developer1";
+            var expectedEmail = "developer1@mycompany.local";
+            var expectedDisplayName = "Developer User 1";
             var expectedGroups = new[]
             {
-                "cn=DeveloperGroupA2,ou=Groups,dc=mycompany,dc=local"
+                "cn=DeveloperGroup1,ou=Groups,dc=mycompany,dc=local"
             };
 
             var contextFixture = FixtureHelper.CreateLdapContext(ConfigurationHelper.GetActiveDirectoryConfiguration());
@@ -23,7 +27,10 @@ namespace Ldap.Integration.Tests
 
             Assert.NotNull(user);
             Assert.Equal(expectedDistinguishedName, user.DistinguishedName, true);
-            Assert.Equal(expectedGroups.Length, user.Groups.Count());
+            Assert.Equal(expectedUan, user.UniqueAccountName, true);
+            Assert.Equal(expectedUpn, user.UserPrincipalName, true);
+            Assert.Equal(expectedEmail, user.Email, true);
+            Assert.Equal(expectedDisplayName, user.DisplayName, true);
             Assert.Equal(expectedGroups.Select(x => x.ToLowerInvariant()).OrderBy(x => x), user.Groups.Select(x => x.Value.ToLowerInvariant()).OrderBy(x => x));
         }
 
@@ -51,7 +58,6 @@ namespace Ldap.Integration.Tests
             Assert.Equal(expectedUpn, user.UserPrincipalName, true);
             Assert.Equal(expectedEmail, user.Email, true);
             Assert.Equal(expectedDisplayName, user.DisplayName, true);
-            Assert.Equal(expectedGroups.Length, user.Groups.Count());
             Assert.Equal(expectedGroups.Select(x => x.ToLowerInvariant()).OrderBy(x => x), user.Groups.Select(x => x.Value.ToLowerInvariant()).OrderBy(x => x));
         }
     }

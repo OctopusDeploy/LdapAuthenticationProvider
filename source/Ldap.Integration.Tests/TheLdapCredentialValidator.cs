@@ -13,7 +13,7 @@ namespace Ldap.Integration.Tests
         internal void CreatesAUserFromActiveDirectory()
         {
             // Arrange
-            var userName = "developerA";
+            var userName = "developer1";
 
             var fixture = FixtureHelper.CreateLdapCredentialValidator(ConfigurationHelper.GetActiveDirectoryConfiguration(), userName);
 
@@ -25,13 +25,13 @@ namespace Ldap.Integration.Tests
 
             var createdUser = ((ResultFromExtension<IUser>)result).Value;
 
-            Assert.Equal("developerA@mycompany.local", createdUser.Username);
-            Assert.Equal("Developer A", createdUser.DisplayName);
-            Assert.Equal("developerA@mycompany.local", createdUser.EmailAddress);
-            Assert.Equal("developerA", createdUser.Identities.First().Claims["uan"].Value);
-            Assert.Equal("developerA@mycompany.local", createdUser.Identities.First().Claims["upn"].Value);
-            Assert.Equal("developerA@mycompany.local", createdUser.Identities.First().Claims["email"].Value);
-            Assert.Equal("Developer A", createdUser.Identities.First().Claims["dn"].Value);
+            Assert.Equal("developer1@mycompany.local", createdUser.Username);
+            Assert.Equal("Developer User 1", createdUser.DisplayName);
+            Assert.Equal("developer1@mycompany.local", createdUser.EmailAddress);
+            Assert.Equal("developer1", createdUser.Identities.First().Claims["uan"].Value);
+            Assert.Equal("developer1@mycompany.local", createdUser.Identities.First().Claims["upn"].Value);
+            Assert.Equal("developer1@mycompany.local", createdUser.Identities.First().Claims["email"].Value);
+            Assert.Equal("Developer User 1", createdUser.Identities.First().Claims["dn"].Value);
         }
 
         [Fact]

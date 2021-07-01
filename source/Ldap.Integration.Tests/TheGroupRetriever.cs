@@ -13,13 +13,13 @@ namespace Ldap.Integration.Tests
         internal void ReadsGroupsForAUserFromActiveDirectory()
         {
             // Arrange
-            var user = new FakeUser("DeveloperA");
+            var user = new FakeUser("developer1");
 
             var expectedGroups = new[]
             {
-                "cn=DeveloperGroupA2,ou=Groups,dc=mycompany,dc=local",
-                "cn=DeveloperGroupA,ou=Groups,dc=mycompany,dc=local",
+                "cn=DeveloperGroup1,ou=Groups,dc=mycompany,dc=local",
                 "cn=Developers,ou=Groups,dc=mycompany,dc=local",
+                "cn=Maintainers,ou=Groups,dc=mycompany,dc=local",
             };
 
             var fixture = FixtureHelper.CreateFixtureGroupRetriever(ConfigurationHelper.GetActiveDirectoryConfiguration());
