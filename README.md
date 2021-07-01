@@ -59,6 +59,10 @@ Refer to the [Octopus Documentation][5] for more information.
 
 This project is built using GitHub actions. A NuGet package is created and pushed to Octopus Deploy, where it is deployed to NuGet repositories.
 
+## Testing
+
+Integration testing against Microsoft ActiveDirectory and OpenLdap using known test data is used to validate behaviour - see [here](source/Ldap.Integration.Tests/README.md) for more details.
+
 ## Issues
 
 Please see [Contributing](CONTRIBUTING.md)
