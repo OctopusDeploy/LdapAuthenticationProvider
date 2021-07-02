@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Ldap.Integration.Tests
 {
-    public class TheLdapCredentialValidator
+    public class TheLdapUserCreationFromPrincipal
     {
         [Fact]
         internal void CreatesAUserFromActiveDirectory()
@@ -15,10 +15,10 @@ namespace Ldap.Integration.Tests
             // Arrange
             var userName = "developer1";
 
-            var fixture = FixtureHelper.CreateLdapCredentialValidator(ConfigurationHelper.GetActiveDirectoryConfiguration(), userName);
+            var fixture = FixtureHelper.CreateLdapUserCreationFromPrincipal(ConfigurationHelper.GetActiveDirectoryConfiguration(), userName);
 
             // Act
-            var result = fixture.GetOrCreateUser(userName, new CancellationToken());
+            var result = fixture.GetOrCreateUser(new FakePrincipal(userName), new CancellationToken());
 
             // Assert
             ExtensionResultHelper.AssertSuccesfulExtensionResult(result);
@@ -40,10 +40,10 @@ namespace Ldap.Integration.Tests
             // Arrange
             var userName = "developer1";
 
-            var fixture = FixtureHelper.CreateLdapCredentialValidator(ConfigurationHelper.GetOpenLdapConfiguration(), userName);
+            var fixture = FixtureHelper.CreateLdapUserCreationFromPrincipal(ConfigurationHelper.GetOpenLdapConfiguration(), userName);
 
             // Act
-            var result = fixture.GetOrCreateUser(userName, new CancellationToken());
+            var result = fixture.GetOrCreateUser(new FakePrincipal(userName), new CancellationToken());
 
             // Assert
             ExtensionResultHelper.AssertSuccesfulExtensionResult(result);

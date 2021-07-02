@@ -16,7 +16,7 @@ namespace Ldap.Integration.Tests.TestHelpers
             return new LdapContextProvider(new Lazy<ILdapConfigurationStore>(() => store), log).GetContext();
         }
 
-        public static LdapCredentialValidator CreateLdapCredentialValidator(LdapConfiguration configuration, string userStoreUserName)
+        public static LdapUserCreationFromPrincipal CreateLdapUserCreationFromPrincipal(LdapConfiguration configuration, string userStoreUserName)
         {
             var configurationStore = new FakeLdapConfigurationStore(configuration);
             var nameNormalizer = new LdapObjectNameNormalizer(new Lazy<ILdapConfigurationStore>(() => configurationStore));
@@ -26,16 +26,17 @@ namespace Ldap.Integration.Tests.TestHelpers
                 log,
                 nameNormalizer,
                 new LdapContextProvider(new Lazy<ILdapConfigurationStore>(() => configurationStore), log),
-                new UserPrincipalFinder(),
-                configurationStore);
+                new UserPrincipalFinder());
 
-            return new LdapCredentialValidator(
+            var credentialValidator = new LdapCredentialValidator(
                 log,
                 nameNormalizer,
                 new FakeUpdateableUserStore(),
                 configurationStore,
                 new IdentityCreator(),
                 ldapService);
+
+            return new LdapUserCreationFromPrincipal(configurationStore, credentialValidator);
         }
 
         public static GroupRetriever CreateFixtureGroupRetriever(LdapConfiguration configuration)
