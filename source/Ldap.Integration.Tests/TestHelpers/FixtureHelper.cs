@@ -9,11 +9,16 @@ namespace Ldap.Integration.Tests.TestHelpers
 {
     internal static class FixtureHelper
     {
-        public static LdapContext CreateLdapContext(LdapConfiguration configuration)
+        public static UserMatcher CreateUserMatcher(LdapConfiguration configuration)
         {
-            var store = new FakeLdapConfigurationStore(configuration);
-            var log = Substitute.For<ISystemLog>();
-            return new LdapContextProvider(new Lazy<ILdapConfigurationStore>(() => store), log).GetContext();
+            var configurationStore = new FakeLdapConfigurationStore(configuration);
+
+            return new UserMatcher(
+                new LdapContextProvider(new Lazy<ILdapConfigurationStore>(() => configurationStore), Substitute.For<ISystemLog>()),
+                new LdapObjectNameNormalizer(new Lazy<ILdapConfigurationStore>(() => configurationStore)),
+                configurationStore,
+                new UserPrincipalFinder(),
+                new IdentityCreator());
         }
 
         public static LdapUserCreationFromPrincipal CreateLdapUserCreationFromPrincipal(LdapConfiguration configuration, string userStoreUserName)
