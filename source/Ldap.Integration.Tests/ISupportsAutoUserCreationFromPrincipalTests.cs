@@ -25,7 +25,6 @@ namespace Ldap.Integration.Tests
 
                 // Assert
                 ExtensionResultHelper.AssertSuccesfulExtensionResult(result);
-
                 var createdUser = ((ResultFromExtension<IUser>)result).Value;
 
                 Assert.Equal("developer1@mycompany.local", createdUser.Username);
@@ -50,7 +49,6 @@ namespace Ldap.Integration.Tests
 
                 // Assert
                 ExtensionResultHelper.AssertSuccesfulExtensionResult(result);
-
                 var createdUser = ((ResultFromExtension<IUser>)result).Value;
 
                 Assert.Equal("developer1", createdUser.Username);

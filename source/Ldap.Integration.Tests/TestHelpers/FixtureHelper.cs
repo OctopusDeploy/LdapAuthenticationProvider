@@ -59,5 +59,34 @@ namespace Ldap.Integration.Tests.TestHelpers
 
             return new GroupRetriever(log, configurationStore, groupLocator);
         }
+
+        public static LdapExternalSecurityGroupLocator CreateLdapExternalSecurityGroupLocator(LdapConfiguration configuration)
+        {
+            var configurationStore = new FakeLdapConfigurationStore(configuration);
+            var log = Substitute.For<ISystemLog>();
+
+            return new LdapExternalSecurityGroupLocator(
+                log,
+                new LdapContextProvider(new Lazy<ILdapConfigurationStore>(() => configurationStore), log),
+                new LdapObjectNameNormalizer(new Lazy<ILdapConfigurationStore>(() => configurationStore)),
+                new FakeLdapConfigurationStore(configuration),
+                new UserPrincipalFinder(),
+                new NestedGroupFinder(new GroupParentFinder())
+                );
+        }
+
+        public static UserSearch CreateUserSearch(LdapConfiguration configuration)
+        {
+            var configurationStore = new FakeLdapConfigurationStore(configuration);
+            var log = Substitute.For<ISystemLog>();
+
+            return new UserSearch(
+                new LdapContextProvider(new Lazy<ILdapConfigurationStore>(() => configurationStore), log),
+                new LdapObjectNameNormalizer(new Lazy<ILdapConfigurationStore>(() => configurationStore)),
+                new FakeLdapConfigurationStore(configuration),
+                new UserPrincipalFinder(),
+                new IdentityCreator()
+                );
+        }
     }
 }
