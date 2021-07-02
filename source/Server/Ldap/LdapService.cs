@@ -1,9 +1,6 @@
 using Octopus.Diagnostics;
 using System;
 using System.Threading;
-using Octopus.Data.Model.User;
-using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
-using Octopus.Server.Extensibility.Results;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
@@ -13,19 +10,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         readonly ILdapObjectNameNormalizer objectNameNormalizer;
         readonly ILdapContextProvider contextProvider;
         readonly IUserPrincipalFinder userPrincipalFinder;
-        readonly ILdapConfigurationStore configurationStore;
 
         public LdapService(ISystemLog log,
             ILdapObjectNameNormalizer objectNameNormalizer,
             ILdapContextProvider contextProvider,
-            IUserPrincipalFinder userPrincipalFinder,
-            ILdapConfigurationStore configurationStore)
+            IUserPrincipalFinder userPrincipalFinder)
         {
             this.log = log;
             this.objectNameNormalizer = objectNameNormalizer;
             this.contextProvider = contextProvider;
             this.userPrincipalFinder = userPrincipalFinder;
-            this.configurationStore = configurationStore;
         }
 
         public UserValidationResult ValidateCredentials(string username, string password, CancellationToken cancellationToken)
