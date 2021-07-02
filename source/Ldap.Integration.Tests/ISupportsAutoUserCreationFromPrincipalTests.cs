@@ -18,7 +18,7 @@ namespace Ldap.Integration.Tests
                 // Arrange
                 var userName = "developer1";
 
-                ISupportsAutoUserCreationFromPrincipalTests fixture = FixtureHelper.CreateLdapUserCreationFromPrincipal(ConfigurationHelper.GetActiveDirectoryConfiguration(), userName);
+                ISupportsAutoUserCreationFromPrincipal fixture = FixtureHelper.CreateLdapUserCreationFromPrincipal(ConfigurationHelper.GetActiveDirectoryConfiguration(), userName);
 
                 // Act
                 var result = fixture.GetOrCreateUser(new FakePrincipal(userName), new CancellationToken());
@@ -43,7 +43,7 @@ namespace Ldap.Integration.Tests
                 // Arrange
                 var userName = "developer1";
 
-                ISupportsAutoUserCreationFromPrincipalTests fixture = FixtureHelper.CreateLdapUserCreationFromPrincipal(ConfigurationHelper.GetOpenLdapConfiguration(), userName);
+                ISupportsAutoUserCreationFromPrincipal fixture = FixtureHelper.CreateLdapUserCreationFromPrincipal(ConfigurationHelper.GetOpenLdapConfiguration(), userName);
 
                 // Act
                 var result = fixture.GetOrCreateUser(new FakePrincipal(userName), new CancellationToken());
