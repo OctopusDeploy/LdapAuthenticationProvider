@@ -44,6 +44,27 @@ namespace Ldap.Integration.Tests.TestHelpers
             return new LdapUserCreationFromPrincipal(configurationStore, credentialValidator);
         }
 
+        public static LdapCredentialValidator CreateLdapCredentialValidator(LdapConfiguration configuration, string userStoreUserName)
+        {
+            var configurationStore = new FakeLdapConfigurationStore(configuration);
+            var nameNormalizer = new LdapObjectNameNormalizer(new Lazy<ILdapConfigurationStore>(() => configurationStore));
+
+            var log = Substitute.For<ISystemLog>();
+            var ldapService = new LdapService(
+                log,
+                nameNormalizer,
+                new LdapContextProvider(new Lazy<ILdapConfigurationStore>(() => configurationStore), log),
+                new UserPrincipalFinder());
+
+            return new LdapCredentialValidator(
+                log,
+                nameNormalizer,
+                new FakeUpdateableUserStore(),
+                configurationStore,
+                new IdentityCreator(),
+                ldapService);
+        }
+
         public static GroupRetriever CreateFixtureGroupRetriever(LdapConfiguration configuration)
         {
             var configurationStore = new FakeLdapConfigurationStore(configuration);
