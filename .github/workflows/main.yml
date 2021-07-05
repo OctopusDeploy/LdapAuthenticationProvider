@@ -2,7 +2,7 @@ name: Build, Test, Package and Push
 
 # Controls when the action will run. 
 on: 
-  # Triggers the workflow on push or pull request events
+  # Triggers the workflow on pull request events and merges/pushes to main
   push:
     branches:
       - main
@@ -30,7 +30,7 @@ jobs:
         shell: bash
         run: ./build.sh --verbosity verbose
         env:
-          OCTOVERSION_CurrentBranch:  ${{ github.head_ref || github.ref }}
+          OCTOVERSION_CurrentBranch:  ${{ github.head_ref || github.ref }} # For pull_request events we override the /refs/pull/xx/merge branch to the PR's head branch
           OCTOVERSION_Patch : ${{ github.run_number }}
 
       - name: Install Octopus CLI 🐙
