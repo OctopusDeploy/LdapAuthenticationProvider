@@ -30,7 +30,7 @@ jobs:
         shell: bash
         run: ./build.sh --verbosity verbose
         env:
-          OCTOVERSION_CurrentBranch: ${{ github.ref }}
+          OCTOVERSION_CurrentBranch:  ${{ github.head_ref || github.ref }}
           OCTOVERSION_Patch : ${{ github.run_number }}
 
       - name: Install Octopus CLI 🐙
