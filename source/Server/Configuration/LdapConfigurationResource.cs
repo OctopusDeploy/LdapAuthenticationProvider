@@ -14,12 +14,13 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public const string IgnoreSslErrorsDescription = "Sets whether to ignore certificate validation errors.";
         public const string UsernameDescription = "Set the user DN to query LDAP.";
         public const string PasswordDescription = "Set the password to query LDAP.";
-        public const string BaseDnDescription = "Set the root distinguished name (DN) to query LDAP.";
+        public const string UserBaseDnDescription = "Set the root distinguished name (DN) to query LDAP for Users.";
         public const string DefaultDomainDescription = "Set the default domain when none is given in the logon form. Optional.";
         public const string UserFilterDescription = "The filter to use when searching valid users.  '*' is replaced with a normalized version of the username.";
+        public const string GroupBaseDnDescription = "Set the root distinguished name (DN) to query LDAP for Groups.";
         public const string GroupFilterDescription = "The filter to use when searching valid user groups.  '*' is replaced with the group name.";
         public const string AllowAutoUserCreationDescription = "Whether unknown users will be automatically created upon successful login.";
-        public const string ReferralFollowingEnabledDescription = "Sets whether to allow referral following.";
+        public const string ReferralFollowingEnabledDescription = "Sets whether to allow referral following (this can slow down queries).";
         public const string ReferralHopLimitDescription = "Sets the maximum number of referrals to follow during automatic referral following.";
         public const string ConstraintTimeLimitDescription = "Sets the time limit in seconds for LDAP operations on the directory.  '0' specifies no limit.";
         public const string NestedGroupSearchDepthDescription = "Specifies how many levels of nesting will be searched. Set to '0' to disable searching for nested groups.";
@@ -56,10 +57,10 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Writeable]
         public SensitiveValue ConnectPassword { get; set; }
 
-        [DisplayName("Base DN")]
-        [Description(BaseDnDescription)]
+        [DisplayName("User Base DN")]
+        [Description(UserBaseDnDescription)]
         [Writeable]
-        public string BaseDN { get; set; }
+        public string UserBaseDN { get; set; }
 
         [DisplayName("Default Domain")]
         [Description(DefaultDomainDescription)]
@@ -70,6 +71,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [Description(UserFilterDescription)]
         [Writeable]
         public string UserFilter { get; set; }
+
+        [DisplayName("Group Base DN")]
+        [Description(GroupBaseDnDescription)]
+        [Writeable]
+        public string GroupBaseDN { get; set; }
 
         [DisplayName("Group Filter")]
         [Description(GroupFilterDescription)]

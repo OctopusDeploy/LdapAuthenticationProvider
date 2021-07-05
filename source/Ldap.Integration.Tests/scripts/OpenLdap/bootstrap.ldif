@@ -1,0 +1,60 @@
+dn: cn=developer1,dc=domain1,dc=local
+changetype: add
+objectclass: inetOrgPerson
+cn: developer1
+givenname: Developer
+sn: 1
+displayname: Developer User 1
+mail: developer1@gmail.com
+userpassword: developer_pass
+
+dn: cn=developer2,dc=domain1,dc=local
+changetype: add
+objectclass: inetOrgPerson
+cn: developer2
+givenname: Developer
+sn: 2
+displayname: Developer User 2
+mail: developer2@gmail.com
+userpassword: developer_pass
+
+dn: ou=Groups,dc=domain1,dc=local
+changetype: add
+objectclass: organizationalUnit
+ou: Groups
+
+dn: ou=Users,dc=domain1,dc=local
+changetype: add
+objectclass: organizationalUnit
+ou: Users
+
+dn: cn=Admins,ou=Groups,dc=domain1,dc=local
+changetype: add
+cn: Admins
+objectclass: groupOfUniqueNames
+uniqueMember: cn=admin,dc=domain1,dc=local
+
+dn: cn=DeveloperGroup1,ou=Groups,dc=domain1,dc=local
+changetype: add
+cn: DeveloperGroup1
+objectclass: groupOfUniqueNames
+uniqueMember: cn=developer1,dc=domain1,dc=local
+
+dn: cn=DeveloperGroup2,ou=Groups,dc=domain1,dc=local
+changetype: add
+cn: DeveloperGroup2
+objectclass: groupOfUniqueNames
+uniqueMember: cn=developer2,dc=domain1,dc=local
+
+dn: cn=Developers,ou=Groups,dc=domain1,dc=local
+changetype: add
+cn: Developers
+objectclass: groupOfUniqueNames
+uniqueMember: cn=DeveloperGroup1,ou=Groups,dc=domain1,dc=local
+uniqueMember: cn=DeveloperGroup2,ou=Groups,dc=domain1,dc=local
+
+dn: cn=Maintainers,ou=Groups,dc=domain1,dc=local
+changetype: add
+cn: Maintainers
+objectclass: groupOfUniqueNames
+uniqueMember: cn=Developers,ou=Groups,dc=domain1,dc=local

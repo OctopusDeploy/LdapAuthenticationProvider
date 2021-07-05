@@ -1,0 +1,23 @@
+#docker-compose stack for integration testing
+version: '3.7'
+
+services:
+
+  ldap_server:
+    image: octopusdeploy/openldap:integrationtestdata
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      LDAP_ADMIN_PASSWORD: ${OCTOPUS_LDAP_OPENLDAP_PASSWORD}
+      LDAP_BASE_DN: dc=domain1,dc=local
+    ports:
+      - 389:389
+
+  ldap_server_admin:
+    image: osixia/phpldapadmin:0.7.2
+    ports:
+      - 8090:80
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: ldap_server
+      PHPLDAPADMIN_HTTPS: 'false'
