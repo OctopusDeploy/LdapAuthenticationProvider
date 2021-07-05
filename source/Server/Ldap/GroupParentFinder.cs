@@ -13,20 +13,14 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
     public class GroupParentFinder : IGroupParentFinder
     {
-        readonly ILdapConfigurationStore store;
-        public GroupParentFinder(ILdapConfigurationStore store)
-        {
-            this.store = store;
-        }
-
         public IEnumerable<GroupDistinguishedName> FindParentGroups(LdapContext context, GroupDistinguishedName name)
         {
-            var attributesToRetrieve = new[] {"cn", "dn", "uniqueMember"};
+            var attributesToRetrieve = new[] {"cn", "dn" };
 
             var result = context.LdapConnection.Search(
-                context.BaseDN,
+                context.GroupBaseDN,
                 LdapConnection.ScopeSub,
-                store.GetNestedGroupFilter().Replace("*", name.ToString()),
+                context.NestedGroupFilter.Replace("*", name.ToString()),
                 attributesToRetrieve,
                 false
             );

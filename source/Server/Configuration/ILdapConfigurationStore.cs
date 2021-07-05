@@ -23,8 +23,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         SensitiveString GetConnectPassword();
         void SetConnectPassword(SensitiveString password);
 
-        string GetBaseDn();
-        void SetBaseDn(string baseDn);
+        string GetUserBaseDn();
+        void SetUserBaseDn(string userBaseDn);
+
+        string GetGroupBaseDn();
+        void SetGroupBaseDn(string groupBaseDn);
 
         string GetDefaultDomain();
         void SetDefaultDomain(string defaultDomain);

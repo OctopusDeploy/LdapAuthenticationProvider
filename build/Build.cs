@@ -71,7 +71,8 @@ class Build : NukeBuild
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
                 .SetNoBuild(true)
-                .EnableNoRestore());
+                .EnableNoRestore()
+                .SetFilter(@"FullyQualifiedName\!~Integration.Tests"));
         });
 
     Target Pack => _ => _

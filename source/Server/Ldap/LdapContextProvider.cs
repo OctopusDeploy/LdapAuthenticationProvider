@@ -43,17 +43,22 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                     con.StartTls();
 
                 con.Bind(ldapConfiguration.Value.GetConnectUsername(), ldapConfiguration.Value.GetConnectPassword().Value);
-                con.Constraints.ReferralFollowing = ldapConfiguration.Value.GetReferralFollowingEnabled();
-                con.Constraints.HopLimit = ldapConfiguration.Value.GetReferralHopLimit();
-                con.Constraints.TimeLimit = ldapConfiguration.Value.GetConstraintTimeLimit() * 1000;
+
+                con.Constraints = new LdapConstraints(
+                    ldapConfiguration.Value.GetConstraintTimeLimit() * 1000,
+                    ldapConfiguration.Value.GetReferralFollowingEnabled(), 
+                    null,
+                    ldapConfiguration.Value.GetReferralHopLimit());
 
                 return new LdapContext
                 {
                     LdapConnection = con,
-                    BaseDN = ldapConfiguration.Value.GetBaseDn(),
+                    UserBaseDN = ldapConfiguration.Value.GetUserBaseDn(),
+                    GroupBaseDN = ldapConfiguration.Value.GetGroupBaseDn(),
                     UniqueAccountNameAttribute = ldapConfiguration.Value.GetUniqueAccountNameAttribute(),
                     UserFilter = ldapConfiguration.Value.GetUserFilter(),
                     GroupFilter = ldapConfiguration.Value.GetGroupFilter(),
+                    NestedGroupFilter = ldapConfiguration.Value.GetNestedGroupFilter(),
                     GroupNameAttribute = ldapConfiguration.Value.GetGroupNameAttribute(),
                     UserDisplayNameAttribute = ldapConfiguration.Value.GetUserDisplayNameAttribute(),
                     UserEmailAttribute = ldapConfiguration.Value.GetUserEmailAttribute(),

@@ -18,7 +18,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         {
             var escapedName = ToLdapUniqueAccountName(uniqueAccountName);
             var lsc = context.LdapConnection.Search(
-                context.BaseDN,
+                context.UserBaseDN,
                 LdapConnection.ScopeSub,
                 context.UserFilter?.Replace("*", escapedName),
                 new[]
@@ -65,7 +65,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         {
             var searchTerm = $"*{ToLdapUniqueAccountName(searchToken)}*";
             var lsc = context.LdapConnection.Search(
-                context.BaseDN,
+                context.UserBaseDN,
                 LdapConnection.ScopeSub,
                 context.UserFilter?.Replace("*", searchTerm),
                 new[]

@@ -59,7 +59,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             using var context = contextProvider.GetContext();
             var filterToken = $"*{partialGroupName}*";
             var lsc = context.LdapConnection.Search(
-                context.BaseDN,
+                context.GroupBaseDN,
                 LdapConnection.ScopeSub,
                 context.GroupFilter?.Replace("*", filterToken),
                 new[] { context.GroupNameAttribute },
@@ -94,7 +94,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
                 if (principal == null)
                 {
-                    var searchedContext = domain ?? context.BaseDN;
+                    var searchedContext = domain ?? context.UserBaseDN;
                     log.Trace($"While loading security groups, a principal identifiable by '{uniqueAccountName}' was not found in '{searchedContext}'");
                     return new LdapExternalSecurityGroupLocatorResult();
                 }

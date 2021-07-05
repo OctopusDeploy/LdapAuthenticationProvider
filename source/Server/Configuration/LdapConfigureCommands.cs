@@ -60,10 +60,15 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
                 ldapConfiguration.Value.SetConnectUsername(v);
                 log.Info("LDAP Username set to: " + v);
             });
-            yield return new ConfigureCommandOption("ldapBaseDn=", LdapConfigurationResource.BaseDnDescription, v =>
+            yield return new ConfigureCommandOption("ldapUserBaseDn=", LdapConfigurationResource.UserBaseDnDescription, v =>
             {
-                ldapConfiguration.Value.SetBaseDn(v);
-                log.Info("LDAP Base DN set");
+                ldapConfiguration.Value.SetUserBaseDn(v);
+                log.Info("LDAP User Base DN set");
+            });
+            yield return new ConfigureCommandOption("ldapGroupBaseDn=", LdapConfigurationResource.GroupBaseDnDescription, v =>
+            {
+                ldapConfiguration.Value.SetGroupBaseDn(v);
+                log.Info("LDAP Group Base DN set");
             });
             yield return new ConfigureCommandOption("ldapDefaultDomain=", LdapConfigurationResource.DefaultDomainDescription, v =>
             {

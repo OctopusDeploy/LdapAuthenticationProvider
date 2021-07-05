@@ -18,15 +18,16 @@ In Octopus Deploy, navigate to Configuration -> Settings -> LDAP.
 |---|---|---|
 |Server|The plain hostname of the LDAP server.|localhost|
 |Port|The port to access the LDAP server.|389|
-|Use SSL|Whether to use Secure Socket Layer to connect to LDAP.|False|
-|Ignore SSL errors|Whether to ignore certificate validation errors.|False|
+|Security Protocol|Options for secure connections (None, SSL (LDAPS) or StartTLS).|None|
+|Ignore SSL errors|Whether to ignore certificate validation errors when using a secure connection method.|False|
 |Username|The distinguished name of the user that the extension will use when connecting to the LDAP server.|cn=query,dc=example,dc=org|
 |Password|The password of the user specified above.|***|
-|Base DN|The root distinguished name (DN) to use when running queries.|dc=example,dc=org|
+|User Base DN|The root distinguished name (DN) to use when running queries for Users.|cn=Users,dc=example,dc=org|
 |Default Domain|This value is prepended to the username when no domain part is provided in the login form (format: DOMAIN\USERNAME). Can be left empty, in that case no domain is prepended.|
 |User Filter|The filter to use when searching valid users. The wildcard * will be replaced with the search expression.|(&(objectClass=person)(sAMAccountName=*))|
+|Group Base DN|The root distinguished name (DN) to use when running queries for Groups.|ou=Groups,dc=example,dc=org|
 |Group Filter|The filter to use when searching valid user groups. The wildcard * will be replaced with the search expression.|(&(objectClass=group)(cn=*))|
-|Nested Group Filter|The filter to use when searching for nested groups. The wildcard * will be replaced by the distinguished name of the initial group.|(&(objectClass=group)(uniqueMember=*))|
+|Nested Group Filter|The filter to use when searching for a group's parents. The wildcard * will be replaced by the distinguished name of the initial group.|(&(objectClass=group)(member=*))|
 |Nested Group Search Depth|Specifies how many levels of nesting will be searched. Set to '0' to disable searching for nested groups.|5|
 |Allow Auto User Creation|Specifies whether users not already set up in Octopus Deploy will be automatically created upon successful LDAP login.|false|
 |Referral Following Enabled|Sets whether or not to allow referral following.|true|
@@ -58,6 +59,10 @@ Refer to the [Octopus Documentation][5] for more information.
 ## Build and release pipeline
 
 This project is built using GitHub actions. A NuGet package is created and pushed to Octopus Deploy, where it is deployed to NuGet repositories.
+
+## Testing
+
+Integration testing against Microsoft ActiveDirectory and OpenLdap using known test data is used to validate behaviour - see [here](source/Ldap.Integration.Tests/README.md) for more details.
 
 ## Issues
 
