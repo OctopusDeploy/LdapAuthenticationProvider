@@ -36,7 +36,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public SensitiveString GetConnectPassword() => GetProperty(doc => doc.ConnectPassword);
         public void SetConnectPassword(SensitiveString password) => SetProperty(doc =>
         {
-            log.WithSensitiveValue(password.Value);
+            if (!string.IsNullOrEmpty(password?.Value))
+                log.WithSensitiveValue(password.Value);
+
             doc.ConnectPassword = password;
         });
 
