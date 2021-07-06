@@ -19,7 +19,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             this.configurationStore = configurationStore;
             var password = configurationStore.GetConnectPassword();
             
-            if (!string.IsNullOrEmpty(password.Value))
+            if (!string.IsNullOrEmpty(password?.Value))
                 log.WithSensitiveValue(password.Value);
         }
 
