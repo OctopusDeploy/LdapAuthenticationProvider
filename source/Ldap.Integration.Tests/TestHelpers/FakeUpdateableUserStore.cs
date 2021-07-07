@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.Threading;
 using Octopus.Data;
-using Octopus.Data.Model;
 using Octopus.Data.Model.User;
 using Octopus.Data.Storage.User;
 using Octopus.Server.Extensibility.Authentication.HostServices;
-using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
+using Octopus.Server.MessageContracts.Features.Users;
 
 namespace Ldap.Integration.Tests.TestHelpers
 {
     internal class FakeUpdateableUserStore : IUpdateableUserStore
     {
-        public IUser AddIdentity(string userId, Identity identity, CancellationToken cancellationToken)
+        public IUser AddIdentity(UserId userId, Identity identity, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public void ClearSecurityGroupIds(string provider, string userId)
+        public void ClearSecurityGroupIds(string provider, UserId userId)
         {
             throw new NotImplementedException();
         }
@@ -28,12 +27,12 @@ namespace Ldap.Integration.Tests.TestHelpers
             return Result<IUser>.Success(new FakeUser(username, emailAddress, displayName, identities));
         }
 
-        public void DisableUser(string userId)
+        public void DisableUser(UserId userId)
         {
             throw new NotImplementedException();
         }
 
-        public void EnableUser(string userId)
+        public void EnableUser(UserId userId)
         {
             throw new NotImplementedException();
         }
@@ -43,7 +42,7 @@ namespace Ldap.Integration.Tests.TestHelpers
             throw new NotImplementedException();
         }
 
-        public IUser GetById(string userId)
+        public IUser GetById(UserId userId)
         {
             throw new NotImplementedException();
         }
@@ -64,12 +63,12 @@ namespace Ldap.Integration.Tests.TestHelpers
             throw new NotImplementedException();
         }
 
-        public void SetSecurityGroupIds(string provider, string userId, IEnumerable<string> ids, DateTimeOffset updated)
+        public void SetSecurityGroupIds(string provider, UserId userId, IEnumerable<string> ids, DateTimeOffset updated)
         {
             throw new NotImplementedException();
         }
 
-        public IUser UpdateIdentity(string userId, Identity identity, CancellationToken cancellationToken)
+        public IUser UpdateIdentity(UserId userId, Identity identity, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

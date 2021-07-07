@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Octopus.Data.Model.User;
 using Octopus.Server.Extensibility.Authentication.Ldap.Identities;
+using Octopus.Server.MessageContracts.Features.Users;
 
 namespace Ldap.Integration.Tests.TestHelpers
 {
@@ -31,7 +32,7 @@ namespace Ldap.Integration.Tests.TestHelpers
 
         public HashSet<Identity> Identities { get; set; }
 
-        public string Id { get; set; }
+        public UserId Id { get; set; }
 
         public SecurityGroups GetSecurityGroups(string identityProviderName)
         {
