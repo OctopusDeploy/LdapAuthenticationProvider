@@ -21,7 +21,7 @@
     <PackageReference Include="Octopus.Configuration" Version="4.0.0" />
     <PackageReference Include="Octopus.Diagnostics" Version="2.1.1" />
     <PackageReference Include="Octopus.Server.Extensibility" Version="14.0.5" />
-    <PackageReference Include="Octopus.Server.Extensibility.Authentication" Version="10.0.4-enh-tinytype-pks0002" />
+    <PackageReference Include="Octopus.Server.Extensibility.Authentication" Version="11.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\images\icon.png">
