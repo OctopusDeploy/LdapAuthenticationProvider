@@ -42,7 +42,7 @@ namespace Ldap.Integration.Tests.TestHelpers
             throw new NotImplementedException();
         }
 
-        public IUser GetById(string userId)
+        public IUser GetById(UserId userId)
         {
             throw new NotImplementedException();
         }
