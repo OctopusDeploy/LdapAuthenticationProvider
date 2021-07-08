@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public class UserValidationResult
@@ -7,7 +9,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         {
         }
 
-        public UserValidationResult(string userPrincipalName, string uniqueAccountName, string displayName, string emailAddress)
+        public UserValidationResult(string? userPrincipalName, string? uniqueAccountName, string? displayName, string? emailAddress)
         {
             UserPrincipalName = userPrincipalName;
             UniqueAccountName = uniqueAccountName;
@@ -22,13 +24,13 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             ValidationMessage = validationMessage;
         }
 
-        public string UserPrincipalName { get; }
-        public string UniqueAccountName { get; }
+        public string? UserPrincipalName { get; }
+        public string? UniqueAccountName { get; }
 
-        public string DisplayName { get; }
-        public string EmailAddress { get; }
+        public string? DisplayName { get; }
+        public string? EmailAddress { get; }
 
         public bool Success { get; }
-        public string ValidationMessage { get; }
+        public string? ValidationMessage { get; }
     }
 }

@@ -47,6 +47,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             {
                 var uniqueAccountName = ldapIdentity.Claims[IdentityCreator.UniqueAccountNameClaimType].Value;
 
+                if (string.IsNullOrEmpty(uniqueAccountName))
+                {
+                    log.WarnFormat("Unable to retrieve groups due to invalid stored identity for user '{0}'", user.Username);
+                    continue;
+                }
+
                 var result = groupLocator.GetGroupIdsForUser(uniqueAccountName, cancellationToken);
                 if (result.WasAbleToRetrieveGroups)
                 {

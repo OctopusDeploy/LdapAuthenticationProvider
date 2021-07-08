@@ -15,6 +15,7 @@
     <NoWarn>NU5105</NoWarn>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <LangVersion>9</LangVersion>
+	<Nullable>Enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.6.0" />

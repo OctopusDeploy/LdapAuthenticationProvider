@@ -25,16 +25,16 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             var isEnabled = ConfigurationDocumentStore.GetIsEnabled();
 
             yield return new ConfigurationValue<bool>("Octopus.WebPortal.LdapIsEnabled", isEnabled, isEnabled, "Is Enabled");
-            yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapServer", ConfigurationDocumentStore.GetServer(), isEnabled && !string.IsNullOrWhiteSpace(ConfigurationDocumentStore.GetServer()), "Server");
+            yield return new ConfigurationValue<string?>("Octopus.WebPortal.LdapServer", ConfigurationDocumentStore.GetServer(), isEnabled && !string.IsNullOrWhiteSpace(ConfigurationDocumentStore.GetServer()), "Server");
             yield return new ConfigurationValue<int>("Octopus.WebPortal.LdapPort", ConfigurationDocumentStore.GetPort(), isEnabled, "Port");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapSecurityProtocol", ConfigurationDocumentStore.GetSecurityProtocol().ToString(), isEnabled, "Security Protocol");
             yield return new ConfigurationValue<bool>("Octopus.WebPortal.LdapIgnoreSslErrors", ConfigurationDocumentStore.GetIgnoreSslErrors(), isEnabled, "Ignore SSL errors");
-            yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUsername", ConfigurationDocumentStore.GetConnectUsername(), isEnabled, "Username");
-            yield return new ConfigurationValue<SensitiveString>("Octopus.WebPortal.LdapPassword", ConfigurationDocumentStore.GetConnectPassword(), isEnabled, "Password");
-            yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserBaseDn", ConfigurationDocumentStore.GetUserBaseDn(), isEnabled, "User Base DN");
-            yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapDefaultDomain", ConfigurationDocumentStore.GetDefaultDomain(), isEnabled, "Default Domain");
+            yield return new ConfigurationValue<string?>("Octopus.WebPortal.LdapUsername", ConfigurationDocumentStore.GetConnectUsername(), isEnabled, "Username");
+            yield return new ConfigurationValue<SensitiveString?>("Octopus.WebPortal.LdapPassword", ConfigurationDocumentStore.GetConnectPassword(), isEnabled, "Password");
+            yield return new ConfigurationValue<string?>("Octopus.WebPortal.LdapUserBaseDn", ConfigurationDocumentStore.GetUserBaseDn(), isEnabled, "User Base DN");
+            yield return new ConfigurationValue<string?>("Octopus.WebPortal.LdapDefaultDomain", ConfigurationDocumentStore.GetDefaultDomain(), isEnabled, "Default Domain");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapUserFilter", ConfigurationDocumentStore.GetUserFilter(), isEnabled, "User Filter");
-            yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapGroupBaseDn", ConfigurationDocumentStore.GetGroupBaseDn(), isEnabled, "Group Base DN");
+            yield return new ConfigurationValue<string?>("Octopus.WebPortal.LdapGroupBaseDn", ConfigurationDocumentStore.GetGroupBaseDn(), isEnabled, "Group Base DN");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapGroupFilter", ConfigurationDocumentStore.GetGroupFilter(), isEnabled, "Group Filter");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapNestedGroupFilter", ConfigurationDocumentStore.GetNestedGroupFilter(), isEnabled, "Nested Group Filter");
             yield return new ConfigurationValue<string>("Octopus.WebPortal.LdapNestedGroupSearchDepth", ConfigurationDocumentStore.GetNestedGroupSearchDepth().ToString(), isEnabled, "Nested Group Search Depth");

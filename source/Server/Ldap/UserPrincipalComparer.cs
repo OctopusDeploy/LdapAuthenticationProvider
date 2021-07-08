@@ -1,17 +1,18 @@
+using System;
 using System.Collections.Generic;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
-    public class UserPrincipalComparer : IEqualityComparer<UserPrincipal>
+    public class UserPrincipalComparer : IEqualityComparer<UserPrincipal?>
     {
-        public bool Equals(UserPrincipal x, UserPrincipal y)
+        public bool Equals(UserPrincipal? x, UserPrincipal? y)
         {
             return x.Equals(y);
         }
 
-        public int GetHashCode(UserPrincipal obj)
+        public int GetHashCode(UserPrincipal? obj)
         {
-            return obj.UniqueAccountName.GetHashCode();
+            return obj?.UniqueAccountName?.GetHashCode() ?? throw new ArgumentNullException(nameof(obj));
         }
     }
 }

@@ -33,16 +33,23 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 options.ConfigureRemoteCertificateValidationCallback(RemoteCertificateValidation);
             }
 
+            var userBaseDn = ldapConfiguration.Value.GetUserBaseDn() ?? throw new Exception();
+            var groupBaseDn = ldapConfiguration.Value.GetGroupBaseDn() ?? throw new Exception();
+
             try
             {
+                var server = ldapConfiguration.Value.GetServer() ?? throw new Exception("LdapConfiguration Server cannot be null!");
+                var connectUser = ldapConfiguration.Value.GetConnectUsername() ?? throw new Exception("LdapConfiguration Server cannot be null!");
+                var connectPassword = ldapConfiguration.Value.GetConnectPassword() ?? throw new Exception("LdapConfiguration Server cannot be null!");
+
                 var con = new LdapConnection(options);
-                con.Connect(ldapConfiguration.Value.GetServer(), ldapConfiguration.Value.GetPort());
+                con.Connect(server, ldapConfiguration.Value.GetPort());
 
                 //This must occur after connecting, but before binding.
                 if (ldapConfiguration.Value.GetSecurityProtocol() == SecurityProtocol.StartTLS)
                     con.StartTls();
 
-                con.Bind(ldapConfiguration.Value.GetConnectUsername(), ldapConfiguration.Value.GetConnectPassword().Value);
+                con.Bind(connectUser, connectPassword.Value);
 
                 con.Constraints = new LdapConstraints(
                     ldapConfiguration.Value.GetConstraintTimeLimit() * 1000,
@@ -50,21 +57,19 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                     null,
                     ldapConfiguration.Value.GetReferralHopLimit());
 
-                return new LdapContext
-                {
-                    LdapConnection = con,
-                    UserBaseDN = ldapConfiguration.Value.GetUserBaseDn(),
-                    GroupBaseDN = ldapConfiguration.Value.GetGroupBaseDn(),
-                    UniqueAccountNameAttribute = ldapConfiguration.Value.GetUniqueAccountNameAttribute(),
-                    UserFilter = ldapConfiguration.Value.GetUserFilter(),
-                    GroupFilter = ldapConfiguration.Value.GetGroupFilter(),
-                    NestedGroupFilter = ldapConfiguration.Value.GetNestedGroupFilter(),
-                    GroupNameAttribute = ldapConfiguration.Value.GetGroupNameAttribute(),
-                    UserDisplayNameAttribute = ldapConfiguration.Value.GetUserDisplayNameAttribute(),
-                    UserEmailAttribute = ldapConfiguration.Value.GetUserEmailAttribute(),
-                    UserMembershipAttribute = ldapConfiguration.Value.GetUserMembershipAttribute(),
-                    UserPrincipalNameAttribute = ldapConfiguration.Value.GetUserPrincipalNameAttribute()
-                };
+                return new LdapContext(
+                    con,
+                    userBaseDn,
+                    groupBaseDn,
+                    ldapConfiguration.Value.GetUniqueAccountNameAttribute(),
+                    ldapConfiguration.Value.GetUserFilter(),
+                    ldapConfiguration.Value.GetGroupFilter(),
+                    ldapConfiguration.Value.GetNestedGroupFilter(),
+                    ldapConfiguration.Value.GetGroupNameAttribute(),
+                    ldapConfiguration.Value.GetUserDisplayNameAttribute(),
+                    ldapConfiguration.Value.GetUserEmailAttribute(),
+                    ldapConfiguration.Value.GetUserMembershipAttribute(),
+                    ldapConfiguration.Value.GetUserPrincipalNameAttribute());
             }
             catch (LdapException ex)
             {
@@ -72,19 +77,19 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             }
         }
 
-        private bool RemoteCertificateValidation(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        private bool RemoteCertificateValidation(object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors)
         {
             if (sslPolicyErrors == SslPolicyErrors.None)
                 return true;
 
             if (sslPolicyErrors.HasFlag(SslPolicyErrors.RemoteCertificateNotAvailable))
-                log.ErrorFormat("LDAP certificate validation failed: RemoteCertificateNotAvailable, {0}", certificate.ToString());
+                log.ErrorFormat("LDAP certificate validation failed: RemoteCertificateNotAvailable, {0}", certificate?.ToString() ?? "*unknown certificate*");
             if (sslPolicyErrors.HasFlag(SslPolicyErrors.RemoteCertificateNameMismatch))
-                log.ErrorFormat("LDAP certificate validation failed: RemoteCertificateNameMismatch, {0}", certificate.ToString());
+                log.ErrorFormat("LDAP certificate validation failed: RemoteCertificateNameMismatch, {0}", certificate?.ToString() ?? "*unknown certificate*");
             if (sslPolicyErrors.HasFlag(SslPolicyErrors.RemoteCertificateChainErrors))
             {
                 log.ErrorFormat("LDAP certificate validation failed: RemoteCertificateChainErrors\n{0}",
-                    string.Join('\n', chain.ChainStatus.Select(x => x.StatusInformation).ToList())
+                    string.Join('\n', (chain?.ChainStatus ?? Array.Empty<X509ChainStatus>()).Select(x => x.StatusInformation).ToList())
                     );
             }
 

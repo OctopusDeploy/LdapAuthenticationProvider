@@ -53,9 +53,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         public ExternalSecurityGroup[] FindGroups(string name, CancellationToken cancellationToken)
         {
             var results = new List<ExternalSecurityGroup>();
-            string domain;
-            string partialGroupName;
-            objectNameNormalizer.NormalizeName(name, out partialGroupName, out domain);
+            objectNameNormalizer.NormalizeName(name, out string partialGroupName, out string? _);
             using var context = contextProvider.GetContext();
             var filterToken = $"*{partialGroupName}*";
             var lsc = context.LdapConnection.Search(

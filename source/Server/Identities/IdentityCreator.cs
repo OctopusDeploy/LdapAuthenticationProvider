@@ -9,13 +9,15 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Identities
         public const string UserPrincipleNameClaimType = "upn";
         public const string UniqueAccountNameClaimType = "uan";
 
-        public Identity Create(string email, string userPrincipleName, string uniqueAccountName, string displayName)
+        public Identity Create(string? email, string? userPrincipleName, string? uniqueAccountName, string? displayName)
         {
             return new Identity(LdapAuthentication.ProviderName)
+#pragma warning disable CS8604 // Possible null reference argument.
                 .WithClaim(ClaimDescriptor.EmailClaimType, email, true)
                 .WithClaim(UserPrincipleNameClaimType, userPrincipleName, true)
                 .WithClaim(UniqueAccountNameClaimType, uniqueAccountName, true)
                 .WithClaim(ClaimDescriptor.DisplayNameClaimType, displayName, false);
+#pragma warning restore CS8604 // Possible null reference argument.
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Octopus.Data.Model;
+﻿using Octopus.Data.Model;
 using Octopus.Data.Storage.Configuration;
 using Octopus.Diagnostics;
 using Octopus.Server.Extensibility.Extensions.Infrastructure.Configuration;
@@ -18,7 +17,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         public override string Id => SingletonId;
 
-        public string GetServer() => GetProperty(doc => doc.Server);
+        public string? GetServer() => GetProperty(doc => doc.Server);
         public void SetServer(string server) => SetProperty(doc => doc.Server = server);
 
         public int GetPort() => GetProperty(doc => doc.Port);
@@ -30,11 +29,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public void SetIgnoreSslErrors(bool ignoreSslErrors) => SetProperty(doc => doc.IgnoreSslErrors = ignoreSslErrors);
         public bool GetIgnoreSslErrors() => GetProperty(doc => doc.IgnoreSslErrors);
 
-        public string GetConnectUsername() => GetProperty(doc => doc.ConnectUsername);
+        public string? GetConnectUsername() => GetProperty(doc => doc.ConnectUsername);
         public void SetConnectUsername(string username) => SetProperty(doc => doc.ConnectUsername = username);
 
-        public SensitiveString GetConnectPassword() => GetProperty(doc => doc.ConnectPassword);
-        public void SetConnectPassword(SensitiveString password) => SetProperty(doc =>
+        public SensitiveString? GetConnectPassword() => GetProperty(doc => doc.ConnectPassword);
+        public void SetConnectPassword(SensitiveString? password) => SetProperty(doc =>
         {
             if (!string.IsNullOrEmpty(password?.Value))
                 log.WithSensitiveValue(password.Value);
@@ -42,14 +41,14 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             doc.ConnectPassword = password;
         });
 
-        public string GetUserBaseDn() => GetProperty(doc => doc.UserBaseDn);
-        public void SetUserBaseDn(string userBaseDn) => SetProperty(doc => doc.UserBaseDn = userBaseDn);
+        public string? GetUserBaseDn() => GetProperty(doc => doc.UserBaseDn);
+        public void SetUserBaseDn(string? userBaseDn) => SetProperty(doc => doc.UserBaseDn = userBaseDn);
 
-        public string GetGroupBaseDn() => GetProperty(doc => doc.GroupBaseDn);
-        public void SetGroupBaseDn(string groupBaseDn) => SetProperty(doc => doc.GroupBaseDn = groupBaseDn);
+        public string? GetGroupBaseDn() => GetProperty(doc => doc.GroupBaseDn);
+        public void SetGroupBaseDn(string? groupBaseDn) => SetProperty(doc => doc.GroupBaseDn = groupBaseDn);
 
-        public string GetDefaultDomain() => GetProperty(doc => doc.DefaultDomain);
-        public void SetDefaultDomain(string defaultDomain) => SetProperty(doc => doc.DefaultDomain = defaultDomain);
+        public string? GetDefaultDomain() => GetProperty(doc => doc.DefaultDomain);
+        public void SetDefaultDomain(string? defaultDomain) => SetProperty(doc => doc.DefaultDomain = defaultDomain);
 
         public string GetUniqueAccountNameAttribute() => GetProperty(doc => doc.AttributeMapping.UniqueAccountNameAttribute);
         public void SetUniqueAccountNameAttribute(string uniqueAccountNameAttribute) => SetProperty(doc => doc.AttributeMapping.UniqueAccountNameAttribute = uniqueAccountNameAttribute);

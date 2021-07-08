@@ -29,7 +29,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [DisplayName("Server")]
         [Description(ServerDescription)]
         [Writeable]
-        public string Server { get; set; }
+        public string? Server { get; set; }
 
         [DisplayName("Port")]
         [Description(PortDescription)]
@@ -50,42 +50,42 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [DisplayName("Username")]
         [Description(UsernameDescription)]
         [Writeable]
-        public string ConnectUsername { get; set; }
+        public string? ConnectUsername { get; set; }
 
         [DisplayName("Password")]
         [Description(PasswordDescription)]
         [Writeable]
-        public SensitiveValue ConnectPassword { get; set; }
+        public SensitiveValue? ConnectPassword { get; set; }
 
         [DisplayName("User Base DN")]
         [Description(UserBaseDnDescription)]
         [Writeable]
-        public string UserBaseDN { get; set; }
+        public string? UserBaseDN { get; set; }
 
         [DisplayName("Default Domain")]
         [Description(DefaultDomainDescription)]
         [Writeable]
-        public string DefaultDomain { get; set; }
+        public string? DefaultDomain { get; set; }
 
         [DisplayName("User Filter")]
         [Description(UserFilterDescription)]
         [Writeable]
-        public string UserFilter { get; set; }
+        public string? UserFilter { get; set; }
 
         [DisplayName("Group Base DN")]
         [Description(GroupBaseDnDescription)]
         [Writeable]
-        public string GroupBaseDN { get; set; }
+        public string? GroupBaseDN { get; set; }
 
         [DisplayName("Group Filter")]
         [Description(GroupFilterDescription)]
         [Writeable]
-        public string GroupFilter { get; set; }
+        public string? GroupFilter { get; set; }
 
         [DisplayName("Nested Group Filter")]
         [Description(NestedGroupFilterDescription)]
         [Writeable]
-        public string NestedGroupFilter { get; set; }
+        public string? NestedGroupFilter { get; set; }
 
         [DisplayName("Nested Group Search Depth")]
         [Description(NestedGroupSearchDepthDescription)]
@@ -128,31 +128,31 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         [DisplayName("Unique Account Name Attribute")]
         [Description(UniqueAccountNameAttributeDescription)]
         [Writeable]
-        public string UniqueAccountNameAttribute { get; set; }
+        public string? UniqueAccountNameAttribute { get; set; }
 
         [DisplayName("User Display Name Attribute")]
         [Description(UserDisplayNameAttributeDescription)]
         [Writeable]
-        public string UserDisplayNameAttribute { get; set; }
+        public string? UserDisplayNameAttribute { get; set; }
 
         [DisplayName("User Principal Name Attribute")]
         [Description(UserPrincipalNameAttributeDescription)]
         [Writeable]
-        public string UserPrincipalNameAttribute { get; set; }
+        public string? UserPrincipalNameAttribute { get; set; }
 
         [DisplayName("User Membership Attribute")]
         [Description(UserMembershipAttributeDescription)]
         [Writeable]
-        public string UserMembershipAttribute { get; set; }
+        public string? UserMembershipAttribute { get; set; }
 
         [DisplayName("User Email Attribute")]
         [Description(UserEmailAttributeDescription)]
         [Writeable]
-        public string UserEmailAttribute { get; set; }
+        public string? UserEmailAttribute { get; set; }
 
         [DisplayName("Group Name Attribute")]
         [Description(GroupNameAttributeDescription)]
         [Writeable]
-        public string GroupNameAttribute { get; set; }
+        public string? GroupNameAttribute { get; set; }
     }
 }

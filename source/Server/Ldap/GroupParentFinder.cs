@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Novell.Directory.Ldap;
 using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
@@ -15,6 +16,15 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
     {
         public IEnumerable<GroupDistinguishedName> FindParentGroups(LdapContext context, GroupDistinguishedName name)
         {
+            if (string.IsNullOrEmpty(context.GroupBaseDN))
+                throw new ArgumentNullException(nameof(context.GroupBaseDN));
+
+            if (string.IsNullOrEmpty(context.GroupFilter))
+                throw new ArgumentNullException(nameof(context.GroupFilter));
+
+            if (string.IsNullOrEmpty(context.NestedGroupFilter))
+                throw new ArgumentNullException(nameof(context.NestedGroupFilter));
+
             var attributesToRetrieve = new[] {"cn", "dn" };
 
             var result = context.LdapConnection.Search(

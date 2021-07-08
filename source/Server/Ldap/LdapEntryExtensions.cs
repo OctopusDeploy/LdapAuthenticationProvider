@@ -6,8 +6,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public static class LdapEntryExtensions
     {
-        public static LdapAttribute TryGetAttribute(this LdapEntry entry, string attributeName)
+        public static LdapAttribute? TryGetAttribute(this LdapEntry entry, string? attributeName)
         {
+            if (string.IsNullOrEmpty(attributeName))
+                return null;
+
             try
             {
                 return entry.GetAttribute(attributeName);

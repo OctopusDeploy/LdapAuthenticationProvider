@@ -7,14 +7,14 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public interface IUserPrincipalFinder
     {
-        UserPrincipal FindByIdentity(LdapContext context, string uniqueAccountName);
+        UserPrincipal? FindByIdentity(LdapContext context, string uniqueAccountName);
 
         IEnumerable<UserPrincipal> SearchUser(LdapContext context, string searchToken);
     }
 
     public class UserPrincipalFinder : IUserPrincipalFinder
     {
-        public UserPrincipal FindByIdentity(LdapContext context, string uniqueAccountName)
+        public UserPrincipal? FindByIdentity(LdapContext context, string uniqueAccountName)
         {
             var escapedName = ToLdapUniqueAccountName(uniqueAccountName);
             var lsc = context.LdapConnection.Search(

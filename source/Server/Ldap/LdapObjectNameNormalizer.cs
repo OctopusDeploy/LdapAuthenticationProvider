@@ -12,7 +12,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             this.ldapConfiguration = ldapConfiguration;
         }
 
-        public string BuildUserName(string name, string domain)
+        public string? BuildUserName(string name, string domain)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return null;
@@ -22,7 +22,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             return $"{domain}\\{name}";
         }
 
-        public void NormalizeName(string name, out string namePart, out string domainPart)
+        public void NormalizeName(string name, out string namePart, out string? domainPart)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
 

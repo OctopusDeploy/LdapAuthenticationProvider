@@ -5,7 +5,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 {
     public interface ILdapConfigurationStore : IExtensionConfigurationStore<LdapConfiguration>
     {
-        string GetServer();
+        string? GetServer();
         void SetServer(string server);
 
         int GetPort();
@@ -17,20 +17,20 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         void SetIgnoreSslErrors(bool ignoreSslErrors);
         bool GetIgnoreSslErrors();
 
-        string GetConnectUsername();
+        string? GetConnectUsername();
         void SetConnectUsername(string username);
 
-        SensitiveString GetConnectPassword();
-        void SetConnectPassword(SensitiveString password);
+        SensitiveString? GetConnectPassword();
+        void SetConnectPassword(SensitiveString? password);
 
-        string GetUserBaseDn();
-        void SetUserBaseDn(string userBaseDn);
+        string? GetUserBaseDn();
+        void SetUserBaseDn(string? userBaseDn);
 
-        string GetGroupBaseDn();
-        void SetGroupBaseDn(string groupBaseDn);
+        string? GetGroupBaseDn();
+        void SetGroupBaseDn(string? groupBaseDn);
 
-        string GetDefaultDomain();
-        void SetDefaultDomain(string defaultDomain);
+        string? GetDefaultDomain();
+        void SetDefaultDomain(string? defaultDomain);
 
         string GetUniqueAccountNameAttribute();
         void SetUniqueAccountNameAttribute(string uniqueAccountNameAttribute);

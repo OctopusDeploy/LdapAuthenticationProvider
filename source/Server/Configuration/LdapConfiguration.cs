@@ -7,10 +7,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
     {
         public LdapConfiguration() : base(LdapConfigurationStore.SingletonId, "LDAP", "Octopus Deploy (contributed by Thomas Unger)", "1.0")
         {
-            AllowAutoUserCreation = true;
         }
 
-        public string Server { get; set; }
+        public string? Server { get; set; }
 
         public int Port { get; set; } = 389;
 
@@ -18,15 +17,15 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         public bool IgnoreSslErrors { get; set; }
 
-        public string ConnectUsername { get; set; }
+        public string? ConnectUsername { get; set; }
 
-        public SensitiveString ConnectPassword { get; set; }
+        public SensitiveString? ConnectPassword { get; set; }
 
-        public string UserBaseDn { get; set; }
+        public string? UserBaseDn { get; set; }
 
-        public string GroupBaseDn { get; set; }
+        public string? GroupBaseDn { get; set; }
 
-        public string DefaultDomain { get; set; }
+        public string? DefaultDomain { get; set; }
 
         public string UserFilter { get; set; } = "(&(objectClass=person)(sAMAccountName=*))";
 
@@ -34,9 +33,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 
         public string NestedGroupFilter { get; set; } = "(&(objectClass=group)(member=*))";
         public int NestedGroupSearchDepth { get; set; } = 5;
-        public bool AllowAutoUserCreation { get; set; }
+        public bool AllowAutoUserCreation { get; set; } = true;
 
-        public bool ReferralFollowingEnabled { get; set; } = false;
+        public bool ReferralFollowingEnabled { get; set; }
 
         /// <summary>
         /// Defaults to 10, as specified in the Novell LDAP library.
