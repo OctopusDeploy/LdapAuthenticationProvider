@@ -9,9 +9,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
     public class LdapConfigurationStore : ExtensionConfigurationStore<LdapConfiguration>, ILdapConfigurationStore
     {
         public static string SingletonId = "authentication-ldap";
-        ISystemLog log;
+        ILogWithContext log;
 
-        public LdapConfigurationStore(IConfigurationStore configurationStore, ISystemLog log) : base(configurationStore)
+        public LdapConfigurationStore(IConfigurationStore configurationStore, ILogWithContext log) : base(configurationStore)
         {
             this.log = log;
         }
@@ -37,7 +37,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
         public void SetConnectPassword(SensitiveString password) => SetProperty(doc =>
         {
             if (!string.IsNullOrEmpty(password?.Value))
-                log.WithSensitiveValue(password.Value);
+                log.CurrentContext.WithSensitiveValue(password.Value);
 
             doc.ConnectPassword = password;
         });

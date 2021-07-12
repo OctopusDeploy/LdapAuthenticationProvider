@@ -11,9 +11,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
     public class LdapContextProvider : ILdapContextProvider
     {
         private readonly Lazy<ILdapConfigurationStore> ldapConfiguration;
-        private readonly ISystemLog log;
+        private readonly ILog log;
 
-        public LdapContextProvider(Lazy<ILdapConfigurationStore> ldapConfiguration, ISystemLog log)
+        public LdapContextProvider(Lazy<ILdapConfigurationStore> ldapConfiguration, ILog log)
         {
             this.ldapConfiguration = ldapConfiguration;
             this.log = log;

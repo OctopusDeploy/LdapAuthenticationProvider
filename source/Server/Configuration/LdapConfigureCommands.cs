@@ -7,11 +7,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 {
     public class LdapConfigureCommands : IContributeToConfigureCommand
     {
-        readonly ISystemLog log;
+        readonly ILog log;
         readonly Lazy<ILdapConfigurationStore> ldapConfiguration;
 
         public LdapConfigureCommands(
-            ISystemLog log,
+            ILog log,
             Lazy<ILdapConfigurationStore> ldapConfiguration)
         {
             this.log = log;

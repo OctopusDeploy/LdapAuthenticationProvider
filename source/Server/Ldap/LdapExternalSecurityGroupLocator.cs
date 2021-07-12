@@ -14,7 +14,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public class LdapExternalSecurityGroupLocator : ILdapExternalSecurityGroupLocator
     {
-        readonly ISystemLog log;
+        readonly ILog log;
         readonly ILdapContextProvider contextProvider;
         readonly ILdapObjectNameNormalizer objectNameNormalizer;
         readonly ILdapConfigurationStore configurationStore;
@@ -24,7 +24,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         public string IdentityProviderName => LdapAuthentication.ProviderName;
 
         public LdapExternalSecurityGroupLocator(
-            ISystemLog log,
+            ILog log,
             ILdapContextProvider contextProvider,
             ILdapObjectNameNormalizer objectNameNormalizer,
             ILdapConfigurationStore configurationStore,

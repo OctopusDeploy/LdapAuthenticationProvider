@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Octopus.Server.MessageContracts;
 using Octopus.TinyTypes;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap.Model
 {
-    public class GroupDistinguishedName : CaseInsensitiveStringTinyType, IIdTinyType
+    public class GroupDistinguishedName : CaseInsensitiveStringTinyType
     {
         public GroupDistinguishedName(string value)
             : base(value)
