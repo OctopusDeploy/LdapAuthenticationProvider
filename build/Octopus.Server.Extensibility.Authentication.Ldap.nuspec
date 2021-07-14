@@ -19,12 +19,12 @@
     <tags>automation deployment</tags>
     <developmentDependency>true</developmentDependency>
     <dependencies>
-      <group targetFramework="net5.0">
+      <group targetFramework=".NETStandard2.1">
         <dependency id="Novell.Directory.Ldap.NETStandard" version="3.6.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="..\source\Server\bin\Release\net5.0\*.dll" target="tools" />
+    <file src="..\source\Server\bin\Release\netstandard2.1\*.dll" target="tools" />
   </files>
 </package>

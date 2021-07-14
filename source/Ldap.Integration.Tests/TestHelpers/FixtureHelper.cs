@@ -14,7 +14,7 @@ namespace Ldap.Integration.Tests.TestHelpers
             var configurationStore = new FakeLdapConfigurationStore(configuration);
 
             return new UserMatcher(
-                new LdapContextProvider(new Lazy<ILdapConfigurationStore>(() => configurationStore), Substitute.For<ISystemLog>()),
+                new LdapContextProvider(new Lazy<ILdapConfigurationStore>(() => configurationStore), Substitute.For<ILog>()),
                 new LdapObjectNameNormalizer(new Lazy<ILdapConfigurationStore>(() => configurationStore)),
                 configurationStore,
                 new UserPrincipalFinder(),
@@ -26,7 +26,7 @@ namespace Ldap.Integration.Tests.TestHelpers
             var configurationStore = new FakeLdapConfigurationStore(configuration);
             var nameNormalizer = new LdapObjectNameNormalizer(new Lazy<ILdapConfigurationStore>(() => configurationStore));
 
-            var log = Substitute.For<ISystemLog>();
+            var log = Substitute.For<ILog>();
             var ldapService = new LdapService(
                 log,
                 nameNormalizer,
@@ -49,7 +49,7 @@ namespace Ldap.Integration.Tests.TestHelpers
             var configurationStore = new FakeLdapConfigurationStore(configuration);
             var nameNormalizer = new LdapObjectNameNormalizer(new Lazy<ILdapConfigurationStore>(() => configurationStore));
 
-            var log = Substitute.For<ISystemLog>();
+            var log = Substitute.For<ILog>();
             var ldapService = new LdapService(
                 log,
                 nameNormalizer,
@@ -68,7 +68,7 @@ namespace Ldap.Integration.Tests.TestHelpers
         public static GroupRetriever CreateFixtureGroupRetriever(LdapConfiguration configuration)
         {
             var configurationStore = new FakeLdapConfigurationStore(configuration);
-            var log = Substitute.For<ISystemLog>();
+            var log = Substitute.For<ILog>();
 
             var groupLocator = new LdapExternalSecurityGroupLocator(
                 log,
@@ -84,7 +84,7 @@ namespace Ldap.Integration.Tests.TestHelpers
         public static LdapExternalSecurityGroupLocator CreateLdapExternalSecurityGroupLocator(LdapConfiguration configuration)
         {
             var configurationStore = new FakeLdapConfigurationStore(configuration);
-            var log = Substitute.For<ISystemLog>();
+            var log = Substitute.For<ILog>();
 
             return new LdapExternalSecurityGroupLocator(
                 log,
@@ -99,7 +99,7 @@ namespace Ldap.Integration.Tests.TestHelpers
         public static UserSearch CreateUserSearch(LdapConfiguration configuration)
         {
             var configurationStore = new FakeLdapConfigurationStore(configuration);
-            var log = Substitute.For<ISystemLog>();
+            var log = Substitute.For<ILog>();
 
             return new UserSearch(
                 new LdapContextProvider(new Lazy<ILdapConfigurationStore>(() => configurationStore), log),

@@ -6,10 +6,10 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
 {
     public class DatabaseInitializer : ExecuteWhenDatabaseInitializes
     {
-        private readonly ISystemLog log;
+        private readonly ILog log;
         private readonly IConfigurationStore configurationStore;
 
-        public DatabaseInitializer(ISystemLog log, IConfigurationStore configurationStore)
+        public DatabaseInitializer(ILog log, IConfigurationStore configurationStore)
         {
             this.log = log;
             this.configurationStore = configurationStore;

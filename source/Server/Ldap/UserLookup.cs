@@ -4,7 +4,6 @@ using Octopus.Server.Extensibility.Authentication.Ldap.Identities;
 using Octopus.Server.Extensibility.Results;
 using System.Linq;
 using System.Threading;
-using Octopus.Server.Extensibility.Authentication.Model;
 
 namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
