@@ -8,12 +8,18 @@ This project is based on the [Octopus Deploy DirectoryServices authentication pr
 
 ## Compatibility
 
-| LDAP Extension Version | Compatible Octopus Server Version | Notes |
+| LDAP Extension Release | Compatible Octopus Server Release | Notes |
 |---|---|---|
-| 0.9 | 2020.6 | Custom Extension.  Last version of community created extension |
-| 1.0 | 2021.1 | Custom Extension.  Officially provided by [@OctopusDeploy](https://github.com/OctopusDeploy) |
+| 0.9.* | 2020.6 | Custom Extension.  Last version of community created extension |
+| 1.0.* | 2021.1 | Custom Extension.  Officially provided by [@OctopusDeploy](https://github.com/OctopusDeploy) |
+| 2.0.* | 2021.2 | Built in extension. Bundled with Octopus Server |
+| 3.0.* | 2021.3 | Built in extension. Bundled with Octopus Server |
 
 ## Installation
+
+From Octopus Server 2021.2 onwards (Ldap extension 2.0+) this extension is bundled with Octopus Server, so no installation is necessary.
+
+For previous versions:
 
 1. Grab a release from the [releases page](https://github.com/OctopusDeploy/LdapAuthenticationProvider/releases).
 2. Install as a custom extension according to the [Octopus Deploy documentation][4].
