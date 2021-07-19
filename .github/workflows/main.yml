@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main
+      - release/*
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -34,12 +35,12 @@ jobs:
           OCTOVERSION_Patch : ${{ github.run_number }}
 
       - name: Install Octopus CLI 🐙
-        uses: OctopusDeploy/install-octopus-cli-action@v1.1.1
+        uses: OctopusDeploy/install-octopus-cli-action@v1.1.6
         with:
           version: latest
       
       - name: Push to Octopus 🐙
-        uses: OctopusDeploy/push-package-action@v1.0.1
+        uses: OctopusDeploy/push-package-action@v1.0.2
         with:
           server: https://deploy.octopus.app
           space: Integrations

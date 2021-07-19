@@ -1,14 +1,28 @@
 # Octopus Deploy LDAP Authentication Provider
 
-![continuous](https://github.com/tunger/OctopusDeploy-LdapAuthenticationProvider/workflows/continuous/badge.svg)
+[![Build, Test, Package and Push](https://github.com/OctopusDeploy/LdapAuthenticationProvider/actions/workflows/main.yml/badge.svg)](https://github.com/OctopusDeploy/LdapAuthenticationProvider/actions/workflows/main.yml)
 
-This repository contains a LDAP authentication provider for [Octopus Deploy][1] based on the [Novell.Directory.Ldap.NETStandard][2] library.
+This repository contains an LDAP authentication provider for [Octopus Deploy][1] based on the [Novell.Directory.Ldap.NETStandard][2] library.
+It was originally authored by [@tunger](https://github.com/tunger) and transferred to [@OctopusDeploy](https://github.com/OctopusDeploy) in May 2021
 This project is based on the [Octopus Deploy DirectoryServices authentication provider][3].
+
+## Compatibility
+
+| LDAP Extension Release | Compatible Octopus Server Release | Notes |
+|---|---|---|
+| 0.9.* | 2020.6 | Custom Extension.  Last version of community created extension |
+| 1.0.* | 2021.1 | Custom Extension.  Officially provided by [@OctopusDeploy](https://github.com/OctopusDeploy) |
+| 2.0.* | 2021.2 | Built in extension. Bundled with Octopus Server |
+| 3.0.* | 2021.3 | Built in extension. Bundled with Octopus Server |
 
 ## Installation
 
-1. Grab a release from the [releases page](https://github.com/tunger/OctopusDeploy-LdapAuthenticationProvider/releases).
-2. Install the extension according to [Octopus Deploy documentation][4].
+From Octopus Server 2021.2 onwards (Ldap extension 2.0+) this extension is bundled with Octopus Server, so no installation is necessary.
+
+For previous versions:
+
+1. Grab a release from the [releases page](https://github.com/OctopusDeploy/LdapAuthenticationProvider/releases).
+2. Install as a custom extension according to the [Octopus Deploy documentation][4].
 
 ## Configuration
 
