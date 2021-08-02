@@ -1,4 +1,4 @@
-﻿using Octopus.Diagnostics;
+using Octopus.Diagnostics;
 using Octopus.Server.Extensibility.Authentication.Extensions;
 using Octopus.Server.Extensibility.Authentication.Extensions.Identities;
 using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
@@ -14,13 +14,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
     {
         private readonly ILdapConfigurationStore configurationStore;
 
-        public LdapAuthenticationProvider(ILdapConfigurationStore configurationStore, ISystemLog log)
+        public LdapAuthenticationProvider(ILdapConfigurationStore configurationStore)
         {
             this.configurationStore = configurationStore;
-            var password = configurationStore.GetConnectPassword();
-            
-            if (!string.IsNullOrEmpty(password?.Value))
-                log.WithSensitiveValue(password.Value);
         }
 
         public string IdentityProviderName => LdapAuthentication.ProviderName;
