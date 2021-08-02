@@ -1,4 +1,4 @@
-using Octopus.Diagnostics;
+﻿using System;
 using Octopus.Server.Extensibility.Authentication.Extensions;
 using Octopus.Server.Extensibility.Authentication.Extensions.Identities;
 using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
@@ -12,7 +12,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
     public class LdapAuthenticationProvider : IAuthenticationProviderWithGroupSupport,
         IUseAuthenticationIdentities
     {
-        private readonly ILdapConfigurationStore configurationStore;
+        readonly ILdapConfigurationStore configurationStore;
 
         public LdapAuthenticationProvider(ILdapConfigurationStore configurationStore)
         {
@@ -27,7 +27,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public AuthenticationProviderElement GetAuthenticationProviderElement()
         {
-            return new AuthenticationProviderElement
+            return new()
             {
                 Name = IdentityProviderName,
                 IdentityType = IdentityType.ActiveDirectory,
@@ -37,7 +37,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public AuthenticationProviderThatSupportsGroups GetGroupLookupElement()
         {
-            return new AuthenticationProviderThatSupportsGroups
+            return new()
             {
                 Name = IdentityProviderName,
                 IsRoleBased = false,
@@ -48,12 +48,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public string[] GetAuthenticationUrls()
         {
-            return new string[0];
+            return Array.Empty<string>();
         }
 
         public IdentityMetadataResource GetMetadata()
         {
-            return new IdentityMetadataResource
+            return new()
             {
                 IdentityProviderName = IdentityProviderName,
                 ClaimDescriptors = new[]
