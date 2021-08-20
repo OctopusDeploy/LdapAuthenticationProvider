@@ -18,7 +18,7 @@ namespace Ldap.Integration.Tests.TestHelpers
             configuration.Server = server ?? throw new ArgumentNullException(nameof(server));
             configuration.Port = port;
             configuration.ConnectUsername = user ?? throw new ArgumentNullException(nameof(user));
-            configuration.ConnectPassword = password.ToSensitiveString() ?? throw new ArgumentNullException(nameof(password));
+            configuration.ConnectPassword = password?.ToSensitiveString();
 
             return configuration;
         }
