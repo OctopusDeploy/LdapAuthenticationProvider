@@ -42,7 +42,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 if (ldapConfiguration.Value.GetSecurityProtocol() == SecurityProtocol.StartTLS)
                     con.StartTls();
 
-                con.Bind(ldapConfiguration.Value.GetConnectUsername(), ldapConfiguration.Value.GetConnectPassword().Value);
+                con.Bind(ldapConfiguration.Value.GetConnectUsername(), ldapConfiguration.Value.GetConnectPassword()?.Value);
 
                 con.Constraints = new LdapConstraints(
                     ldapConfiguration.Value.GetConstraintTimeLimit() * 1000,
