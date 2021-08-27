@@ -1,4 +1,3 @@
-using Octopus.Diagnostics;
 using Octopus.Server.Extensibility.Authentication.Extensions;
 using Octopus.Server.Extensibility.Authentication.Extensions.Identities;
 using Octopus.Server.Extensibility.Authentication.Ldap.Configuration;
