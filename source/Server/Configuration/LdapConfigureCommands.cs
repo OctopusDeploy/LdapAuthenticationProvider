@@ -1,4 +1,5 @@
-﻿using Octopus.Diagnostics;
+﻿using Octopus.Data.Model;
+using Octopus.Diagnostics;
 using Octopus.Server.Extensibility.Extensions.Infrastructure.Configuration;
 using System;
 using System.Collections.Generic;
@@ -59,6 +60,19 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap.Configuration
             {
                 ldapConfiguration.Value.SetConnectUsername(v);
                 log.Info("LDAP Username set to: " + v);
+            });
+            yield return new ConfigureCommandOption("ldapPassword=", LdapConfigurationResource.PasswordDescription, v =>
+            {
+                if (!string.IsNullOrEmpty(v))
+                {
+                    ldapConfiguration.Value.SetConnectPassword(v.ToSensitiveString());
+                    log.Info("LDAP Password set to provided value");
+                }
+                else
+                {
+                    ldapConfiguration.Value.SetConnectPassword(null);
+                    log.Info("LDAP Password set to null (anonymous bind)");
+                }
             });
             yield return new ConfigureCommandOption("ldapUserBaseDn=", LdapConfigurationResource.UserBaseDnDescription, v =>
             {
