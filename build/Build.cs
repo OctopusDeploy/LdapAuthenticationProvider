@@ -130,7 +130,8 @@ class Build : NukeBuild
         {
             var artifactPaths = ArtifactsDirectory.GlobFiles("*.nupkg")
                 .NotEmpty()
-                .Select(p => p.ToString());
+                .Select(p => p.ToString())
+                .OrderBy(x => x);
 
             System.Console.WriteLine($"::set-output name=packages_to_push::{string.Join(',', artifactPaths)}");
         });
