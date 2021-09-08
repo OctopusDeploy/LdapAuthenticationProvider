@@ -61,3 +61,14 @@ jobs:
           space: Integrations
           api_key: ${{ secrets.DEPLOY_API_KEY }}
           packages: ${{ steps.build.outputs.packages_to_push }}
+
+      - name: Create Release in Octopus 🐙
+        uses: OctopusDeploy/create-release@v1
+        with:
+          server: https://deploy.octopus.app
+          space: Integrations
+          api_key: ${{ secrets.DEPLOY_API_KEY }}
+          project: "LdapAuthenticationProvider"
+          package:
+            - "Octopus.Client.Extensibility.Authentication.Ldap:${{ steps.build.outputs.octoversion_fullsemver }}"
+            - "Octopus.Server.Extensibility.Authentication.Ldap:${{ steps.build.outputs.octoversion_fullsemver }}"
