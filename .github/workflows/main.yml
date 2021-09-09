@@ -63,7 +63,7 @@ jobs:
           packages: ${{ steps.build.outputs.packages_to_push }}
 
       - name: Create Release in Octopus 🐙
-        uses: OctopusDeploy/create-release@v1.0.4
+        uses: OctopusDeploy/create-release-action@v1.0.4
         with:
           server: https://deploy.octopus.app
           space: Integrations
