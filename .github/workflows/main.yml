@@ -50,12 +50,12 @@ jobs:
             })
 
       - name: Install Octopus CLI 🐙
-        uses: OctopusDeploy/install-octopus-cli-action@v1
+        uses: OctopusDeploy/install-octopus-cli-action@v1.1.6
         with:
           version: latest
       
       - name: Push to Octopus 🐙
-        uses: OctopusDeploy/push-package-action@v1
+        uses: OctopusDeploy/push-package-action@v1.0.2
         with:
           server: https://deploy.octopus.app
           space: Integrations
@@ -63,7 +63,7 @@ jobs:
           packages: ${{ steps.build.outputs.packages_to_push }}
 
       - name: Create Release in Octopus 🐙
-        uses: OctopusDeploy/create-release@v1
+        uses: OctopusDeploy/create-release@v1.0.4
         with:
           server: https://deploy.octopus.app
           space: Integrations
