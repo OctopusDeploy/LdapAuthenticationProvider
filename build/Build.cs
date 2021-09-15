@@ -1,5 +1,3 @@
-using System.IO;
-using System.Linq;
 using Nuke.Common;
 using Nuke.Common.Execution;
 using Nuke.Common.IO;
@@ -125,34 +123,8 @@ class Build : NukeBuild
                 });
         });
 
-    Target OutputPackagesToPush => _ => _
-        .DependsOn(Pack)
-        .Executes(() =>
-        {
-            // Create an output variable containing comma separated package files for GH Actions to pass to the push-package-action
-            var artifactPaths = ArtifactsDirectory.GlobFiles("*.nupkg")
-                .NotEmpty()
-                .Select(p => p.ToString())
-                .OrderBy(x => x);
-
-            System.Console.WriteLine($"::set-output name=packages_to_push::{string.Join(',', artifactPaths)}");
-
-            // Create an output variable containing comma separated packageName:version entries for GH Actions to pass to the create-release-action
-            var packageNamesAndVersions = ArtifactsDirectory.GlobFiles("*.nupkg")
-                .NotEmpty()
-                .Select(p =>
-                {
-                    var packageName = Path.GetFileNameWithoutExtension(p).Replace($".{OctoVersionInfo.FullSemVer}", "");
-
-                    return $"{packageName}:{OctoVersionInfo.FullSemVer}";
-                })
-                .OrderBy(x => x);
-
-            System.Console.WriteLine($"::set-output name=package_versions::{string.Join(',', packageNamesAndVersions)}");
-        });
-
     Target Default => _ => _
-        .DependsOn(OutputPackagesToPush);
+        .DependsOn(Pack);
 
     /// Support plugins are available for:
     /// - JetBrains ReSharper        https://nuke.build/resharper
