@@ -72,5 +72,6 @@ jobs:
           space: Integrations
           api_key: ${{ secrets.DEPLOY_API_KEY }}
           project: "LdapAuthenticationProvider"
-          packages: Octopus.Client.Extensibility.Authentication.Ldap:${{ steps.build.outputs.octoversion_fullsemver }}
+          packages: |-
+            Octopus.Client.Extensibility.Authentication.Ldap:${{ steps.build.outputs.octoversion_fullsemver }}
             Octopus.Server.Extensibility.Authentication.Ldap:${{ steps.build.outputs.octoversion_fullsemver }}
