@@ -55,7 +55,7 @@ jobs:
           version: latest
       
       - name: Push to Octopus 🐙
-        uses: OctopusDeploy/push-package-action@v1.1.0
+        uses: OctopusDeploy/push-package-action@v1.1.1
         with:
           server: https://deploy.octopus.app
           space: Integrations
