@@ -67,7 +67,6 @@ jobs:
       - name: Create Release in Octopus 🐙
         uses: OctopusDeploy/create-release-action@v1.1.1
         with:
-          debug: true
           server: https://deploy.octopus.app
           space: Integrations
           api_key: ${{ secrets.DEPLOY_API_KEY }}
