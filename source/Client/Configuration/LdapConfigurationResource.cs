@@ -17,7 +17,7 @@ namespace Octopus.Client.Extensibility.Authentication.Ldap.Configuration
         public const string UseSslDescription = "Sets whether to use Secure Socket Layer to connect to LDAP.";
         public const string IgnoreSslErrorsDescription = "Sets whether to ignore certificate validation errors.";
         public const string UsernameDescription = "Set the user DN to query LDAP.";
-        public const string PasswordDescription = "Set the password to query LDAP.";
+        public const string PasswordDescription = "Set the password to query LDAP (leave empty for anonymous bind).";
         public const string UserBaseDnDescription = "Set the root distinguished name (DN) to query LDAP for Users.";
         public const string DefaultDomainDescription = "Set the default domain when none is given in the logon form. Optional.";
         public const string UserFilterDescription = "The filter to use when searching valid users.";
