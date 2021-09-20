@@ -1,15 +1,12 @@
-using System.Linq;
 using Nuke.Common;
-using Nuke.Common.CI;
 using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.OctoVersion;
 using Nuke.Common.Utilities.Collections;
-using OctoVersion.Core;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
-using Nuke.OctoVersion;
 
 [CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
@@ -19,7 +16,22 @@ class Build : NukeBuild
 
     [Solution] readonly Solution Solution;
 
-    [NukeOctoVersion] readonly OctoVersionInfo OctoVersionInfo;
+    [Parameter] readonly bool? OctoVersionAutoDetectBranch = NukeBuild.IsLocalBuild;
+    [Parameter] readonly string OctoVersionBranch;
+    [Parameter] readonly int? OctoVersionFullSemVer;
+    [Parameter] readonly int? OctoVersionMajor;
+    [Parameter] readonly int? OctoVersionMinor;
+    [Parameter] readonly int? OctoVersionPatch;
+
+    [Required]
+    [OctoVersion(
+        AutoDetectBranchParameter = nameof(OctoVersionAutoDetectBranch),
+        BranchParameter = nameof(OctoVersionBranch),
+        FullSemVerParameter = nameof(OctoVersionFullSemVer),
+        MajorParameter = nameof(OctoVersionMajor),
+        MinorParameter = nameof(OctoVersionMinor),
+        PatchParameter = nameof(OctoVersionPatch))]
+    readonly OctoVersionInfo OctoVersionInfo;
 
     static AbsolutePath SourceDirectory => RootDirectory / "source";
     static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
@@ -33,12 +45,6 @@ class Build : NukeBuild
             SourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults").ForEach(DeleteDirectory);
             EnsureCleanDirectory(ArtifactsDirectory);
             EnsureCleanDirectory(PublishDirectory);
-        });
-
-    Target CalculateVersion => _ => _
-        .Executes(() =>
-        {
-            //all the magic happens inside `[NukeOctoVersion]` above. we just need a target for TeamCity to call
         });
 
     Target Restore => _ => _
@@ -117,19 +123,8 @@ class Build : NukeBuild
                 });
         });
 
-    Target OutputPackagesToPush => _ => _
-        .DependsOn(Pack)
-        .Executes(() =>
-        {
-            var artifactPaths = ArtifactsDirectory.GlobFiles("*.nupkg")
-                .NotEmpty()
-                .Select(p => p.ToString());
-
-            System.Console.WriteLine($"::set-output name=packages_to_push::{string.Join(',', artifactPaths)}");
-        });
-
     Target Default => _ => _
-        .DependsOn(OutputPackagesToPush);
+        .DependsOn(Pack);
 
     /// Support plugins are available for:
     /// - JetBrains ReSharper        https://nuke.build/resharper
