@@ -29,20 +29,48 @@ jobs:
       - name: Nuke Build 🏗
         id: build
         shell: bash
-        run: ./build.sh --verbosity verbose
-        env:
-          OCTOVERSION_CurrentBranch:  ${{ github.head_ref || github.ref }} # For pull_request events we override the /refs/pull/xx/merge branch to the PR's head branch
-          OCTOVERSION_Patch : ${{ github.run_number }}
+        # Pass branch and patch number to Nuke OctoVersion 
+        # (for pull_request events we override the /refs/pull/xx/merge branch to the PR's head branch)
+        run: |
+          ./build.sh \
+            --OctoVersionBranch ${{ github.head_ref || github.ref }} \
+            --OctoVersionPatch ${{ github.run_number }}
+
+      - name: Tag release (when not pre-release) 🏷️
+        if: ${{ !contains( steps.build.outputs.octoversion_fullsemver, '-' ) }}
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "refs/tags/${{ steps.build.outputs.octoversion_fullsemver }}",
+              sha: context.sha
+            })
 
       - name: Install Octopus CLI 🐙
-        uses: OctopusDeploy/install-octopus-cli-action@v1.1.1
+        uses: OctopusDeploy/install-octopus-cli-action@v1.1.7
         with:
           version: latest
       
       - name: Push to Octopus 🐙
-        uses: OctopusDeploy/push-package-action@v1.0.1
+        uses: OctopusDeploy/push-package-action@v1.1.1
         with:
           server: https://deploy.octopus.app
           space: Integrations
           api_key: ${{ secrets.DEPLOY_API_KEY }}
-          packages: ${{ steps.build.outputs.packages_to_push }}
+          packages: |
+            ./artifacts/Octopus.Client.Extensibility.Authentication.Ldap.${{ steps.build.outputs.octoversion_fullsemver }}.nupkg
+            ./artifacts/Octopus.Server.Extensibility.Authentication.Ldap.${{ steps.build.outputs.octoversion_fullsemver }}.nupkg
+
+      - name: Create Release in Octopus 🐙
+        uses: OctopusDeploy/create-release-action@v1.1.1
+        with:
+          server: https://deploy.octopus.app
+          space: Integrations
+          api_key: ${{ secrets.DEPLOY_API_KEY }}
+          project: "LdapAuthenticationProvider"
+          packages: |
+            Octopus.Client.Extensibility.Authentication.Ldap:${{ steps.build.outputs.octoversion_fullsemver }}
+            Octopus.Server.Extensibility.Authentication.Ldap:${{ steps.build.outputs.octoversion_fullsemver }}
