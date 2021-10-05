@@ -57,7 +57,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             string partialGroupName;
             objectNameNormalizer.NormalizeName(name, out partialGroupName, out domain);
             using var context = contextProvider.GetContext();
-            var filterToken = $"*{partialGroupName}*";
+            var filterToken = $"*{partialGroupName.EscapeForLdapSearchFilter()}*";
             var lsc = context.LdapConnection.Search(
                 context.GroupBaseDN,
                 LdapConnection.ScopeSub,
