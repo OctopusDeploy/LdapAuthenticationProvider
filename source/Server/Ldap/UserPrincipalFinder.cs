@@ -16,11 +16,10 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
     {
         public UserPrincipal FindByIdentity(LdapContext context, string uniqueAccountName)
         {
-            var escapedName = ToLdapUniqueAccountName(uniqueAccountName);
             var lsc = context.LdapConnection.Search(
                 context.UserBaseDN,
                 LdapConnection.ScopeSub,
-                context.UserFilter?.Replace("*", escapedName),
+                context.UserFilter?.Replace("*", uniqueAccountName.EscapeForLdapSearchFilter()),
                 new[]
                 {
                     "cn",
@@ -52,18 +51,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             };
         }
 
-        /// <summary>
-        /// Escapes uniqueAccountName for ldap queries.
-        /// </summary>
-        private string ToLdapUniqueAccountName(string uniqueAccountName)
-        {
-            // \e is simple backslash \ in LDAP, convert to recognized delimiter.
-            return uniqueAccountName.Replace("\\", "\\5C");
-        }
-
         public IEnumerable<UserPrincipal> SearchUser(LdapContext context, string searchToken)
         {
-            var searchTerm = $"*{ToLdapUniqueAccountName(searchToken)}*";
+            var searchTerm = $"*{searchToken.EscapeForLdapSearchFilter()}*";
             var lsc = context.LdapConnection.Search(
                 context.UserBaseDN,
                 LdapConnection.ScopeSub,

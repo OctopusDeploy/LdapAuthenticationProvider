@@ -20,7 +20,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             var result = context.LdapConnection.Search(
                 context.GroupBaseDN,
                 LdapConnection.ScopeSub,
-                context.NestedGroupFilter.Replace("*", name.ToString()),
+                context.NestedGroupFilter.Replace("*", name.ToString().EscapeForLdapSearchFilter()),
                 attributesToRetrieve,
                 false
             );
