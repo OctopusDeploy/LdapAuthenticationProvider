@@ -4,6 +4,7 @@ using Ldap.Integration.Tests.TestHelpers;
 using Octopus.Server.Extensibility.Authentication.Extensions;
 using Octopus.Server.Extensibility.Results;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Ldap.Integration.Tests
 {
@@ -11,6 +12,12 @@ namespace Ldap.Integration.Tests
     {
         public class TheReadMethod
         {
+            readonly ITestOutputHelper _testLogger;
+            public TheReadMethod(ITestOutputHelper testLogger)
+            {
+                _testLogger = testLogger;
+            }
+            
             [Fact]
             internal void ReadsGroupsForAUserFromActiveDirectory()
             {
@@ -24,7 +31,7 @@ namespace Ldap.Integration.Tests
                     "cn=Maintainers,ou=Groups,dc=mycompany,dc=local",
                 };
 
-                IExternalGroupRetriever fixture = FixtureHelper.CreateFixtureGroupRetriever(ConfigurationHelper.GetActiveDirectoryConfiguration());
+                IExternalGroupRetriever fixture = FixtureHelper.CreateFixtureGroupRetriever(ConfigurationHelper.GetActiveDirectoryConfiguration(), _testLogger);
 
                 // Act
                 var result = fixture.Read(user, new System.Threading.CancellationToken());
@@ -53,7 +60,7 @@ namespace Ldap.Integration.Tests
                     "cn=DeveloperGroup1,ou=Groups,dc=domain1,dc=local"
                 };
 
-                IExternalGroupRetriever fixture = FixtureHelper.CreateFixtureGroupRetriever(ConfigurationHelper.GetOpenLdapConfiguration());
+                IExternalGroupRetriever fixture = FixtureHelper.CreateFixtureGroupRetriever(ConfigurationHelper.GetOpenLdapConfiguration(), _testLogger);
 
                 // Act
                 var result = fixture.Read(user, new System.Threading.CancellationToken());

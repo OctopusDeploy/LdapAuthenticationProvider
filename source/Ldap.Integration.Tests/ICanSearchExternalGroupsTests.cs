@@ -1,10 +1,10 @@
 using System;
-using System.Linq;
 using System.Threading;
 using Ldap.Integration.Tests.TestHelpers;
 using Octopus.Server.Extensibility.Authentication.Extensions;
 using Octopus.Server.Extensibility.Results;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Ldap.Integration.Tests
 {
@@ -12,12 +12,18 @@ namespace Ldap.Integration.Tests
     {
         public class TheSearchMethod
         {
+            readonly ITestOutputHelper _testLogger;
+            public TheSearchMethod(ITestOutputHelper testLogger)
+            {
+                _testLogger = testLogger;
+            }
+
             [Fact]
             internal void FindsGroupsFromActiveDirectory()
             {
                 var partialName = "Devel";
 
-                ICanSearchExternalGroups fixture = FixtureHelper.CreateLdapExternalSecurityGroupLocator(ConfigurationHelper.GetActiveDirectoryConfiguration());
+                ICanSearchExternalGroups fixture = FixtureHelper.CreateLdapExternalSecurityGroupLocator(ConfigurationHelper.GetActiveDirectoryConfiguration(), _testLogger);
 
                 var result = fixture.Search(partialName, new CancellationToken());
                 
@@ -35,7 +41,7 @@ namespace Ldap.Integration.Tests
             {
                 var partialName = "Devel";
                 
-                ICanSearchExternalGroups fixture = FixtureHelper.CreateLdapExternalSecurityGroupLocator(ConfigurationHelper.GetOpenLdapConfiguration());
+                ICanSearchExternalGroups fixture = FixtureHelper.CreateLdapExternalSecurityGroupLocator(ConfigurationHelper.GetOpenLdapConfiguration(), _testLogger);
 
                 var result = fixture.Search(partialName, new CancellationToken());
 

@@ -5,6 +5,7 @@ using Octopus.Data.Model.User;
 using Octopus.Server.Extensibility.Authentication.Extensions;
 using Octopus.Server.Extensibility.Results;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Ldap.Integration.Tests
 {
@@ -12,6 +13,12 @@ namespace Ldap.Integration.Tests
     {
         public class TheValidateCredentialsMethod
         {
+            readonly ITestOutputHelper _testLogger;
+            public TheValidateCredentialsMethod(ITestOutputHelper testLogger)
+            {
+                _testLogger = testLogger;
+            }
+
             [Fact]
             internal void ValidatesAUserFromActiveDirectory()
             {
@@ -19,7 +26,7 @@ namespace Ldap.Integration.Tests
                 var userName = "developer1";
                 var password = "devp@ss01!";
 
-                IDoesBasicAuthentication fixture = FixtureHelper.CreateLdapCredentialValidator(ConfigurationHelper.GetActiveDirectoryConfiguration(), userName);
+                IDoesBasicAuthentication fixture = FixtureHelper.CreateLdapCredentialValidator(ConfigurationHelper.GetActiveDirectoryConfiguration(), userName, _testLogger);
 
                 // Act
                 var result = fixture.ValidateCredentials(userName, password, new CancellationToken());
@@ -44,7 +51,7 @@ namespace Ldap.Integration.Tests
                 var userName = "developer1";
                 var password = "developer_pass";
 
-                IDoesBasicAuthentication fixture = FixtureHelper.CreateLdapCredentialValidator(ConfigurationHelper.GetOpenLdapConfiguration(), userName);
+                IDoesBasicAuthentication fixture = FixtureHelper.CreateLdapCredentialValidator(ConfigurationHelper.GetOpenLdapConfiguration(), userName, _testLogger);
 
                 // Act
                 var result = fixture.ValidateCredentials(userName, password, new CancellationToken());
