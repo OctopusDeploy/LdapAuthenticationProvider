@@ -50,9 +50,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                     null,
                     ldapConfiguration.Value.GetReferralHopLimit());
 
-                return new LdapContext
+                return new LdapContext(con, log)
                 {
-                    LdapConnection = con,
                     UserBaseDN = ldapConfiguration.Value.GetUserBaseDn(),
                     GroupBaseDN = ldapConfiguration.Value.GetGroupBaseDn(),
                     UniqueAccountNameAttribute = ldapConfiguration.Value.GetUniqueAccountNameAttribute(),
