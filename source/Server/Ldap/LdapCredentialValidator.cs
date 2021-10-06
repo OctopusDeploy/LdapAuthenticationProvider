@@ -45,8 +45,6 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public IResultFromExtension<IUser> ValidateCredentials(string username, string password, CancellationToken cancellationToken)
         {
-            log.Verbose($"Validating credentials provided for '{username}'...");
-
             return GetOrCreateCommon(username, cancellationToken, () => ldapService.ValidateCredentials(username, password, cancellationToken));
         }
 
