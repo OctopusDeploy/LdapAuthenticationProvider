@@ -44,8 +44,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
             try
             {
-                log.Verbose($"Calling Bind ('{principal.DistinguishedName}')");
-                context.LdapConnection.Bind(principal.DistinguishedName, password);
+                context.ValidateCredentials(principal.DistinguishedName, password);
                 log.Verbose($"Credentials for '{uniqueAccountName}' validated, mapped to principal '{principal.UniqueAccountName}'");
             }
             catch (Exception)

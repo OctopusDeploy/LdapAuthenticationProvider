@@ -16,22 +16,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
     {
         public UserPrincipal FindByIdentity(LdapContext context, string uniqueAccountName)
         {
-            var lsc = context.LdapConnection.Search(
-                context.UserBaseDN,
-                LdapConnection.ScopeSub,
-                context.UserFilter?.Replace("*", uniqueAccountName.EscapeForLdapSearchFilter()),
-                new[]
-                {
-                    "cn",
-                    context.UserDisplayNameAttribute,
-                    context.UserMembershipAttribute,
-                    context.UserPrincipalNameAttribute,
-                    context.UserEmailAttribute,
-                    context.UniqueAccountNameAttribute
-                },
-                false
-                );
-            var searchResult = lsc.FirstOrDefault();
+            var searchResult = context.FindUser(uniqueAccountName);
+
             if (searchResult == null)
                 return null;
 
@@ -53,23 +39,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public IEnumerable<UserPrincipal> SearchUser(LdapContext context, string searchToken)
         {
-            var searchTerm = $"*{searchToken.EscapeForLdapSearchFilter()}*";
-            var lsc = context.LdapConnection.Search(
-                context.UserBaseDN,
-                LdapConnection.ScopeSub,
-                context.UserFilter?.Replace("*", searchTerm),
-                new[]
-                {
-                    "cn",
-                    context.UserDisplayNameAttribute,
-                    context.UserMembershipAttribute,
-                    context.UserPrincipalNameAttribute,
-                    context.UserEmailAttribute,
-                    context.UniqueAccountNameAttribute
-                },
-                false
-                );
-            return lsc.Select(x => CreatePrincipalFromLdapEntry(x, context)).ToList();
+            var results = context.SearchUsers(searchToken);
+
+            return results.Select(x => CreatePrincipalFromLdapEntry(x, context)).ToList();
         }
     }
 }
