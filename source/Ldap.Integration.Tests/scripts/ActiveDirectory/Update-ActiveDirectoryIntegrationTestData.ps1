@@ -23,7 +23,8 @@ New-ADGroup "SpecialGroup# with a hash" -Path "OU=Groups,DC=mycompany,DC=local" 
 New-ADGroup "SpecialGroup, with a comma" -SamAccountName "SpecialGroup_ with a comma" -Path "OU=Groups,DC=mycompany,DC=local" -GroupCategory Security -GroupScope Global
 New-ADGroup "SpecialGroup * ( ) . & - _ [ ] `` ~ | @ $ % ^ ? : { } ! '" -SamAccountName "SpecialGroup _ ( ) . & - _ _ _ ` ~ _ @ $ % ^ _ _ { } ! '" -Path "OU=Groups,DC=mycompany,DC=local" -GroupCategory Security -GroupScope Global
 
-New-ADUser -Name "special#1" -Enabled:$true -GivenName "Special" -Surname "#1" -SamAccountName "special#1" -UserPrincipalName "special#1@mycompany.local" -AccountPassword $devPass -EmailAddress "special#1@mycompany.local" -DisplayName "Special User #1"
+$specialPass = ConvertTo-SecureString -AsPlainText "specialp@ss01!" -Force
+New-ADUser -Name "special#1" -Enabled:$true -GivenName "Special" -Surname "#1" -SamAccountName "special#1" -UserPrincipalName "special#1@mycompany.local" -AccountPassword $specialPass -EmailAddress "special#1@mycompany.local" -DisplayName "Special User #1"
 
 Get-ADGroup "SpecialGroup (with brackets)" | Add-ADGroupMember  -Members @(Get-ADUser "special#1")
 Get-ADGroup "SpecialGroup# with a hash" | Add-ADGroupMember  -Members @(Get-ADUser "special#1")

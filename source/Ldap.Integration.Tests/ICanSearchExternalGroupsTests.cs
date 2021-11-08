@@ -37,6 +37,25 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            internal void FindsGroupsFromActiveDirectoryWithSpecialCharacters()
+            {
+                var partialName = "Special";
+
+                ICanSearchExternalGroups fixture = FixtureHelper.CreateLdapExternalSecurityGroupLocator(ConfigurationHelper.GetActiveDirectoryConfiguration(), _testLogger);
+
+                var result = fixture.Search(partialName, new CancellationToken());
+                
+                ExtensionResultHelper.AssertSuccesfulExtensionResult(result);
+                var searchResult = ((ResultFromExtension<ExternalSecurityGroupResult>)result).Value;
+
+                Assert.Equal(4, searchResult.Groups.Length);
+                Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup (with brackets),ou=Groups,dc=mycompany,dc=local", StringComparison.InvariantCultureIgnoreCase));
+                Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup\\# with a hash,ou=Groups,dc=mycompany,dc=local", StringComparison.InvariantCultureIgnoreCase));
+                Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup\\, with a comma,ou=Groups,dc=mycompany,dc=local", StringComparison.InvariantCultureIgnoreCase));
+                Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup * ( ) . & - _ [ ] ` ~ | @ $ % ^ ? : { } ! ',ou=Groups,dc=mycompany,dc=local", StringComparison.InvariantCultureIgnoreCase));
+            }
+
+            [Fact]
             internal void FindsGroupsFromOpenLDAP()
             {
                 var partialName = "Devel";
