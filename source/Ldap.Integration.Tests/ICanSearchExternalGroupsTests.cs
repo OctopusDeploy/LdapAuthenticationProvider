@@ -48,6 +48,7 @@ namespace Ldap.Integration.Tests
                 ExtensionResultHelper.AssertSuccesfulExtensionResult(result);
                 var searchResult = ((ResultFromExtension<ExternalSecurityGroupResult>)result).Value;
 
+                // Note that ActiveDirectory returns the reserved DN characters in escaped backslashformat, eg \, for , (comma)
                 Assert.Equal(3, searchResult.Groups.Length);
                 Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup Parent,ou=Groups,dc=mycompany,dc=local", StringComparison.InvariantCultureIgnoreCase));
                 Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup \\, \\\\ \\# \\+ \\< \\> \\; \\\" \\=,ou=Groups,dc=mycompany,dc=local", StringComparison.InvariantCultureIgnoreCase));
@@ -84,6 +85,7 @@ namespace Ldap.Integration.Tests
                 ExtensionResultHelper.AssertSuccesfulExtensionResult(result);
                 var searchResult = ((ResultFromExtension<ExternalSecurityGroupResult>)result).Value;
 
+                // Note that openLdap returns the reserved DN characters in escaped hex format, eg \2C for , (comma) and strangely doesnt encode the pound (#) symbol
                 Assert.Equal(3, searchResult.Groups.Length);
                 Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup Parent,ou=Groups,dc=domain1,dc=local", StringComparison.InvariantCultureIgnoreCase));
                 Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup \\2C \\5C # \\2B \\3C \\3E \\3B \\22 \\3D,ou=Groups,dc=domain1,dc=local", StringComparison.InvariantCultureIgnoreCase));
