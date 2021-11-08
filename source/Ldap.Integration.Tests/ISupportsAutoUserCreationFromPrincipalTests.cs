@@ -44,6 +44,30 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            internal void CreatesAUserFromActiveDirectoryWithSpecialCharacters()
+            {
+                // Arrange
+                var userName = "special#1";
+
+                ISupportsAutoUserCreationFromPrincipal fixture = FixtureHelper.CreateLdapUserCreationFromPrincipal(ConfigurationHelper.GetActiveDirectoryConfiguration(), userName, _testLogger);
+
+                // Act
+                var result = fixture.GetOrCreateUser(new FakePrincipal(userName), new CancellationToken());
+
+                // Assert
+                ExtensionResultHelper.AssertSuccesfulExtensionResult(result);
+                var createdUser = ((ResultFromExtension<IUser>)result).Value;
+
+                Assert.Equal("special#1@mycompany.local", createdUser.Username);
+                Assert.Equal("Special User #1", createdUser.DisplayName);
+                Assert.Equal("special#1@mycompany.local", createdUser.EmailAddress);
+                Assert.Equal("special#1", createdUser.Identities.First().Claims["uan"].Value);
+                Assert.Equal("special#1@mycompany.local", createdUser.Identities.First().Claims["upn"].Value);
+                Assert.Equal("special#1@mycompany.local", createdUser.Identities.First().Claims["email"].Value);
+                Assert.Equal("Special User #1", createdUser.Identities.First().Claims["dn"].Value);
+            }
+
+            [Fact]
             internal void CreatesAUserFromOpenLDAP()
             {
                 // Arrange
