@@ -82,6 +82,7 @@ namespace Ldap.Integration.Tests
                 // Arrange
                 var user = new FakeUser("developer1");
 
+                // Note that ActiveDirectory returns the reserved DN characters in escaped backslashformat, eg \, for , (comma)
                 var expectedGroups = new[]
                 {
                     "cn=Maintainers,ou=Groups,dc=domain1,dc=local",
@@ -111,6 +112,7 @@ namespace Ldap.Integration.Tests
                 // Arrange
                 var user = new FakeUser("special#1");
                 
+                // Note that openLdap returns the reserved DN characters in escaped hex format, eg \2C for , (comma) and strangely doesnt encode the pound (#) symbol
                 var expectedGroups = new[]
                 {
                     "cn=SpecialGroup Parent,ou=Groups,dc=domain1,dc=local",
