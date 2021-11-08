@@ -69,26 +69,20 @@ displayname: Special User 1
 mail: special#1@gmail.com
 userpassword: special_pass
 
-dn: cn=SpecialGroup (with brackets),ou=Groups,dc=domain1,dc=local
-changetype: add
-cn: SpecialGroup (with brackets)
-objectclass: groupOfUniqueNames
-uniqueMember: cn=special\#1,dc=domain1,dc=local
-
-dn: cn=SpecialGroup\# with a hash,ou=Groups,dc=domain1,dc=local
-changetype: add
-cn: SpecialGroup# with a hash
-objectclass: groupOfUniqueNames
-uniqueMember: cn=special\#1,dc=domain1,dc=local
-
-dn: cn=SpecialGroup\, with a comma,ou=Groups,dc=domain1,dc=local
-changetype: add
-cn: SpecialGroup, with a comma
-objectclass: groupOfUniqueNames
-uniqueMember: cn=special\#1,dc=domain1,dc=local
-
 dn: cn=SpecialGroup * ( ) . & - _ [ ] ` ~ | @ $ % ^ ? : { } ! ',ou=Groups,dc=domain1,dc=local
 changetype: add
 cn: SpecialGroup * ( ) . & - _ [ ] ` ~ | @ $ % ^ ? : { } ! '
 objectclass: groupOfUniqueNames
 uniqueMember: cn=special\#1,dc=domain1,dc=local
+
+dn: cn=SpecialGroup \, \\ \# \+ \< \> \; \" \=,ou=Groups,dc=domain1,dc=local
+changetype: add
+cn: SpecialGroup \, \\ \# \+ \< \> \; \" \=,ou=Groups,dc=domain1,dc=local
+objectclass: groupOfUniqueNames
+uniqueMember: cn=SpecialGroup * ( ) . & - _ [ ] ` ~ | @ $ % ^ ? : { } ! ',ou=Groups,dc=domain1,dc=local
+
+dn: cn=SpecialGroup Parent,ou=Groups,dc=domain1,dc=local
+changetype: add
+cn: SpecialGroup Parent
+objectclass: groupOfUniqueNames
+uniqueMember: cn=SpecialGroup \, \\ \# \+ \< \> \; \" \=,ou=Groups,dc=domain1,dc=local
