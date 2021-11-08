@@ -42,7 +42,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         internal ILdapSearchResults SearchUsers(string searchToken)
         {
-            var escapedValue = $"*{searchToken.EscapeForLdapSearchFilter()}*";
+            var escapedValue = $"*{searchToken.EscapeForLdapSearchFilter(log)}*";
             var searchFilter = UserFilter?.Replace("*", escapedValue);
 
             var results = SearchLdap(
@@ -64,7 +64,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         internal LdapEntry FindUser(string userName)
         {
-            var escapedValue = userName.EscapeForLdapSearchFilter();
+            var escapedValue = userName.EscapeForLdapSearchFilter(log);
             var searchFilter = UserFilter?.Replace("*", escapedValue);
 
             var results = SearchLdap(
@@ -86,7 +86,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         internal List<LdapEntry> SearchGroups(string searchToken)
         {
-            var escapedValue = $"*{searchToken.EscapeForLdapSearchFilter()}*";
+            var escapedValue = $"*{searchToken.EscapeForLdapSearchFilter(log)}*";
             var searchFilter = GroupFilter.Replace("*", escapedValue);
 
             var results = SearchLdap(
@@ -104,7 +104,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         internal List<LdapEntry> SearchParentGroups(GroupDistinguishedName groupDistinguishedName)
         {
-            var escapedValue = groupDistinguishedName.ToString().EscapeForLdapSearchFilter();
+            var escapedValue = groupDistinguishedName.ToString().EscapeForLdapSearchFilter(log);
             var searchFilter = NestedGroupFilter.Replace("*", escapedValue);
 
             var results = SearchLdap(
@@ -122,7 +122,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         private ILdapSearchResults SearchLdap(string searchBase, string escapedearchFilter, string[] attributes)
         {
-            log.Verbose($"LDAP::Search (Base: '{searchBase}' Filter: '{escapedearchFilter}' Attributes: '{string.Join(",", attributes)}')");
+            log.Verbose($"LDAP::SearchLdap (Base: '{searchBase}' Filter: '{escapedearchFilter}' Attributes: '{string.Join(",", attributes)}')");
             return ldapConnection.Search(
                 searchBase,
                 LdapConnection.ScopeSub,
