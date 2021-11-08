@@ -48,6 +48,36 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            internal void ReadsGroupsForAUserFromActiveDirectoryWithSpecialCharacters()
+            {
+                // Arrange
+                var user = new FakeUser("special#1");
+
+                var expectedGroups = new[]
+                {
+                    "cn=SpecialGroup (with brackets),ou=Groups,dc=mycompany,dc=local",
+                    "cn=SpecialGroup\\# with a hash,ou=Groups,dc=mycompany,dc=local",
+                    "cn=SpecialGroup\\, with a comma,ou=Groups,dc=mycompany,dc=local",
+                    "cn=SpecialGroup * ( ) . & - _ [ ] ` ~ | @ $ % ^ ? : { } ! ',ou=Groups,dc=mycompany,dc=local"
+                };
+
+                IExternalGroupRetriever fixture = FixtureHelper.CreateFixtureGroupRetriever(ConfigurationHelper.GetActiveDirectoryConfiguration(), _testLogger);
+
+                // Act
+                var result = fixture.Read(user, new System.Threading.CancellationToken());
+
+                // Assert
+                if (result is FailureResultFromExtension)
+                {
+                    throw new Exception(string.Join("\n", (result as FailureResultFromExtension).Errors));
+                }
+
+                var groupResult = (ResultFromExtension<ExternalGroupResult>)result;
+
+                Assert.Equal(expectedGroups.Select(x => x.ToLowerInvariant()).OrderBy(x => x), groupResult.Value.GroupIds.Select(x => x.ToLowerInvariant()).OrderBy(x => x));
+            }
+
+            [Fact]
             internal void ReadsGroupsForAUserFromOpenLDAP()
             {
                 // Arrange
