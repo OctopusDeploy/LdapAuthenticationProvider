@@ -35,22 +35,6 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
-            internal void FindsUsersFromActiveDirectoryWithSpecialCharacters()
-            {
-                var partialName = "special";
-
-                ICanSearchExternalUsers fixture = FixtureHelper.CreateUserSearch(ConfigurationHelper.GetActiveDirectoryConfiguration(), _testLogger);
-
-                var result = fixture.Search(partialName, new CancellationToken());
-
-                ExtensionResultHelper.AssertSuccesfulExtensionResult(result);
-                var searchResult = ((ResultFromExtension<ExternalUserLookupResult>)result).Value;
-
-                Assert.Single(searchResult.Identities);
-                Assert.Contains(searchResult.Identities, x => x.Claims["uan"].Value == "special#1");
-            }
-
-            [Fact]
             internal void FindsUsersFromOpenLDAP()
             {
                 var partialName = "devel";

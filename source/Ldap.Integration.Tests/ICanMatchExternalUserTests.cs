@@ -37,26 +37,6 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
-            internal void MatchesAUserFromActiveDirectoryWithSpecialCharacters()
-            {
-                var userName = "special#1";
-                var expectedUpn = "special#1@mycompany.local";
-                var expectedUan = "special#1";
-                var expectedEmail = "special#1@mycompany.local";
-                var expectedDisplayName = "Special User #1";
-
-                ICanMatchExternalUser fixture = FixtureHelper.CreateUserMatcher(ConfigurationHelper.GetActiveDirectoryConfiguration(), _testLogger);
-
-                var match = fixture.Match(userName, new CancellationToken());
-
-                Assert.NotNull(match);
-                Assert.Equal(expectedUan, match.Claims["uan"].Value);
-                Assert.Equal(expectedUpn, match.Claims["upn"].Value);
-                Assert.Equal(expectedEmail, match.Claims["email"].Value);
-                Assert.Equal(expectedDisplayName, match.Claims["dn"].Value);
-            }
-
-            [Fact]
             internal void MatchesAUserFromOpenLDAP()
             {
                 var userName = "developer1";

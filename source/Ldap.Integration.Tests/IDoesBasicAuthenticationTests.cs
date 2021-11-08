@@ -45,31 +45,6 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
-            internal void ValidatesAUserFromActiveDirectoryWithSpecialCharacters()
-            {
-                // Arrange
-                var userName = "special#1";
-                var password = "devp@ss01!";
-
-                IDoesBasicAuthentication fixture = FixtureHelper.CreateLdapCredentialValidator(ConfigurationHelper.GetActiveDirectoryConfiguration(), userName, _testLogger);
-
-                // Act
-                var result = fixture.ValidateCredentials(userName, password, new CancellationToken());
-
-                // Assert
-                ExtensionResultHelper.AssertSuccesfulExtensionResult(result);
-                var user = ((ResultFromExtension<IUser>)result).Value;
-
-                Assert.Equal("special#1@mycompany.local", user.Username);
-                Assert.Equal("Special User #1", user.DisplayName);
-                Assert.Equal("special#1@mycompany.local", user.EmailAddress);
-                Assert.Equal("special#1", user.Identities.First().Claims["uan"].Value);
-                Assert.Equal("special#1@mycompany.local", user.Identities.First().Claims["upn"].Value);
-                Assert.Equal("special#1@mycompany.local", user.Identities.First().Claims["email"].Value);
-                Assert.Equal("Special User #1", user.Identities.First().Claims["dn"].Value);
-            }
-
-            [Fact]
             internal void ValidatesAUserFromOpenLDAP()
             {
                 // Arrange
