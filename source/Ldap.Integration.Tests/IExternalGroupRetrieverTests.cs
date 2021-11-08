@@ -55,9 +55,8 @@ namespace Ldap.Integration.Tests
 
                 var expectedGroups = new[]
                 {
-                    "cn=SpecialGroup (with brackets),ou=Groups,dc=mycompany,dc=local",
-                    "cn=SpecialGroup\\# with a hash,ou=Groups,dc=mycompany,dc=local",
-                    "cn=SpecialGroup\\, with a comma,ou=Groups,dc=mycompany,dc=local",
+                    "cn=SpecialGroup Parent,ou=Groups,dc=mycompany,dc=local",
+                    "cn=SpecialGroup \\, \\\\ \\# \\+ \\< \\> \\; \\\" \\=,ou=Groups,dc=mycompany,dc=local",
                     "cn=SpecialGroup * ( ) . & - _ [ ] ` ~ | @ $ % ^ ? : { } ! ',ou=Groups,dc=mycompany,dc=local"
                 };
 
