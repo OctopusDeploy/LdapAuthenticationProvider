@@ -18,7 +18,7 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
                 .Replace("\000", "\\00");
 
             if (value != escaped)
-                log.Verbose($"LDAP::EscapeForLdapSearchFilter escaping '{value}' with '{escaped}'");
+                log.Verbose($"LDAP::EscapeFilter escaping '{value}' with '{escaped}'");
 
             return escaped;
         }

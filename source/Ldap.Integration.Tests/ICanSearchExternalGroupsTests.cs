@@ -84,10 +84,9 @@ namespace Ldap.Integration.Tests
                 ExtensionResultHelper.AssertSuccesfulExtensionResult(result);
                 var searchResult = ((ResultFromExtension<ExternalSecurityGroupResult>)result).Value;
 
-                Assert.Equal(4, searchResult.Groups.Length);
-                Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup (with brackets),ou=Groups,dc=domain1,dc=local", StringComparison.InvariantCultureIgnoreCase));
-                Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup# with a hash,ou=Groups,dc=domain1,dc=local", StringComparison.InvariantCultureIgnoreCase));
-                Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup\\2C with a comma,ou=Groups,dc=domain1,dc=local", StringComparison.InvariantCultureIgnoreCase));
+                Assert.Equal(3, searchResult.Groups.Length);
+                Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup Parent,ou=Groups,dc=domain1,dc=local", StringComparison.InvariantCultureIgnoreCase));
+                Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup \\2C \\5C # \\2B \\3C \\3E \\3B \\22 \\3D,ou=Groups,dc=domain1,dc=local", StringComparison.InvariantCultureIgnoreCase));
                 Assert.Contains(searchResult.Groups, x => x.Id.Equals("cn=SpecialGroup * ( ) . & - _ [ ] ` ~ | @ $ % ^ ? : { } ! ',ou=Groups,dc=domain1,dc=local", StringComparison.InvariantCultureIgnoreCase));
             }
         }
