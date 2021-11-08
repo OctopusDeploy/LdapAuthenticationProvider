@@ -58,3 +58,37 @@ changetype: add
 cn: Maintainers
 objectclass: groupOfUniqueNames
 uniqueMember: cn=Developers,ou=Groups,dc=domain1,dc=local
+
+dn: cn=special\#1,dc=domain1,dc=local
+changetype: add
+objectclass: inetOrgPerson
+cn: special#1
+givenname: Special
+sn: #1
+displayname: Special User 1
+mail: special#1@gmail.com
+userpassword: special_pass
+
+dn: cn=SpecialGroup (with brackets),ou=Groups,dc=domain1,dc=local
+changetype: add
+cn: SpecialGroup (with brackets)
+objectclass: groupOfUniqueNames
+uniqueMember: cn=special\#1,dc=domain1,dc=local
+
+dn: cn=SpecialGroup\# with a hash,ou=Groups,dc=domain1,dc=local
+changetype: add
+cn: SpecialGroup# with a hash
+objectclass: groupOfUniqueNames
+uniqueMember: cn=special\#1,dc=domain1,dc=local
+
+dn: cn=SpecialGroup\, with a comma,ou=Groups,dc=domain1,dc=local
+changetype: add
+cn: SpecialGroup, with a comma
+objectclass: groupOfUniqueNames
+uniqueMember: cn=special\#1,dc=domain1,dc=local
+
+dn: cn=SpecialGroup * ( ) . & - _ [ ] ` ~ | @ $ % ^ ? : { } ! ',ou=Groups,dc=domain1,dc=local
+changetype: add
+cn: SpecialGroup * ( ) . & - _ [ ] ` ~ | @ $ % ^ ? : { } ! '
+objectclass: groupOfUniqueNames
+uniqueMember: cn=special\#1,dc=domain1,dc=local

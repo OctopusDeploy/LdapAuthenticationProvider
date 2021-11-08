@@ -105,6 +105,36 @@ namespace Ldap.Integration.Tests
 
                 Assert.Equal(expectedGroups.Select(x => x.ToLowerInvariant()).OrderBy(x => x), groupResult.Value.GroupIds.Select(x => x.ToLowerInvariant()).OrderBy(x => x));
             }
+
+            [Fact]
+            internal void ReadsGroupsForAUserFromOpenLDAPWithSpecialCharacters()
+            {
+                // Arrange
+                var user = new FakeUser("special#1");
+                
+                var expectedGroups = new[]
+                {
+                    "cn=SpecialGroup (with brackets),ou=Groups,dc=domain1,dc=local",
+                    "cn=SpecialGroup# with a hash,ou=Groups,dc=domain1,dc=local",
+                    "cn=SpecialGroup\\2C with a comma,ou=Groups,dc=domain1,dc=local",
+                    "cn=SpecialGroup * ( ) . & - _ [ ] ` ~ | @ $ % ^ ? : { } ! ',ou=Groups,dc=domain1,dc=local"
+                };
+
+                IExternalGroupRetriever fixture = FixtureHelper.CreateFixtureGroupRetriever(ConfigurationHelper.GetOpenLdapConfiguration(), _testLogger);
+
+                // Act
+                var result = fixture.Read(user, new System.Threading.CancellationToken());
+
+                // Assert
+                if (result is FailureResultFromExtension)
+                {
+                    throw new Exception(string.Join("\n", (result as FailureResultFromExtension).Errors));
+                }
+
+                var groupResult = (ResultFromExtension<ExternalGroupResult>)result;
+
+                Assert.Equal(expectedGroups.Select(x => x.ToLowerInvariant()).OrderBy(x => x), groupResult.Value.GroupIds.Select(x => x.ToLowerInvariant()).OrderBy(x => x));
+            }
         }
     }
 }
