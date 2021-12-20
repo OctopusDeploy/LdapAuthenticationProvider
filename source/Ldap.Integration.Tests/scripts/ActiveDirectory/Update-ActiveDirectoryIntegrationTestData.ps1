@@ -1,5 +1,7 @@
 Import-Module ActiveDirectory
 
+New-ADOrganizationalUnit "Groups"
+
 New-ADGroup "Maintainers" -Path "OU=Groups,DC=mycompany,DC=local" -GroupCategory Security -GroupScope Global
 New-ADGroup "Developers" -Path "OU=Groups,DC=mycompany,DC=local" -GroupCategory Security -GroupScope Global
 New-ADGroup "DeveloperGroup1" -Path "OU=Groups,DC=mycompany,DC=local" -GroupCategory Security -GroupScope Global
@@ -15,3 +17,14 @@ Get-ADGroup "Developers" | Add-ADGroupMember -Members @(Get-ADGroup "DeveloperGr
 
 Get-ADGroup "DeveloperGroup1" | Add-ADGroupMember -Members @(Get-ADUser "developer1")
 Get-ADGroup "DeveloperGroup2" | Add-ADGroupMember -Members @(Get-ADUser "developer2")
+
+New-ADGroup "SpecialGroup Parent" -Path "OU=Groups,DC=mycompany,DC=local" -GroupCategory Security -GroupScope Global
+New-ADGroup 'SpecialGroup , \ # + < > ; " =' -SamAccountName "SpecialGroup _ _ # _ _ _ _ _ _" -Path "OU=Groups,DC=mycompany,DC=local" -GroupCategory Security -GroupScope Global
+New-ADGroup "SpecialGroup * ( ) . & - _ [ ] `` ~ | @ $ % ^ ? : { } ! '" -SamAccountName "SpecialGroup _ ( ) . & - _ _ _ ` ~ _ @ $ % ^ _ _ { } ! '" -Path "OU=Groups,DC=mycompany,DC=local" -GroupCategory Security -GroupScope Global
+
+$specialPass = ConvertTo-SecureString -AsPlainText "specp@ss01!" -Force
+New-ADUser -Name "special#1" -Enabled:$true -GivenName "Special" -Surname "#1" -SamAccountName "special#1" -UserPrincipalName "special#1@mycompany.local" -AccountPassword $specialPass -EmailAddress "special#1@mycompany.local" -DisplayName "Special User #1"
+
+Get-ADGroup "SpecialGroup Parent" | Add-ADGroupMember -Members @(Get-ADGroup "SpecialGroup _ _ # _ _ _ _ _ _")
+Get-ADGroup "SpecialGroup _ _ # _ _ _ _ _ _" | Add-ADGroupMember -Members @(Get-ADGroup "SpecialGroup _ ( ) . & - _ _ _ ` ~ _ @ $ % ^ _ _ { } ! '")
+Get-ADGroup "SpecialGroup _ ( ) . & - _ _ _ ` ~ _ @ $ % ^ _ _ { } ! '" | Add-ADGroupMember  -Members @(Get-ADUser "special#1")

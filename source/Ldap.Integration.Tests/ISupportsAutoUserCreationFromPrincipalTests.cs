@@ -5,6 +5,7 @@ using Octopus.Data.Model.User;
 using Octopus.Server.Extensibility.Authentication.Extensions;
 using Octopus.Server.Extensibility.Results;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Ldap.Integration.Tests
 {
@@ -12,13 +13,19 @@ namespace Ldap.Integration.Tests
     {
         public class TheGetOrCreateUserMethod
         {
+            readonly ITestOutputHelper _testLogger;
+            public TheGetOrCreateUserMethod(ITestOutputHelper testLogger)
+            {
+                _testLogger = testLogger;
+            }
+
             [Fact]
             internal void CreatesAUserFromActiveDirectory()
             {
                 // Arrange
                 var userName = "developer1";
 
-                ISupportsAutoUserCreationFromPrincipal fixture = FixtureHelper.CreateLdapUserCreationFromPrincipal(ConfigurationHelper.GetActiveDirectoryConfiguration(), userName);
+                ISupportsAutoUserCreationFromPrincipal fixture = FixtureHelper.CreateLdapUserCreationFromPrincipal(ConfigurationHelper.GetActiveDirectoryConfiguration(), userName, _testLogger);
 
                 // Act
                 var result = fixture.GetOrCreateUser(new FakePrincipal(userName), new CancellationToken());
@@ -42,7 +49,7 @@ namespace Ldap.Integration.Tests
                 // Arrange
                 var userName = "developer1";
 
-                ISupportsAutoUserCreationFromPrincipal fixture = FixtureHelper.CreateLdapUserCreationFromPrincipal(ConfigurationHelper.GetOpenLdapConfiguration(), userName);
+                ISupportsAutoUserCreationFromPrincipal fixture = FixtureHelper.CreateLdapUserCreationFromPrincipal(ConfigurationHelper.GetOpenLdapConfiguration(), userName, _testLogger);
 
                 // Act
                 var result = fixture.GetOrCreateUser(new FakePrincipal(userName), new CancellationToken());

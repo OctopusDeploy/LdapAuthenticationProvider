@@ -16,23 +16,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
     {
         public UserPrincipal FindByIdentity(LdapContext context, string uniqueAccountName)
         {
-            var escapedName = ToLdapUniqueAccountName(uniqueAccountName);
-            var lsc = context.LdapConnection.Search(
-                context.UserBaseDN,
-                LdapConnection.ScopeSub,
-                context.UserFilter?.Replace("*", escapedName),
-                new[]
-                {
-                    "cn",
-                    context.UserDisplayNameAttribute,
-                    context.UserMembershipAttribute,
-                    context.UserPrincipalNameAttribute,
-                    context.UserEmailAttribute,
-                    context.UniqueAccountNameAttribute
-                },
-                false
-                );
-            var searchResult = lsc.FirstOrDefault();
+            var searchResult = context.FindUser(uniqueAccountName);
+
             if (searchResult == null)
                 return null;
 
@@ -52,34 +37,11 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
             };
         }
 
-        /// <summary>
-        /// Escapes uniqueAccountName for ldap queries.
-        /// </summary>
-        private string ToLdapUniqueAccountName(string uniqueAccountName)
-        {
-            // \e is simple backslash \ in LDAP, convert to recognized delimiter.
-            return uniqueAccountName.Replace("\\", "\\5C");
-        }
-
         public IEnumerable<UserPrincipal> SearchUser(LdapContext context, string searchToken)
         {
-            var searchTerm = $"*{ToLdapUniqueAccountName(searchToken)}*";
-            var lsc = context.LdapConnection.Search(
-                context.UserBaseDN,
-                LdapConnection.ScopeSub,
-                context.UserFilter?.Replace("*", searchTerm),
-                new[]
-                {
-                    "cn",
-                    context.UserDisplayNameAttribute,
-                    context.UserMembershipAttribute,
-                    context.UserPrincipalNameAttribute,
-                    context.UserEmailAttribute,
-                    context.UniqueAccountNameAttribute
-                },
-                false
-                );
-            return lsc.Select(x => CreatePrincipalFromLdapEntry(x, context)).ToList();
+            var results = context.SearchUsers(searchToken);
+
+            return results.Select(x => CreatePrincipalFromLdapEntry(x, context)).ToList();
         }
     }
 }

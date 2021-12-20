@@ -13,17 +13,9 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
     public class GroupParentFinder : IGroupParentFinder
     {
-        public IEnumerable<GroupDistinguishedName> FindParentGroups(LdapContext context, GroupDistinguishedName name)
+        public IEnumerable<GroupDistinguishedName> FindParentGroups(LdapContext context, GroupDistinguishedName groupDistinguishedName)
         {
-            var attributesToRetrieve = new[] {"cn", "dn" };
-
-            var result = context.LdapConnection.Search(
-                context.GroupBaseDN,
-                LdapConnection.ScopeSub,
-                context.NestedGroupFilter.Replace("*", name.ToString()),
-                attributesToRetrieve,
-                false
-            );
+            var result = context.SearchParentGroups(groupDistinguishedName);
 
             return result.Select(r => r.Dn).ToGroupDistinguishedNames();
         }

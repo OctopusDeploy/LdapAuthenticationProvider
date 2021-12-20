@@ -1,9 +1,9 @@
-using System.Linq;
 using System.Threading;
 using Ldap.Integration.Tests.TestHelpers;
 using Octopus.Server.Extensibility.Authentication.Extensions;
 using Octopus.Server.Extensibility.Results;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Ldap.Integration.Tests
 {
@@ -11,12 +11,18 @@ namespace Ldap.Integration.Tests
     {
         public class TheSearchMethod
         {
+            readonly ITestOutputHelper _testLogger;
+            public TheSearchMethod(ITestOutputHelper testLogger)
+            {
+                _testLogger = testLogger;
+            }
+
             [Fact]
             internal void FindsUsersFromActiveDirectory()
             {
                 var partialName = "devel";
 
-                ICanSearchExternalUsers fixture = FixtureHelper.CreateUserSearch(ConfigurationHelper.GetActiveDirectoryConfiguration());
+                ICanSearchExternalUsers fixture = FixtureHelper.CreateUserSearch(ConfigurationHelper.GetActiveDirectoryConfiguration(), _testLogger);
 
                 var result = fixture.Search(partialName, new CancellationToken());
 
@@ -33,7 +39,7 @@ namespace Ldap.Integration.Tests
             {
                 var partialName = "devel";
                 
-                ICanSearchExternalUsers fixture = FixtureHelper.CreateUserSearch(ConfigurationHelper.GetOpenLdapConfiguration());
+                ICanSearchExternalUsers fixture = FixtureHelper.CreateUserSearch(ConfigurationHelper.GetOpenLdapConfiguration(), _testLogger);
 
                 var result = fixture.Search(partialName, new CancellationToken());
 
