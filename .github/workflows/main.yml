@@ -61,8 +61,8 @@ jobs:
           space: Integrations
           api_key: ${{ secrets.DEPLOY_API_KEY }}
           packages: |
-            ./artifacts/Octopus.Client.Extensibility.Authentication.Ldap.${{ steps.build.outputs.octoversion_fullsemver }}.nupkg
-            ./artifacts/Octopus.Server.Extensibility.Authentication.Ldap.${{ steps.build.outputs.octoversion_fullsemver }}.nupkg
+            ./artifacts/Octopus.Client.Extensibility.Authentication.Ldap.${{ steps.build.outputs.octoversion_nugetversion }}.nupkg
+            ./artifacts/Octopus.Server.Extensibility.Authentication.Ldap.${{ steps.build.outputs.octoversion_nugetversion }}.nupkg
 
       - name: Create Release in Octopus 🐙
         uses: OctopusDeploy/create-release-action@v1.1.1
@@ -72,5 +72,5 @@ jobs:
           api_key: ${{ secrets.DEPLOY_API_KEY }}
           project: "LdapAuthenticationProvider"
           packages: |
-            Octopus.Client.Extensibility.Authentication.Ldap:${{ steps.build.outputs.octoversion_fullsemver }}
-            Octopus.Server.Extensibility.Authentication.Ldap:${{ steps.build.outputs.octoversion_fullsemver }}
+            Octopus.Client.Extensibility.Authentication.Ldap:${{ steps.build.outputs.octoversion_nugetversion }}
+            Octopus.Server.Extensibility.Authentication.Ldap:${{ steps.build.outputs.octoversion_nugetversion }}
