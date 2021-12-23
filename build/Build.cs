@@ -97,7 +97,7 @@ class Build : NukeBuild
                 .DisableIncludeSymbols()
                 .SetVerbosity(DotNetVerbosity.Normal)
                 .SetProperty("NuspecFile", "../../build/Octopus.Server.Extensibility.Authentication.Ldap.nuspec")
-                .SetProperty("NuspecProperties", $"Version={OctoVersionInfo.NuGetVersion}"));
+                .SetProperty("NuspecProperties", $"Version={OctoVersionInfo.FullSemVer}"));
 
             DotNetPack(_ => _
                 .SetProject(RootDirectory / "source/Client/Client.csproj")
@@ -106,9 +106,7 @@ class Build : NukeBuild
                 .SetOutputDirectory(ArtifactsDirectory)
                 .EnableNoBuild()
                 .DisableIncludeSymbols()
-                .SetVerbosity(DotNetVerbosity.Normal)
-                .SetProperty("NuspecFile", "../../build/Octopus.Client.Extensibility.Authentication.Ldap.nuspec")
-                .SetProperty("NuspecProperties", $"Version={OctoVersionInfo.NuGetVersion}"));
+                .SetVerbosity(DotNetVerbosity.Normal));
         });
 
     Target CopyToLocalPackages => _ => _
