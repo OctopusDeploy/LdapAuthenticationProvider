@@ -52,25 +52,15 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 
         public ExternalSecurityGroup[] FindGroups(string name, CancellationToken cancellationToken)
         {
-            var results = new List<ExternalSecurityGroup>();
-            string domain;
-            string partialGroupName;
-            objectNameNormalizer.NormalizeName(name, out partialGroupName, out domain);
+            objectNameNormalizer.NormalizeName(name, out var partialGroupName, out var _);
+
             using var context = contextProvider.GetContext();
-            var filterToken = $"*{partialGroupName}*";
-            var lsc = context.LdapConnection.Search(
-                context.GroupBaseDN,
-                LdapConnection.ScopeSub,
-                context.GroupFilter?.Replace("*", filterToken),
-                new[] { context.GroupNameAttribute },
-                false
-            );
-            var searchResults = lsc.ToList();
-            results.AddRange(searchResults.Select(x => new ExternalSecurityGroup
+            var searchResults = context.SearchGroups(partialGroupName);
+            var results = searchResults.Select(x => new ExternalSecurityGroup
             {
                 Id = x.Dn,
                 DisplayName = x.GetAttribute(context.GroupNameAttribute).StringValue
-            }));
+            });
 
             return results.OrderBy(o => o.DisplayName).ToArray();
         }

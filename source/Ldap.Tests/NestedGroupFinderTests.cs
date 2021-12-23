@@ -15,7 +15,7 @@ namespace Ldap.Tests
         internal void FindAllParentGroupsTest(NestedGroupTestDataSource testData)
         {
             var parentFinder = new ParentFinder(testData.Groups);
-            var context = Substitute.For<LdapContext>();
+            var context = Substitute.For<LdapContext>(null, null);
             var nestedFinder = new NestedGroupFinder(parentFinder);
             var results = nestedFinder.FindAllParentGroups(context, testData.SearchDepth, testData.InitialGroups);
 
