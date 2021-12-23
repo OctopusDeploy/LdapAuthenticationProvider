@@ -107,6 +107,7 @@ class Build : NukeBuild
                 .EnableNoBuild()
                 .DisableIncludeSymbols()
                 .SetVerbosity(DotNetVerbosity.Normal)
+                .SetProperty("NuspecFile", "../../build/Octopus.Client.Extensibility.Authentication.Ldap.nuspec")
                 .SetProperty("NuspecProperties", $"Version={OctoVersionInfo.NuGetVersion}"));
         });
 
