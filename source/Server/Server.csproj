@@ -19,7 +19,7 @@
   <ItemGroup>
     <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.6.0" />
     <PackageReference Include="Octopus.Configuration" Version="4.0.0" />
-    <PackageReference Include="Octopus.Diagnostics" Version="2.1.1" />
+    <PackageReference Include="Octopus.Diagnostics" Version="2.1.2" />
     <PackageReference Include="Octopus.Server.Extensibility" Version="14.0.5" />
     <PackageReference Include="Octopus.Server.Extensibility.Authentication" Version="11.1.75" />
   </ItemGroup>
