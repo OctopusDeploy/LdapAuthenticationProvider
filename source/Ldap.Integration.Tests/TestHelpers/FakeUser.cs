@@ -24,6 +24,8 @@ namespace Ldap.Integration.Tests.TestHelpers
         public string Username { get; set; }
 
         public Guid IdentificationToken { get; set; }
+        
+        public Guid SessionsToken { get; }
 
         public string DisplayName { get; set; }
         public string EmailAddress { get; set; }
@@ -34,6 +36,11 @@ namespace Ldap.Integration.Tests.TestHelpers
 
         public UserId Id { get; set; }
 
+        public void SetSessionsToken(Guid token)
+        {
+            throw new NotImplementedException();
+        }
+        
         public SecurityGroups GetSecurityGroups(string identityProviderName)
         {
             throw new NotImplementedException();
