@@ -36,11 +36,11 @@ namespace Ldap.Integration.Tests.TestHelpers
 
         public UserId Id { get; set; }
 
-        public void SetSessionsToken(Guid token)
+        public void RevokeSessions()
         {
             throw new NotImplementedException();
         }
-        
+
         public SecurityGroups GetSecurityGroups(string identityProviderName)
         {
             throw new NotImplementedException();
