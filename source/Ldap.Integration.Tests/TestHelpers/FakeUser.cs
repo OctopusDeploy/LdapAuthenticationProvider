@@ -44,6 +44,21 @@ namespace Ldap.Integration.Tests.TestHelpers
             throw new NotImplementedException();
         }
 
+        public void RevokeSessions(DateTimeOffset validFrom)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ValidateAccessToken(DateTimeOffset tokenIssuedAt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ValidateRefreshToken(DateTimeOffset tokenIssuedAt)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetPassword(string plainTextPassword)
         {
             throw new NotImplementedException();
