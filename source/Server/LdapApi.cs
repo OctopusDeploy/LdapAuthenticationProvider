@@ -6,8 +6,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public class LdapApi : RegistersEndpoints
     {
-        public const string ApiExternalGroupsSearch = "/api/externalgroups/ldap{?partialName}";
-        public const string ApiExternalUsersSearch = "/api/externalusers/ldap{?partialName}";
+        public const string ApiExternalGroupsSearch = "/api/externalgroups/ldap";
+        public const string ApiExternalUsersSearch = "/api/externalusers/ldap";
 
         public LdapApi()
         {
