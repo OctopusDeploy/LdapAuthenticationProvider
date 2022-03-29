@@ -12,7 +12,6 @@ provider "azurerm" {
   features {}
 }
 
-
 ## <https://www.terraform.io/docs/providers/azurerm/r/resource_group.html>
 resource "azurerm_resource_group" "rg" {
   name     = "rg_authtest_ad"
