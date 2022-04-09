@@ -1,7 +1,10 @@
+using System;
 using Nuke.Common;
 using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tooling;
+using Nuke.Common.Tools.Docker;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.OctoVersion;
 using Nuke.Common.Utilities.Collections;
@@ -122,6 +125,27 @@ class Build : NukeBuild
                 });
         });
 
+    const string CONTAINER_PROJECT = "openldap";
+    Target Integration => _ => _
+        .Executes(() =>
+        {
+            var composeDirectory = SourceDirectory / "Ldap.Integration.Tests/scripts/OpenLdap/";
+            Environment.SetEnvironmentVariable("OCTOPUS_LDAP_OPENLDAP_PORT", "3777");
+
+            DockerTasks.Docker($"compose -f docker-compose.yml --project-name {CONTAINER_PROJECT} up -d",
+                composeDirectory);
+
+            DotNetTest(_ => _
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
+                .SetFilter("AuthProvider=OpenLDAP")
+                .SetNoBuild(true)
+                .EnableNoRestore());
+            
+            DockerTasks.Docker($"compose -f docker-compose.yml --project-name {CONTAINER_PROJECT} down",
+                composeDirectory);
+        });
+    
     Target Default => _ => _
         .DependsOn(Pack);
 
