@@ -56,6 +56,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","OpenLDAP")]
             internal void FindsGroupsFromOpenLDAP()
             {
                 var partialName = "Devel";
@@ -74,6 +75,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","OpenLDAP")]
             internal void FindsGroupsFromOpenLDAPWithSpecialCharacters()
             {
                 var partialName = "Special";

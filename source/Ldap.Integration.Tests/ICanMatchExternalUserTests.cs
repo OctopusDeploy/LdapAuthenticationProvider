@@ -37,6 +37,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","OpenLDAP")]
             internal void MatchesAUserFromOpenLDAP()
             {
                 var userName = "developer1";

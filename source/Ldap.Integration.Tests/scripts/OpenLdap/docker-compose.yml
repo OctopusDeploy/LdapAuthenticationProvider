@@ -12,7 +12,7 @@ services:
       LDAP_ADMIN_PASSWORD: ${OCTOPUS_LDAP_OPENLDAP_PASSWORD:-Pass}
       LDAP_BASE_DN: dc=domain1,dc=local
     ports:
-      - 389:389
+      - ${OCTOPUS_LDAP_OPENLDAP_PORT:-389}:389
 
   ldap_server_admin:
     image: osixia/phpldapadmin:0.7.2

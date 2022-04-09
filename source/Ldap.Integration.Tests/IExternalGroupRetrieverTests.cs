@@ -77,6 +77,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","OpenLDAP")]
             internal void ReadsGroupsForAUserFromOpenLDAP()
             {
                 // Arrange
@@ -107,6 +108,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","OpenLDAP")]
             internal void ReadsGroupsForAUserFromOpenLDAPWithSpecialCharacters()
             {
                 // Arrange
