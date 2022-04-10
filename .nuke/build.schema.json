@@ -85,7 +85,7 @@
               "Compile",
               "CopyToLocalPackages",
               "Default",
-              "Inegration",
+              "Integration",
               "Pack",
               "Restore",
               "Test"
@@ -106,7 +106,7 @@
               "Compile",
               "CopyToLocalPackages",
               "Default",
-              "Inegration",
+              "Integration",
               "Pack",
               "Restore",
               "Test"
