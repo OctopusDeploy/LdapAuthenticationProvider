@@ -141,8 +141,12 @@ class Build : NukeBuild
             DotNetTest(_ => _
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
-                .AddTeamCityLogger()
-                .SetFilter("AuthProvider=OpenLDAP"));
+                .SetFilter("AuthProvider=OpenLDAP")
+                .SetProcessArgumentConfigurator(arguments => arguments
+                    .Add("--logger trx")
+                    .Add("--logger console;verbosity=normal")
+                    .Add(TeamCity.Instance is not null ? "--logger teamcity" : string.Empty)
+            ));
             
             using (var process = ProcessTasks.StartProcess("pwsh", "./Remove-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory))
             {
