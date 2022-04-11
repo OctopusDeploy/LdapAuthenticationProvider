@@ -1,4 +1,7 @@
 using System;
+using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Nuke.Common;
 using Nuke.Common.CI.TeamCity;
 using Nuke.Common.Execution;
@@ -126,7 +129,8 @@ class Build : NukeBuild
                 });
         });
 
-    Target Integration => _ => _
+    
+    Target Integration2 => _ => _
         .Executes(() =>
         {
             var composeDirectory = SourceDirectory / "Ldap.Integration.Tests/scripts/OpenLdap/";
@@ -152,6 +156,68 @@ class Build : NukeBuild
             finally
             {
                 using var process = ProcessTasks.StartProcess("pwsh", "./Remove-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory);
+                process.AssertZeroExitCode();
+            }
+
+
+            /*DockerTasks.Docker($"compose -f docker-compose.yml --project-name {CONTAINER_PROJECT} up -d",
+                composeDirectory);
+
+            DotNetTest(_ => _
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
+                .SetFilter("AuthProvider=OpenLDAP")
+                .SetNoBuild(true)
+                .EnableNoRestore());
+            
+            var x = ProcessTasks.StartShell("New-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory);
+            x.WaitForExit();
+            
+            DockerTasks.Docker($"compose -f docker-compose.yml --project-name {CONTAINER_PROJECT} down",
+                composeDirectory);*/
+        });
+    
+    Target Integration => _ => _
+        .Executes(() =>
+        {
+            var composeDirectory = SourceDirectory / "Ldap.Integration.Tests/scripts/ActiveDirectory/Azure/";
+
+            string public_ip_addr, admin_password;
+            
+
+            using (var process = ProcessTasks.StartProcess("powershell", "./New-ActiveDirectoryIntegrationTestEnvironment.ps1", composeDirectory))
+            {
+                process.AssertZeroExitCode();
+            }
+            
+            using (var process = ProcessTasks.StartProcess("terraform", "output -json", composeDirectory))
+            {
+                process.AssertZeroExitCode();
+                var rawJson = process.Output.Where(d => d.Type == OutputType.Std)
+                    .Select(d => d.Text)
+                    .Aggregate(string.Empty, (a, b) => $"{a}{Environment.NewLine}{b}");
+                var raw = JsonConvert.DeserializeObject<JObject>(rawJson);
+                
+                public_ip_addr = raw["public_ip_addr"].Value<string>("value");
+                admin_password = raw["admin_password"].Value<string>("value");
+            }
+
+            try
+            {
+                DotNetTest(_ => _
+                    .SetProjectFile(Solution)
+                    .SetConfiguration(Configuration)
+                    .SetFilter("AuthProvider=ActiveDirectory")
+                    .SetProcessEnvironmentVariable("OCTOPUS_LDAP_AD_SERVER", public_ip_addr)
+                    .SetProcessEnvironmentVariable("OCTOPUS_LDAP_AD_PASSWORD", admin_password)
+                    .SetProcessArgumentConfigurator(arguments => arguments
+                        .Add("--logger trx")
+                        .Add("--logger console;verbosity=normal")
+                    ));
+            }
+            finally
+            {
+                using var process = ProcessTasks.StartProcess("powershell", "./Remove-ActiveDirectoryIntegrationTestEnvironment.ps1", composeDirectory);
                 process.AssertZeroExitCode();
             }
 

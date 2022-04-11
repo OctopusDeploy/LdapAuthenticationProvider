@@ -19,6 +19,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","ActiveDirectory")]
             internal void FindsGroupsFromActiveDirectory()
             {
                 var partialName = "Devel";

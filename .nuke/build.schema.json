@@ -86,6 +86,7 @@
               "CopyToLocalPackages",
               "Default",
               "Integration",
+              "Integration2",
               "Pack",
               "Restore",
               "Test"
@@ -107,6 +108,7 @@
               "CopyToLocalPackages",
               "Default",
               "Integration",
+              "Integration2",
               "Pack",
               "Restore",
               "Test"

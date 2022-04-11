@@ -20,6 +20,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","ActiveDirectory")]
             internal void CreatesAUserFromActiveDirectory()
             {
                 // Arrange
