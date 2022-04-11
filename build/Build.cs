@@ -132,7 +132,25 @@ class Build : NukeBuild
             var composeDirectory = SourceDirectory / "Ldap.Integration.Tests/scripts/OpenLdap/";
             Environment.SetEnvironmentVariable("OCTOPUS_LDAP_OPENLDAP_PORT", "3777");
 
-            DockerTasks.Docker($"compose -f docker-compose.yml --project-name {CONTAINER_PROJECT} up -d",
+            using (var process = ProcessTasks.StartProcess("powershell", "./New-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory))
+            {
+                process.AssertZeroExitCode();
+            }
+            
+            DotNetTest(_ => _
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
+                .SetFilter("AuthProvider=OpenLDAP")
+                .SetNoBuild(true)
+                .EnableNoRestore());
+            
+            using (var process = ProcessTasks.StartProcess("powershell", "./Remove-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory))
+            {
+                process.AssertZeroExitCode();
+            }
+            
+            
+            /*DockerTasks.Docker($"compose -f docker-compose.yml --project-name {CONTAINER_PROJECT} up -d",
                 composeDirectory);
 
             DotNetTest(_ => _
@@ -142,8 +160,11 @@ class Build : NukeBuild
                 .SetNoBuild(true)
                 .EnableNoRestore());
             
+            var x = ProcessTasks.StartShell("New-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory);
+            x.WaitForExit();
+            
             DockerTasks.Docker($"compose -f docker-compose.yml --project-name {CONTAINER_PROJECT} down",
-                composeDirectory);
+                composeDirectory);*/
         });
     
     Target Default => _ => _
