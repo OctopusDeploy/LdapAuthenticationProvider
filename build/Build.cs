@@ -185,7 +185,7 @@ class Build : NukeBuild
             string public_ip_addr, admin_password;
             
 
-            using (var process = ProcessTasks.StartProcess("powershell", "./New-ActiveDirectoryIntegrationTestEnvironment.ps1", composeDirectory))
+            using (var process = ProcessTasks.StartProcess("pwsh", "./New-ActiveDirectoryIntegrationTestEnvironment.ps1", composeDirectory))
             {
                 process.AssertZeroExitCode();
             }
@@ -217,7 +217,7 @@ class Build : NukeBuild
             }
             finally
             {
-                using var process = ProcessTasks.StartProcess("powershell", "./Remove-ActiveDirectoryIntegrationTestEnvironment.ps1", composeDirectory);
+                using var process = ProcessTasks.StartProcess("pwsh", "./Remove-ActiveDirectoryIntegrationTestEnvironment.ps1", composeDirectory);
                 process.AssertZeroExitCode();
             }
 
