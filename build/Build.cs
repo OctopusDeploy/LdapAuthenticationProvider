@@ -1,5 +1,6 @@
 using System;
 using Nuke.Common;
+using Nuke.Common.CI.TeamCity;
 using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
@@ -140,6 +141,7 @@ class Build : NukeBuild
             DotNetTest(_ => _
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
+                .AddTeamCityLogger()
                 .SetFilter("AuthProvider=OpenLDAP"));
             
             using (var process = ProcessTasks.StartProcess("pwsh", "./Remove-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory))
