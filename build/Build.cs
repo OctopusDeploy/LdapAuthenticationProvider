@@ -132,7 +132,7 @@ class Build : NukeBuild
             var composeDirectory = SourceDirectory / "Ldap.Integration.Tests/scripts/OpenLdap/";
             Environment.SetEnvironmentVariable("OCTOPUS_LDAP_OPENLDAP_PORT", "3777");
 
-            using (var process = ProcessTasks.StartProcess("powershell", "./New-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory))
+            using (var process = ProcessTasks.StartProcess("pwsh", "./New-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory))
             {
                 process.AssertZeroExitCode();
             }
@@ -144,7 +144,7 @@ class Build : NukeBuild
                 .SetNoBuild(true)
                 .EnableNoRestore());
             
-            using (var process = ProcessTasks.StartProcess("powershell", "./Remove-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory))
+            using (var process = ProcessTasks.StartProcess("pwsh", "./Remove-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory))
             {
                 process.AssertZeroExitCode();
             }
