@@ -126,34 +126,36 @@ class Build : NukeBuild
                 });
         });
 
-    const string CONTAINER_PROJECT = "openldap";
     Target Integration => _ => _
         .Executes(() =>
         {
             var composeDirectory = SourceDirectory / "Ldap.Integration.Tests/scripts/OpenLdap/";
             Environment.SetEnvironmentVariable("OCTOPUS_LDAP_OPENLDAP_PORT", "3777");
 
-            using (var process = ProcessTasks.StartProcess("pwsh", "./New-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory))
+            using (var process = ProcessTasks.StartProcess("powershell", "./New-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory))
             {
                 process.AssertZeroExitCode();
             }
-            
-            DotNetTest(_ => _
-                .SetProjectFile(Solution)
-                .SetConfiguration(Configuration)
-                .SetFilter("AuthProvider=OpenLDAP")
-                .SetProcessArgumentConfigurator(arguments => arguments
-                    .Add("--logger trx")
-                    .Add("--logger console;verbosity=normal")
-                    .Add(TeamCity.Instance is not null ? "--logger teamcity" : string.Empty)
-            ));
-            
-            using (var process = ProcessTasks.StartProcess("pwsh", "./Remove-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory))
+
+            try
             {
+                DotNetTest(_ => _
+                    .SetProjectFile(Solution)
+                    .SetConfiguration(Configuration)
+                    .SetFilter("AuthProvider=OpenLDAP")
+                    .SetProcessArgumentConfigurator(arguments => arguments
+                        .Add("--logger trx")
+                        .Add("--logger console;verbosity=normal")
+                        .Add(TeamCity.Instance is not null ? "--logger teamcity" : string.Empty)
+                    ));
+            }
+            finally
+            {
+                using var process = ProcessTasks.StartProcess("powershell", "./Remove-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory);
                 process.AssertZeroExitCode();
             }
-            
-            
+
+
             /*DockerTasks.Docker($"compose -f docker-compose.yml --project-name {CONTAINER_PROJECT} up -d",
                 composeDirectory);
 
