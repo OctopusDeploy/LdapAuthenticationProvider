@@ -140,9 +140,7 @@ class Build : NukeBuild
             DotNetTest(_ => _
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
-                .SetFilter("AuthProvider=OpenLDAP")
-                .SetNoBuild(true)
-                .EnableNoRestore());
+                .SetFilter("AuthProvider=OpenLDAP"));
             
             using (var process = ProcessTasks.StartProcess("pwsh", "./Remove-OpenLdapIntegrationTestEnvironment.ps1", composeDirectory))
             {
