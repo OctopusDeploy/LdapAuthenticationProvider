@@ -6,7 +6,8 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
 {
     public interface INestedGroupFinder
     {
-        IEnumerable<GroupDistinguishedName> FindAllParentGroups(LdapContext context, int depth, IEnumerable<GroupDistinguishedName> names);
+        IEnumerable<GroupDistinguishedName> FindAllParentGroups(LdapContext context, int depth,
+            IEnumerable<GroupDistinguishedName> names);
     }
 
     public class NestedGroupFinder : INestedGroupFinder
@@ -19,8 +20,12 @@ namespace Octopus.Server.Extensibility.Authentication.Ldap
         }
 
         /// <returns>Returns all ancestor DNs, as well as the passed in group DNs.</returns>
-        public IEnumerable<GroupDistinguishedName> FindAllParentGroups(LdapContext context, int searchDepth, IEnumerable<GroupDistinguishedName> names)
+        public IEnumerable<GroupDistinguishedName> FindAllParentGroups(LdapContext context, int searchDepth,
+            IEnumerable<GroupDistinguishedName> names)
         {
+            if (names == null)
+                return Enumerable.Empty<GroupDistinguishedName>();
+
             var groups = new HashSet<GroupDistinguishedName>(names.Distinct());
             var nextGroups = groups;
 
