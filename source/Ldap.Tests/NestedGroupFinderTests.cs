@@ -25,6 +25,16 @@ namespace Ldap.Tests
             Assert.Equal(sortedResults, sortedExpected);
         }
 
+        [Fact]
+        internal void GracefullyHandlesNullGroups()
+        {
+            var parentFinder = new ParentFinder(Enumerable.Empty<Group>());
+            var context = Substitute.For<LdapContext>(null, null);
+            var nestedFinder = new NestedGroupFinder(parentFinder);
+            var results = nestedFinder.FindAllParentGroups(context, 1, null);
+            Assert.Empty(results);
+        }
+
         public static IEnumerable<object[]> GetTestData()
         {
             yield return WhenHasHierarchy_ThenOnlyReturnBranchContainingInitialGroup().AsObjectArray();
@@ -99,7 +109,7 @@ namespace Ldap.Tests
                 groups: new[] {root1, child11, child111},
                 initialGroups: new[] {child111},
                 searchDepth: 1, //Note that the result will include the initial group
-                expectedResult: new[] { child11, child111}
+                expectedResult: new[] {child11, child111}
             );
         }
 
@@ -111,7 +121,8 @@ namespace Ldap.Tests
             public IEnumerable<Group> InitialGroups { get; }
             public int SearchDepth { get; }
 
-            public NestedGroupTestDataSource(string testName, IEnumerable<Group> groups, IEnumerable<Group> initialGroups, int searchDepth, IEnumerable<Group> expectedResult)
+            public NestedGroupTestDataSource(string testName, IEnumerable<Group> groups,
+                IEnumerable<Group> initialGroups, int searchDepth, IEnumerable<Group> expectedResult)
             {
                 TestName = testName;
                 Groups = groups;
@@ -143,11 +154,12 @@ namespace Ldap.Tests
                 this.groups = groups;
             }
 
-            public IEnumerable<GroupDistinguishedName> FindParentGroups(LdapContext context, GroupDistinguishedName name)
+            public IEnumerable<GroupDistinguishedName> FindParentGroups(LdapContext context,
+                GroupDistinguishedName name)
             {
                 //Get all the groups who have a child with the dn matching the value of name
                 return groups.Where(g => g.Children.Any(c => c == name))
-                             .Select(g => g);
+                    .Select(g => g);
             }
         }
 
