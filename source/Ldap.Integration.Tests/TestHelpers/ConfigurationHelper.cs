@@ -17,10 +17,10 @@ namespace Ldap.Integration.Tests.TestHelpers
 
         public static LdapConfiguration GetActiveDirectoryConfiguration()
         {
-            var server = Environment.GetEnvironmentVariable(ENVVAR_AD_SERVER);
+            var server = Environment.GetEnvironmentVariable(ENVVAR_AD_SERVER) ?? "20.231.14.150";
             var port = Convert.ToInt32(Environment.GetEnvironmentVariable(ENVVAR_AD_PORT) ?? "389");
-            var user = Environment.GetEnvironmentVariable(ENVVAR_AD_USER);
-            var password = Environment.GetEnvironmentVariable(ENVVAR_AD_PASSWORD);
+            var user = Environment.GetEnvironmentVariable(ENVVAR_AD_USER) ?? "adminuser@mycompany.local";
+            var password = Environment.GetEnvironmentVariable(ENVVAR_AD_PASSWORD) ?? "Z@qDBHRXQmwoXBTs";
 
             return new LdapConfiguration()
                 .Enabled()
@@ -51,7 +51,7 @@ namespace Ldap.Integration.Tests.TestHelpers
             var server = Environment.GetEnvironmentVariable(ENVVAR_OPENLDAP_SERVER) ?? "localhost";
             var port = Convert.ToInt32(Environment.GetEnvironmentVariable(ENVVAR_OPENLDAP_PORT) ?? "389");
             var user = Environment.GetEnvironmentVariable(ENVVAR_OPENLDAP_USER) ?? "cn=admin,dc=domain1,dc=local";
-            var password = Environment.GetEnvironmentVariable(ENVVAR_OPENLDAP_PASSWORD);
+            var password = Environment.GetEnvironmentVariable(ENVVAR_OPENLDAP_PASSWORD) ?? "Pass";
 
             return new LdapConfiguration()
                 .Enabled()

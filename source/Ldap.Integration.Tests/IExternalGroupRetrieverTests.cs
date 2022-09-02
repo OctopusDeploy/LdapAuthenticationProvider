@@ -19,6 +19,7 @@ namespace Ldap.Integration.Tests
             }
             
             [Fact]
+            [Trait("AuthProvider","ActiveDirectory")]
             internal void ReadsGroupsForAUserFromActiveDirectory()
             {
                 // Arrange
@@ -48,6 +49,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","ActiveDirectory")]
             internal void ReadsGroupsForAUserFromActiveDirectoryWithSpecialCharacters()
             {
                 // Arrange
@@ -77,6 +79,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","OpenLDAP")]
             internal void ReadsGroupsForAUserFromOpenLDAP()
             {
                 // Arrange
@@ -107,6 +110,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","OpenLDAP")]
             internal void ReadsGroupsForAUserFromOpenLDAPWithSpecialCharacters()
             {
                 // Arrange

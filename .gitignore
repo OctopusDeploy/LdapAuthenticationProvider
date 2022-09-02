@@ -68,3 +68,7 @@ TestResult.xml
 !packages.config
 .idea
 **/launchSettings.json
+
+.terraform/
+terraform.tfstate*
+.terraform*

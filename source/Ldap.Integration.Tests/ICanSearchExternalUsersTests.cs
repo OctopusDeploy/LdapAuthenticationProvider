@@ -18,6 +18,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","ActiveDirectory")]
             internal void FindsUsersFromActiveDirectory()
             {
                 var partialName = "devel";
@@ -35,6 +36,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","OpenLDAP")]
             internal void FindsUsersFromOpenLDAP()
             {
                 var partialName = "devel";

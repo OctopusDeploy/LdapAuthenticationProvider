@@ -1,6 +1,6 @@
 FROM osixia/openldap
 
-LABEL maintainer="devops@occtopus.com"
+LABEL maintainer="devops@octopus.com"
 
 ENV LDAP_ORGANISATION="Domain 1" \
     LDAP_DOMAIN="domain1.local"

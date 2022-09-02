@@ -20,6 +20,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","ActiveDirectory")]
             internal void ValidatesAUserFromActiveDirectory()
             {
                 // Arrange
@@ -45,6 +46,7 @@ namespace Ldap.Integration.Tests
             }
 
             [Fact]
+            [Trait("AuthProvider","OpenLDAP")]
             internal void ValidatesAUserFromOpenLDAP()
             {
                 // Arrange
