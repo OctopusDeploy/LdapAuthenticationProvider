@@ -7,8 +7,8 @@ using Nuke.Common.Tools.OctoVersion;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using Serilog;
 
-[CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
 class Build : NukeBuild
 {
@@ -25,7 +25,6 @@ class Build : NukeBuild
     const string CiBranchNameEnvVariable = "OCTOVERSION_CurrentBranch";
     [Parameter("Branch name for OctoVersion to use to calculate the version number. Can be set via the environment variable " + CiBranchNameEnvVariable + ".", Name = CiBranchNameEnvVariable)]
     string BranchName { get; set; }
-
 
     static AbsolutePath SourceDirectory => RootDirectory / "source";
     static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
@@ -54,7 +53,7 @@ class Build : NukeBuild
         .DependsOn(Restore)
         .Executes(() =>
         {
-            Logger.Info("Building LDAP Authentication Provider v{0}", OctoVersionInfo.FullSemVer);
+            Log.Logger.Information("Building LDAP Authentication Provider v{0}", OctoVersionInfo.FullSemVer);
 
             DotNetBuild(_ => _
                 .SetProjectFile(Solution)
@@ -80,7 +79,7 @@ class Build : NukeBuild
         .Produces(ArtifactsDirectory / "*.nupkg")
         .Executes(() =>
         {
-            Logger.Info("Packing LDAP Authentication Provider v{0}", OctoVersionInfo.FullSemVer);
+            Log.Logger.Information("Packing LDAP Authentication Provider v{0}", OctoVersionInfo.FullSemVer);
 
             DotNetPack(_ => _
                 .SetProject(Solution)
