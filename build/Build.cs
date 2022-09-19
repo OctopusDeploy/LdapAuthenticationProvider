@@ -7,31 +7,24 @@ using Nuke.Common.Tools.OctoVersion;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using Serilog;
 
-[CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
 class Build : NukeBuild
 {
+    [Parameter("Configuration to build - 'Release' (server)")]
     readonly Configuration Configuration = Configuration.Release;
-
+    
     [Solution] readonly Solution Solution;
 
-    [Parameter] readonly bool? OctoVersionAutoDetectBranch = NukeBuild.IsLocalBuild;
-    [Parameter] readonly string OctoVersionBranch;
-    [Parameter] readonly int? OctoVersionFullSemVer;
-    [Parameter] readonly int? OctoVersionMajor;
-    [Parameter] readonly int? OctoVersionMinor;
-    [Parameter] readonly int? OctoVersionPatch;
+    [Parameter("Whether to auto-detect the branch name - this is okay for a local build, but should not be used under CI.")] readonly bool AutoDetectBranch = IsLocalBuild;
 
-    [Required]
-    [OctoVersion(
-        AutoDetectBranchParameter = nameof(OctoVersionAutoDetectBranch),
-        BranchParameter = nameof(OctoVersionBranch),
-        FullSemVerParameter = nameof(OctoVersionFullSemVer),
-        MajorParameter = nameof(OctoVersionMajor),
-        MinorParameter = nameof(OctoVersionMinor),
-        PatchParameter = nameof(OctoVersionPatch))]
-    readonly OctoVersionInfo OctoVersionInfo;
+    [OctoVersion(BranchMember = nameof(BranchName), AutoDetectBranchMember = nameof(AutoDetectBranch), Framework = "net6.0")]
+    public OctoVersionInfo OctoVersionInfo;
+
+    const string CiBranchNameEnvVariable = "OCTOVERSION_CurrentBranch";
+    [Parameter("Branch name for OctoVersion to use to calculate the version number. Can be set via the environment variable " + CiBranchNameEnvVariable + ".", Name = CiBranchNameEnvVariable)]
+    string BranchName { get; set; }
 
     static AbsolutePath SourceDirectory => RootDirectory / "source";
     static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
@@ -60,7 +53,7 @@ class Build : NukeBuild
         .DependsOn(Restore)
         .Executes(() =>
         {
-            Logger.Info("Building LDAP Authentication Provider v{0}", OctoVersionInfo.FullSemVer);
+            Log.Logger.Information("Building LDAP Authentication Provider v{0}", OctoVersionInfo.FullSemVer);
 
             DotNetBuild(_ => _
                 .SetProjectFile(Solution)
@@ -86,7 +79,7 @@ class Build : NukeBuild
         .Produces(ArtifactsDirectory / "*.nupkg")
         .Executes(() =>
         {
-            Logger.Info("Packing LDAP Authentication Provider v{0}", OctoVersionInfo.FullSemVer);
+            Log.Logger.Information("Packing LDAP Authentication Provider v{0}", OctoVersionInfo.FullSemVer);
 
             DotNetPack(_ => _
                 .SetProject(Solution)

@@ -25,6 +25,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\source\Server\bin\Release\net5.0\*.dll" target="tools" />
+    <file src="..\source\Server\bin\Release\net6.0\*.dll" target="tools" />
   </files>
 </package>
